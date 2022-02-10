@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/lab5.2.iml" filepath="$PROJECT_DIR$/.idea/modules/lab5.2.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lab5.2.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lab5.2.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lab5.2.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lab5.2.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lab5.2.app.test.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lab5.2.app.test.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/lab5.1.iml" filepath="$PROJECT_DIR$/lab5.1.iml" />
+>>>>>>> ff983b0 (first commit)
     </modules>
   </component>
 </project>
