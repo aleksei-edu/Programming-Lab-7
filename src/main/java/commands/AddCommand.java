@@ -1,21 +1,24 @@
 package commands;
 
-import data.Route;
+import exception.CommandNeedArgumentException;
 import exception.CommandNotAcceptArgumentsException;
 import utility.CollectionManager;
-import utility.CommandManager;
+import utility.CreateNewElementManager;
 
-public class HelpCommand extends AbstractCommand{
-    public HelpCommand(){
-        super("help","вывести справку по доступным командам");
+public class AddCommand extends AbstractCommand{
+    public AddCommand(){
+        super("add","добавить новый элемент в коллекцию");
     }
 
     @Override
     public void execute(String argument) {
         try {
             if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
-            for (CommandInterface command : CommandManager.getCommands()){
-                System.out.println(command.toString());
+            try{
+                CreateNewElementManager.add();
+            }
+            catch(Exception e){
+                e.printStackTrace();
             }
         }
         catch(CommandNotAcceptArgumentsException e){

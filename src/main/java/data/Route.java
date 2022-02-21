@@ -3,6 +3,7 @@ import utility.CollectionManager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Route implements Comparable<Route> {
@@ -63,6 +64,44 @@ public class Route implements Comparable<Route> {
 
     public Long getDistance(){return distance;}
 
+    public void setName(String name){this.name = name;}
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setFrom(LocationFrom from) {
+        this.from = from;
+    }
+
+    public void setTo(LocationTo to) {
+        this.to = to;
+    }
+
+    public void setDistance(Long distance) {
+        this.distance = distance;
+    }
+
+    public void setRouteList(List<String> routeList) {
+        this.routeList = routeList;
+    }
+
+    public void updateRoute(Route route){
+        this.name = route.name;
+        this.coordinates = route.coordinates;
+        this.from = route.from;
+        this.to = route.to;
+        this.distance = route.distance;
+    }
+
     @Override
     public String toString(){
         return "id: " + id + ", name: " + name + ", " + coordinates.toString() +
@@ -76,5 +115,12 @@ public class Route implements Comparable<Route> {
     public int compareTo(Route routeObj){
         Integer compareId = id;
         return compareId.compareTo(routeObj.getId());
+    }
+
+    public static class ComparatorByDistance implements Comparator<Route>{
+        @Override
+        public int compare(Route o1, Route o2) {
+            return o1.getDistance().compareTo(o2.getDistance());
+        }
     }
 }

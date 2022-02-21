@@ -3,7 +3,8 @@ package commands;
 public abstract class AbstractCommand implements CommandInterface {
     private String name;
     private String description;
-    public AbstractCommand(String name, String description){
+
+    public AbstractCommand(String name,String description){
         this.name = name;
         this.description = description;
     }

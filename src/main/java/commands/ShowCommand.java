@@ -9,6 +9,7 @@ public class ShowCommand extends AbstractCommand{
         super("show","вывести в стандартный поток вывода все " +
                 "элементы коллекции в строковом представлении");
     }
+
     @Override
     public void execute(String argument) {
         try {

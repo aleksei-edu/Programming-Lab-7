@@ -10,6 +10,7 @@ public class RemoveByIdCommand extends AbstractCommand{
     public RemoveByIdCommand(){
         super("remove_by_id","удалить элемент из коллекции по его id");
     }
+
     @Override
     public void execute(String argument) {
         try {
@@ -17,8 +18,9 @@ public class RemoveByIdCommand extends AbstractCommand{
             try{
                 int id = Integer.parseInt(argument);
                 CollectionManager.getRouteCollection().removeIf(route -> (route.getId()==id));
+                System.out.println("Удалён элемент по id: " + id);
             }
-            catch(Exception e){
+            catch(NumberFormatException e){
                 e.printStackTrace();
             }
         }

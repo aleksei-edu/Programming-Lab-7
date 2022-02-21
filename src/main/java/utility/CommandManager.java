@@ -5,26 +5,45 @@ import exception.CommandNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CommandManager {
     private static List<CommandInterface> commands = new ArrayList<>();
     private static CommandInterface[] last10Commands = new CommandInterface[10];
     private static int last10CommandsIter = 0;
-    private static CommandInterface show = new ShowCommand();
-    private static CommandInterface exit = new ExitCommand();
-    private static CommandInterface help = new HelpCommand();
-    private static CommandInterface save = new SaveCommand();
-    private static CommandInterface clear = new ClearCommand();
-    private static CommandInterface history = new HistoryCommand();
+    private static final CommandInterface show = new ShowCommand();
+    private static final CommandInterface exit = new ExitCommand();
+    private static final CommandInterface help = new HelpCommand();
+    private static final CommandInterface save = new SaveCommand();
+    private static final CommandInterface clear = new ClearCommand();
+    private static final CommandInterface history = new HistoryCommand();
+    private static final CommandInterface removeById = new RemoveByIdCommand();
+    private static final CommandInterface info = new InfoCommand();
+    private static final CommandInterface add = new AddCommand();
+    private static final CommandInterface update = new UpdateCommand();
+    private static final CommandInterface script = new ExecuteScript();
+    private static final CommandInterface addIfMax = new AddIfMax();
+    private static final CommandInterface removeLower = new RemoveLower();
+    private static final CommandInterface removeAllByDistance = new RemoveAllByDistance();
+    private static final CommandInterface minByDistance = new MinByDistance();
 
 
     static {
-        commands.add(show);
-        commands.add(exit);
         commands.add(help);
-        commands.add(save);
+        commands.add(info);
+        commands.add(show);
+        commands.add(add);
+        commands.add(update);
+        commands.add(removeById);
         commands.add(clear);
+        commands.add(save);
+        commands.add(script);
+        commands.add(exit);
+        commands.add(addIfMax);
+        commands.add(removeLower);
         commands.add(history);
+        commands.add(removeAllByDistance);
+        commands.add(minByDistance);
     }
 
     public static void execute(String userCommand, String argument){
@@ -32,7 +51,7 @@ public class CommandManager {
             boolean flag = false;
             for (CommandInterface commandIter : commands) {
                 if (commandIter.getName().equals(userCommand)) {
-                    commandIter.execute(argument);
+                    commandIter.execute(argument.toLowerCase().trim());
                     CommandManager.addLastCommand(commandIter);
                     flag = true;
                     break;

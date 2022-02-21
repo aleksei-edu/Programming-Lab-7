@@ -7,8 +7,9 @@ import utility.FileManager;
 
 public class SaveCommand extends AbstractCommand{
     public SaveCommand(){
-        super("save", "сохранить коллекцию в файл");
+        super("save","сохранить коллекцию в файл");
     }
+
     @Override
     public void execute(String argument) {
         try {

@@ -4,21 +4,49 @@ import java.time.LocalDate;
 import java.util.LinkedHashSet;
 
 import data.Route;
+import exception.IdOverflowException;
+
 import java.util.Set;
+import java.util.SortedSet;
+
 public class CollectionManager {
-    private static int freeNumberForId = 0;
+    private static int freeNumberForId = 1;
     private static LocalDate lastInitTime;
-    private static Set<Route> routeCollection = new LinkedHashSet<>();
+    private static LocalDate saveTime;
+    private static Set<Route> routeCollection = new LinkedHashSet<Route>();
 
     public static int getFreeNumberForId(){
-        freeNumberForId+=1;
-        return freeNumberForId;
-
+        while (true) {
+            try {
+                boolean flag = true;
+                for (Route route : routeCollection) {
+                    if (route.getId() == freeNumberForId) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if(!flag) {
+                    freeNumberForId += 1;
+                    if(freeNumberForId < 0){throw new IdOverflowException();}
+                }
+                else{
+                    return freeNumberForId;
+                }
+            }
+            catch (IdOverflowException e){
+                e.printStackTrace();
+            }
+        }
     }
+
 
     public static Set<Route> getRouteCollection(){
         return routeCollection;
     }
+
+    public static void saveTimeCollection(){saveTime = LocalDate.now();}
+
+    public static LocalDate getSaveTimeCollection(){return saveTime;}
 
     public static void initCollection(){
         lastInitTime = LocalDate.now();

@@ -6,7 +6,7 @@ import utility.CollectionManager;
 
 public class ExitCommand extends AbstractCommand{
     public ExitCommand(){
-        super("exit","Команда для завершения программы.");
+        super("exit","завершить программу (без сохранения в файл)");
     }
     @Override
     public void execute(String argument){
