@@ -1,7 +1,6 @@
 package utility;
 
 import java.io.*;
-import java.lang.annotation.Native;
 import java.util.*;
 
 import data.Coordinates;
@@ -10,9 +9,19 @@ import data.LocationTo;
 import data.Route;
 import exception.NullEnvException;
 
+/**
+ * Класс управляет записью/чтением из файлов
+ */
 public class FileManager  {
+    /**
+     * Переменная окружения
+     */
     private static String env;
 
+    /**
+     * Установить переменную окружения
+     * @param env переменная окружения
+     */
     public static void setEnv(String env){
         FileManager.env = env;
     }
@@ -21,6 +30,9 @@ public class FileManager  {
         return env;
     }
 
+    /**
+     * Сохранить коллекцию в файл
+     */
     public static void saveCollection() {
         BufferedWriter writer = null;
         try {
@@ -45,14 +57,16 @@ public class FileManager  {
             }
         }
     }
+
+    /**
+     * Загрузить коллекцию из файла
+     */
     public static void readCollection(){
         BufferedReader reader = null;
         String line = "";
         try {
             if (System.getenv(env) == null) throw new NullEnvException();
             reader = new BufferedReader(new FileReader(System.getenv(env)));
-           // reader.readLine();
-            //NavigableSet<Route> tempSortedRouteCollection = new TreeSet<>();
             while((line = reader.readLine()) != null){
                 String[] row = line.split(",");
                 for (int i = 0; i < row.length; i++){
@@ -80,6 +94,10 @@ public class FileManager  {
         }
     }
 
+    /**
+     * Выполнить скрипт из файла
+     * @param fileName
+     */
     public static void readScript(String  fileName){
         BufferedReader reader = null;
         String line = "";

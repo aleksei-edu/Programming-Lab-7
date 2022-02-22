@@ -20,15 +20,12 @@ public class MaxByCreationDate extends AbstractCommand{
             if (CollectionManager.getRouteCollection().size() == 0){
                 System.out.println("Коллекция пуста.");
             }
-            long min  = Long.MAX_VALUE;
-            Route routeMin = null;
             ArrayList<Route> sortArray = new ArrayList<>();
             for (Route index : CollectionManager.getRouteCollection()){
                 sortArray.add(index);
             }
-            Collections.sort(sortArray, new Route.ComparatorByDistance());
-            int id = sortArray.get(0).getId();
-            System.out.println(sortArray.get(0).toString());
+            Collections.sort(sortArray, new Route.ComparatorByCreationDate());
+            System.out.println(sortArray.get(sortArray.size()-1).toString());
         }
         catch(CommandNotAcceptArgumentsException e){
             e.printStackTrace();

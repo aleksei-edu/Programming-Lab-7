@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
 <<<<<<< HEAD
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="16" project-jdk-type="JavaSDK" />
 =======
+=======
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/Javadocs" />
+    <option name="OPTION_SCOPE" value="private" />
+    <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="true" />
+  </component>
+>>>>>>> a4fe1b4 (3.0)
   <component name="ProjectRootManager" version="2" project-jdk-name="16" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

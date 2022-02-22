@@ -14,8 +14,23 @@ public class Route implements Comparable<Route> {
     private LocationFrom from; //Поле не может быть null
     private LocationTo to; //Поле не может быть null
     private Long distance; //Поле не может быть null, Значение поля должно быть больше 1
+    /**
+     * Все поля Route в виде String
+     * <p>
+     * Используется для{@link #getRouteList()}
+     */
     private List<String> routeList = new ArrayList<>();
 
+    /**
+     *
+     * @param id если есть, иначе ""
+     * @param name Route name
+     * @param coordinates Route coordinates
+     * @param creationDate если есть, иначе ""
+     * @param from Route from
+     * @param to Route to
+     * @param distance Route distance
+     */
     public Route(String id,String name, Coordinates coordinates, String creationDate,
                     LocationFrom from, LocationTo to, Long distance ){
         try {
@@ -52,48 +67,14 @@ public class Route implements Comparable<Route> {
         return id;
     }
 
-    public String getName(){return name;}
-
-    public Coordinates getCoordinates(){return coordinates;}
-
     public LocalDate getCreationDate(){return creationDate;}
-
-    public LocationFrom getFrom(){return from;}
-
-    public LocationTo getTo(){return to;}
 
     public Long getDistance(){return distance;}
 
-    public void setName(String name){this.name = name;}
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
-
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public void setFrom(LocationFrom from) {
-        this.from = from;
-    }
-
-    public void setTo(LocationTo to) {
-        this.to = to;
-    }
-
-    public void setDistance(Long distance) {
-        this.distance = distance;
-    }
-
-    public void setRouteList(List<String> routeList) {
-        this.routeList = routeList;
-    }
-
+    /**
+     * Обновить поля элемента Route
+     * @param route новый элемент Route
+     */
     public void updateRoute(Route route){
         this.name = route.name;
         this.coordinates = route.coordinates;
@@ -121,6 +102,12 @@ public class Route implements Comparable<Route> {
         @Override
         public int compare(Route o1, Route o2) {
             return o1.getDistance().compareTo(o2.getDistance());
+        }
+    }
+    public static class ComparatorByCreationDate implements Comparator<Route>{
+        @Override
+        public int compare(Route o1, Route o2) {
+            return o1.getCreationDate().compareTo(o2.getCreationDate());
         }
     }
 }

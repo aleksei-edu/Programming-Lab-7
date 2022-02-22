@@ -5,10 +5,12 @@ import exception.CommandNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
+/**
+ * Класс управляет командами
+ */
 public class CommandManager {
-    private static List<CommandInterface> commands = new ArrayList<>();
+    private static final List<CommandInterface> commands = new ArrayList<>();
     private static CommandInterface[] last10Commands = new CommandInterface[10];
     private static int last10CommandsIter = 0;
     private static final CommandInterface show = new ShowCommand();
@@ -26,7 +28,7 @@ public class CommandManager {
     private static final CommandInterface removeLower = new RemoveLower();
     private static final CommandInterface removeAllByDistance = new RemoveAllByDistance();
     private static final CommandInterface minByDistance = new MinByDistance();
-
+    private static final CommandInterface maxByCreationDate = new MaxByCreationDate();
 
     static {
         commands.add(help);
@@ -44,7 +46,14 @@ public class CommandManager {
         commands.add(history);
         commands.add(removeAllByDistance);
         commands.add(minByDistance);
+        commands.add(maxByCreationDate);
     }
+
+    /**
+     * Метод запускает выполнение команды
+     * @param userCommand  команда введенная пользователем
+     * @param argument  аргумент команды введенной пользователем
+     */
 
     public static void execute(String userCommand, String argument){
         try {
@@ -65,15 +74,27 @@ public class CommandManager {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Добавляет команду в историю последних 10 команд
+     * @param lastCommand последняя введённая команда
+     */
     public static void addLastCommand(CommandInterface lastCommand){
         last10Commands[last10CommandsIter % 10] = lastCommand;
         last10CommandsIter+=1;
     }
 
-    public static CommandInterface[] getLast10Commands(){
+    /**
+     * Возвращает массив из последних 10 команд
+     * @return массив последних 10 команд
+     */
+    private static CommandInterface[] getLast10Commands(){
         return last10Commands;
     }
 
+    /**
+     * Вывод в консоль 10 последних команд
+     */
     public static void printLast10Commands(){
         for(int i = 0; i < 10; i++){
             if (last10Commands[((last10CommandsIter+i) % 10)] == null){
@@ -83,6 +104,10 @@ public class CommandManager {
         }
     }
 
+    /**
+     * Возвращает все доступные команды
+     * @return выводит List из всех доступных команд
+     */
     public static List<CommandInterface> getCommands(){
         return commands;
     }

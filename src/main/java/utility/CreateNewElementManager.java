@@ -5,11 +5,20 @@ import data.LocationFrom;
 import data.LocationTo;
 import data.Route;
 
-import java.util.Scanner;
-
+/**
+ * Класс создаёт/обновляет элементы {@link Route} в интерактивном режиме.
+ */
 public class CreateNewElementManager {
+    /**
+     * Максимальное значение для координаты x
+     */
     private static final double MAX_COORDINATE_X = 699;
 
+    /**
+     * Обновить элемент {@link Route}
+     * @see commands.UpdateCommand
+     * @param oldroute элемент {@link Route} который мы хотим обновить.
+     */
     public static void update(Route oldroute){
         Route route = new Route((Integer.valueOf(oldroute.getId()).toString()),
                 askName(),
@@ -21,6 +30,12 @@ public class CreateNewElementManager {
         updateCollection(1,route,oldroute);
     }
 
+    /**
+     * Создать новый элемент {@link Route}
+     * @see commands.AddIfMax
+     * @see commands.RemoveLower
+     * @return новый {@link Route}
+     */
     public static Route createNewElement(){
         Route route = new Route("",
                 askName(),
@@ -34,7 +49,10 @@ public class CreateNewElementManager {
         return route;
     }
 
-
+    /**
+     * Добавить новый элемент {@link Route} в коллекцию
+     * @see commands.AddCommand
+     */
     public static void add(){
         Route route = new Route("",
                 askName(),
@@ -46,7 +64,12 @@ public class CreateNewElementManager {
         updateCollection(0, route, null);
     }
 
-
+    /**
+     * Обновление коллекции
+     * @param mode режим работы. 0 - добавление элемента в коллекцию, 1 - обновление элемента коллекции
+     * @param newRoute новый элемент {@link Route}
+     * @param oldRoute элемент {@link Route} который хотим обновить (если есть, иначе null)
+     */
     private static void updateCollection(Integer mode,Route newRoute, Route oldRoute){
         while (true) {
             try {
@@ -83,12 +106,15 @@ public class CreateNewElementManager {
         }
     }
 
-
+    /**
+     * Спросить Имя {@link Route}
+     * @return Route name
+     */
     private static String askName(){
         while (true) {
-            System.out.println("Введите Route name:");
-            String userPrint = ConsoleManager.getUserPrint();
+            System.out.println("Введите Route name (тип: String, не может быть пустой):");
             try {
+                String userPrint = ConsoleManager.getUserPrint();
                 if (userPrint.equals("")) {
                     throw new IllegalArgumentException("Значение Route name не может быть пустой строкой.");
                 }
@@ -102,15 +128,16 @@ public class CreateNewElementManager {
     private static Double askCoordinateX(){
         while (true) {
             System.out.println("Введите Coordinate X (тип: double, не более 699):");
-            double userPrint = Double.parseDouble(ConsoleManager.getUserPrint());
             try {
+                double userPrint = Double.parseDouble(ConsoleManager.getUserPrint());
                 if (userPrint > MAX_COORDINATE_X) {
                     throw new IllegalArgumentException("Значение Coordinate X " +
                             "превышает максимально допустимое: " + MAX_COORDINATE_X);
                 }
                 return userPrint;
-            } catch (IllegalArgumentException e) {
-                e.getMessage();
+            }
+            catch (IllegalArgumentException e){
+                e.printStackTrace();
             }
         }
     }
@@ -118,9 +145,9 @@ public class CreateNewElementManager {
     private static Double askCoordinateY(){
         while (true) {
             try {
-                System.out.println("Введите Coordinate Y :");
+                System.out.println("Введите Coordinate Y (тип: double):");
                 return Double.parseDouble(ConsoleManager.getUserPrint());
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         }
@@ -129,10 +156,10 @@ public class CreateNewElementManager {
     private static Integer askLocationFromX(){
         while (true) {
             try {
-                System.out.println("Введите LocationFrom X:");
+                System.out.println("Введите LocationFrom X (тип: int):");
                 return Integer.parseInt(ConsoleManager.getUserPrint());
             }
-            catch (Exception e){
+            catch (NumberFormatException e){
                 e.printStackTrace();
             }
         }
@@ -141,10 +168,10 @@ public class CreateNewElementManager {
     private static float askLocationFromY(){
         while (true) {
             try {
-                System.out.println("Введите LocationFrom Y:");
+                System.out.println("Введите LocationFrom Y (тип: float):");
                 return Float.parseFloat(ConsoleManager.getUserPrint());
             }
-            catch (Exception e){
+            catch (NumberFormatException e){
                 e.printStackTrace();
             }
         }
@@ -153,10 +180,10 @@ public class CreateNewElementManager {
     private static double askLocationFromZ(){
         while (true) {
             try {
-                System.out.println("Введите LocationFrom Z:");
+                System.out.println("Введите LocationFrom Z (тип: double):");
                 return Double.parseDouble(ConsoleManager.getUserPrint());
             }
-            catch (Exception e){
+            catch (NumberFormatException e){
                 e.printStackTrace();
             }
         }
@@ -165,10 +192,10 @@ public class CreateNewElementManager {
     private static Float askLocationToX(){
         while (true) {
             try {
-                System.out.println("Введите LocationTo X:");
+                System.out.println("Введите LocationTo X (тип: float):");
                 return Float.parseFloat(ConsoleManager.getUserPrint());
             }
-            catch (Exception e){
+            catch (NumberFormatException e){
                 e.printStackTrace();
             }
         }
@@ -177,10 +204,10 @@ public class CreateNewElementManager {
     private static Long askLocationToY(){
         while (true) {
             try {
-                System.out.println("Введите LocationTo Y:");
+                System.out.println("Введите LocationTo Y (тип: long):");
                 return Long.parseLong(ConsoleManager.getUserPrint());
             }
-            catch (Exception e){
+            catch (NumberFormatException e){
                 e.printStackTrace();
             }
         }
@@ -189,10 +216,10 @@ public class CreateNewElementManager {
     private static String askLocationToName(){
         while (true) {
             try {
-                System.out.println("Введите LocationTo name:");
+                System.out.println("Введите LocationTo name (тип: String):");
                 return ConsoleManager.getUserPrint();
             }
-            catch (Exception e){
+            catch (NumberFormatException e){
                 e.printStackTrace();
             }
         }
@@ -201,7 +228,7 @@ public class CreateNewElementManager {
     private static Long askDistance(){
         while (true) {
             try {
-                System.out.println("Введите distance:");
+                System.out.println("Введите distance (тип: long, больше 1):");
                 var userPrint = Long.parseLong(ConsoleManager.getUserPrint());
                 if (userPrint < 2) {
                     throw new IllegalArgumentException("Значение distance должно быть больше 1");
