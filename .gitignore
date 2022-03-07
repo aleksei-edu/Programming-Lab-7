@@ -151,3 +151,8 @@ main.toc
 .Trashes
 ehthumbs.db
 Thumbs.db
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build

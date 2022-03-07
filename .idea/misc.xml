@@ -2,16 +2,28 @@
 <project version="4">
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="16" project-jdk-type="JavaSDK" />
 =======
 =======
+=======
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+    <file type="web" url="file://$PROJECT_DIR$/gradleLab5" />
+  </component>
+>>>>>>> 6c6441f (add gradle, openCSV)
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/Javadocs" />
     <option name="OPTION_SCOPE" value="private" />
     <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="true" />
   </component>
+<<<<<<< HEAD
 >>>>>>> a4fe1b4 (3.0)
   <component name="ProjectRootManager" version="2" project-jdk-name="16" project-jdk-type="JavaSDK">
+=======
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" default="true" project-jdk-name="16" project-jdk-type="JavaSDK">
+>>>>>>> 6c6441f (add gradle, openCSV)
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 >>>>>>> ff983b0 (first commit)

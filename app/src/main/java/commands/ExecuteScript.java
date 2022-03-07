@@ -1,8 +1,7 @@
 package commands;
 
-import exception.CommandNeedArgumentException;
 import exception.CommandNotAcceptArgumentsException;
-import utility.CollectionManager;
+import exception.CommandNeedArgumentException;
 import utility.FileManager;
 
 public class ExecuteScript extends AbstractCommand{

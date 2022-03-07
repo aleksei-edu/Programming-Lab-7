@@ -1,8 +1,6 @@
 package commands;
 
-import data.Route;
 import exception.CommandNotAcceptArgumentsException;
-import utility.CollectionManager;
 import utility.CommandManager;
 
 public class HistoryCommand extends AbstractCommand{

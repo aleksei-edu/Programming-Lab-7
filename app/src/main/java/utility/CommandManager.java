@@ -10,6 +10,7 @@ import java.util.List;
  * Класс управляет командами
  */
 public class CommandManager {
+    //TODO не
     private static final List<CommandInterface> commands = new ArrayList<>();
     private static CommandInterface[] last10Commands = new CommandInterface[10];
     private static int last10CommandsIter = 0;

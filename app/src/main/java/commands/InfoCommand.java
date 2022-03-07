@@ -1,11 +1,7 @@
 package commands;
 
-import data.Route;
 import exception.CommandNotAcceptArgumentsException;
 import utility.CollectionManager;
-
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 public class InfoCommand extends AbstractCommand{
     public InfoCommand(){

@@ -1,22 +1,17 @@
 package commands;
 
-import data.Route;
 import exception.CommandNotAcceptArgumentsException;
 import utility.CollectionManager;
-import utility.CommandManager;
 
-public class HelpCommand extends AbstractCommand{
-    public HelpCommand(){
-        super("help","вывести справку по доступным командам");
+public class ClearCommand extends AbstractCommand {
+    public ClearCommand(){
+        super("clear","очистить коллекцию");
     }
-
     @Override
     public void execute(String argument) {
         try {
             if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
-            for (CommandInterface command : CommandManager.getCommands()){
-                System.out.println(command.toString());
-            }
+            CollectionManager.clear();
         }
         catch(CommandNotAcceptArgumentsException e){
             e.printStackTrace();

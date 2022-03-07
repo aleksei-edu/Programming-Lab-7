@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
 <<<<<<< HEAD
+<<<<<<< HEAD
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
@@ -14,6 +15,15 @@
     </annotationProcessing>
     <bytecodeTargetLevel target="16" />
 =======
+=======
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="16">
+      <module name="gradleLab5" target="16" />
+      <module name="gradleLab5.main" target="16" />
+      <module name="gradleLab5.test" target="16" />
+    </bytecodeTargetLevel>
+  </component>
+>>>>>>> 6c6441f (add gradle, openCSV)
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="lab5.1" options="--add-exports java.base/javax=ALL-UNNAMED" />

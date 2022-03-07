@@ -3,6 +3,7 @@ package utility;
 import java.io.*;
 import java.util.*;
 
+import com.opencsv.CSVReader;
 import data.Coordinates;
 import data.LocationFrom;
 import data.LocationTo;
@@ -67,6 +68,7 @@ public class FileManager  {
         try {
             if (System.getenv(env) == null) throw new NullEnvException();
             reader = new BufferedReader(new FileReader(System.getenv(env)));
+            CSVReader reader1 = new CSVReader(reader);
             while((line = reader.readLine()) != null){
                 String[] row = line.split(",");
                 for (int i = 0; i < row.length; i++){

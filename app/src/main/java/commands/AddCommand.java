@@ -1,8 +1,6 @@
 package commands;
 
-import exception.CommandNeedArgumentException;
 import exception.CommandNotAcceptArgumentsException;
-import utility.CollectionManager;
 import utility.CreateNewElementManager;
 
 public class AddCommand extends AbstractCommand{

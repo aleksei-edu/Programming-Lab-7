@@ -4,7 +4,6 @@ import data.Route;
 import exception.CommandNeedArgumentException;
 import exception.CommandNotAcceptArgumentsException;
 import utility.CollectionManager;
-import utility.ConsoleManager;
 import utility.CreateNewElementManager;
 
 public class UpdateCommand extends AbstractCommand{

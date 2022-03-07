@@ -1,6 +1,4 @@
 package utility;
-import utility.CommandManager;
-import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -16,7 +14,7 @@ public class ConsoleManager {
      * Считывает из пользовательского ввода введенную команду.
      */
     public static void interactiveMode(){
-        var userCommand = (userScanner.nextLine().toLowerCase().trim() + " ").split(" ",2);
+        String[] userCommand = (userScanner.nextLine().toLowerCase().trim() + " ").split(" ",2);
         CommandManager.execute(userCommand[0],userCommand[1]);
     }
 
