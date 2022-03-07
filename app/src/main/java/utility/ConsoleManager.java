@@ -1,4 +1,5 @@
 package utility;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -13,7 +14,7 @@ public class ConsoleManager {
     /**
      * Считывает из пользовательского ввода введенную команду.
      */
-    public static void interactiveMode(){
+    public static void interactiveMode() throws IOException {
         String[] userCommand = (userScanner.nextLine().toLowerCase().trim() + " ").split(" ",2);
         CommandManager.execute(userCommand[0],userCommand[1]);
     }

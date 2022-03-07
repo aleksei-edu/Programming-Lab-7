@@ -1,11 +1,13 @@
 package utility;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
 import data.Route;
 import exception.IdOverflowException;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,6 +30,8 @@ public class CollectionManager {
      * Коллекция в которой хранятся {@link Route}
      */
     private static Set<Route> routeCollection = new LinkedHashSet<Route>();
+
+    private static ArrayList<String[]> stringRouteCollection = new ArrayList<>();
 
     /**
      * Метод ищет новое уникальное id
@@ -98,5 +102,14 @@ public class CollectionManager {
     public static void clear(){
         routeCollection.clear();
         System.out.println("Коллекция успешно очищена.");
+    }
+
+
+    public static ArrayList<String[]> getStringRouteCollection() {
+        return stringRouteCollection;
+    }
+
+    public static void addStringRouteCollection(String[] stringRoute) {
+        stringRouteCollection.add(stringRoute);
     }
 }

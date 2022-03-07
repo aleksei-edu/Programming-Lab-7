@@ -3,6 +3,7 @@ package utility;
 import commands.*;
 import exception.CommandNotFoundException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class CommandManager {
      * @param argument  аргумент команды введенной пользователем
      */
 
-    public static void execute(String userCommand, String argument){
+    public static void execute(String userCommand, String argument) throws IOException {
         try {
             boolean flag = false;
             for (CommandInterface commandIter : commands) {

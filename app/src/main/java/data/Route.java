@@ -57,6 +57,10 @@ public class Route implements Comparable<Route> {
             routeList.add(to.getY().toString());
             routeList.add(to.getName());
             routeList.add(distance.toString());
+            String[] str = {routeList.get(0), routeList.get(1), routeList.get(2), routeList.get(3), routeList.get(4),
+            routeList.get(5), routeList.get(6), routeList.get(7), routeList.get(8), routeList.get(9), routeList.get(10),
+            routeList.get(11)};
+            CollectionManager.addStringRouteCollection(str);
         }
         catch(IllegalArgumentException e){
             e.printStackTrace();

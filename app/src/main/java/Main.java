@@ -1,7 +1,9 @@
 import utility.*;
 
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         FileManager.setEnv("LABA");
         CollectionManager.loadCollection();
         //TODO: PrintTable

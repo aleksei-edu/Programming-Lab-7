@@ -3,7 +3,7 @@ package utility;
 import java.io.*;
 import java.util.*;
 
-import com.opencsv.CSVReader;
+import com.opencsv.*;
 import data.Coordinates;
 import data.LocationFrom;
 import data.LocationTo;
@@ -34,28 +34,21 @@ public class FileManager  {
     /**
      * Сохранить коллекцию в файл
      */
-    public static void saveCollection() {
-        BufferedWriter writer = null;
+    public static void saveCollection() throws IOException {
+        BufferedWriter bWriter = null;
+        CSVWriter writer = null;
         try {
             if (System.getenv(env) == null) throw new NullEnvException();
             OutputStream os = new FileOutputStream(System.getenv(env));
-            writer = new BufferedWriter(new OutputStreamWriter(os));
-            for (Route route : CollectionManager.getRouteCollection()) {
-                String str = String.join(",", route.getRouteList());
-                writer.write(str + "\n");
-            }
+            bWriter = new BufferedWriter(new OutputStreamWriter(os));
+            writer= new CSVWriter(bWriter);
+            writer.writeAll(CollectionManager.getStringRouteCollection());
         } catch (NullEnvException | FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
-            try {
-                writer.close();
-                System.out.println("Коллекция успешно сохранена в " + env + ".");
-                CollectionManager.saveTimeCollection();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            writer.close();
+            System.out.println("Коллекция успешно сохранена в " + env + ".");
+            CollectionManager.saveTimeCollection();
         }
     }
 
@@ -64,20 +57,26 @@ public class FileManager  {
      */
     public static void readCollection(){
         BufferedReader reader = null;
-        String line = "";
+        String[] line = null;
         try {
             if (System.getenv(env) == null) throw new NullEnvException();
             reader = new BufferedReader(new FileReader(System.getenv(env)));
-            CSVReader reader1 = new CSVReader(reader);
-            while((line = reader.readLine()) != null){
-                String[] row = line.split(",");
-                for (int i = 0; i < row.length; i++){
-                    row[i] = row[i].trim().toLowerCase();
+            CSVParser parser = new CSVParserBuilder()
+                    .withSeparator(',')
+                    .withIgnoreQuotations(true)
+                    .build();
+            CSVReader csvReader = new CSVReaderBuilder(reader)
+                    .withSkipLines(0)
+                    .withCSVParser(parser)
+                    .build();
+            while((line = csvReader.readNext()) != null){
+                for (int i = 0; i < line.length; i++){
+                    line[i] = line[i].trim().toLowerCase();
                 }
-                CollectionManager.getRouteCollection().add(new Route(row[0],row[1],
-                        new Coordinates(Double.parseDouble(row[2]),Double.parseDouble(row[3])),row[4],
-                        new LocationFrom(Integer.parseInt(row[5]),Float.parseFloat(row[6]),Double.parseDouble(row[7])),
-                        new LocationTo(Float.parseFloat(row[8]), Long.parseLong(row[9]),row[10]), Long.parseLong(row[11])));
+                CollectionManager.getRouteCollection().add(new Route(line[0],line[1],
+                        new Coordinates(Double.parseDouble(line[2]),Double.parseDouble(line[3])),line[4],
+                        new LocationFrom(Integer.parseInt(line[5]),Float.parseFloat(line[6]),Double.parseDouble(line[7])),
+                        new LocationTo(Float.parseFloat(line[8]), Long.parseLong(line[9]),line[10]), Long.parseLong(line[11])));
             }
         }
         catch(NullEnvException e){
