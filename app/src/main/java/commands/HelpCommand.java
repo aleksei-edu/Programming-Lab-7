@@ -1,7 +1,7 @@
 package commands;
 
 import exception.CommandNotAcceptArgumentsException;
-import utility.CommandManager;
+import invokers.CommandManager;
 
 public class HelpCommand extends AbstractCommand{
     public HelpCommand(){
@@ -12,7 +12,7 @@ public class HelpCommand extends AbstractCommand{
     public void execute(String argument) {
         try {
             if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
-            for (CommandInterface command : CommandManager.getCommands()){
+            for (Command command : CommandManager.getCommands()){
                 System.out.println(command.toString());
             }
         }

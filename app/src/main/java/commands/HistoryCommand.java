@@ -1,7 +1,7 @@
 package commands;
 
 import exception.CommandNotAcceptArgumentsException;
-import utility.CommandManager;
+import invokers.CommandManager;
 
 public class HistoryCommand extends AbstractCommand{
     public HistoryCommand(){

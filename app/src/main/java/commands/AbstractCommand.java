@@ -1,6 +1,9 @@
 package commands;
 
-public abstract class AbstractCommand implements CommandInterface {
+/**
+ * Абстрактный класс, от которого наследуются все команды.
+ */
+public abstract class AbstractCommand implements Command {
     private String name;
     private String description;
 

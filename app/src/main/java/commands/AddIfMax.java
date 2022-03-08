@@ -5,6 +5,9 @@ import exception.CommandNotAcceptArgumentsException;
 import utility.CollectionManager;
 import utility.CreateNewElementManager;
 
+/**
+ * Команда добавить новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции
+ */
 public class AddIfMax extends AbstractCommand{
     public AddIfMax(){
         super("add_if_max","добавить новый элемент в коллекцию, " +

@@ -1,4 +1,4 @@
-package utility;
+package invokers;
 
 import commands.*;
 import exception.CommandNotFoundException;
@@ -12,43 +12,26 @@ import java.util.List;
  */
 public class CommandManager {
     //TODO не
-    private static final List<CommandInterface> commands = new ArrayList<>();
-    private static CommandInterface[] last10Commands = new CommandInterface[10];
+    private static final List<Command> commands = new ArrayList<>();
+    private static Command[] last10Commands = new Command[10];
     private static int last10CommandsIter = 0;
-    private static final CommandInterface show = new ShowCommand();
-    private static final CommandInterface exit = new ExitCommand();
-    private static final CommandInterface help = new HelpCommand();
-    private static final CommandInterface save = new SaveCommand();
-    private static final CommandInterface clear = new ClearCommand();
-    private static final CommandInterface history = new HistoryCommand();
-    private static final CommandInterface removeById = new RemoveByIdCommand();
-    private static final CommandInterface info = new InfoCommand();
-    private static final CommandInterface add = new AddCommand();
-    private static final CommandInterface update = new UpdateCommand();
-    private static final CommandInterface script = new ExecuteScript();
-    private static final CommandInterface addIfMax = new AddIfMax();
-    private static final CommandInterface removeLower = new RemoveLower();
-    private static final CommandInterface removeAllByDistance = new RemoveAllByDistance();
-    private static final CommandInterface minByDistance = new MinByDistance();
-    private static final CommandInterface maxByCreationDate = new MaxByCreationDate();
-
     static {
-        commands.add(help);
-        commands.add(info);
-        commands.add(show);
-        commands.add(add);
-        commands.add(update);
-        commands.add(removeById);
-        commands.add(clear);
-        commands.add(save);
-        commands.add(script);
-        commands.add(exit);
-        commands.add(addIfMax);
-        commands.add(removeLower);
-        commands.add(history);
-        commands.add(removeAllByDistance);
-        commands.add(minByDistance);
-        commands.add(maxByCreationDate);
+        commands.add(new HelpCommand());
+        commands.add(new InfoCommand());
+        commands.add(new ShowCommand());
+        commands.add(new AddCommand());
+        commands.add(new UpdateCommand());
+        commands.add(new RemoveByIdCommand());
+        commands.add(new ClearCommand());
+        commands.add(new SaveCommand());
+        commands.add(new ExecuteScript());
+        commands.add(new ExitCommand());
+        commands.add(new AddIfMax());
+        commands.add(new RemoveLower());
+        commands.add(new HistoryCommand());
+        commands.add(new RemoveAllByDistance());
+        commands.add(new MinByDistance());
+        commands.add(new MaxByCreationDate());
     }
 
     /**
@@ -60,7 +43,7 @@ public class CommandManager {
     public static void execute(String userCommand, String argument) throws IOException {
         try {
             boolean flag = false;
-            for (CommandInterface commandIter : commands) {
+            for (Command commandIter : commands) {
                 if (commandIter.getName().equals(userCommand)) {
                     commandIter.execute(argument.toLowerCase().trim());
                     CommandManager.addLastCommand(commandIter);
@@ -81,7 +64,8 @@ public class CommandManager {
      * Добавляет команду в историю последних 10 команд
      * @param lastCommand последняя введённая команда
      */
-    public static void addLastCommand(CommandInterface lastCommand){
+    //TODO можно добавить через Stack
+    public static void addLastCommand(Command lastCommand){
         last10Commands[last10CommandsIter % 10] = lastCommand;
         last10CommandsIter+=1;
     }
@@ -90,7 +74,7 @@ public class CommandManager {
      * Возвращает массив из последних 10 команд
      * @return массив последних 10 команд
      */
-    private static CommandInterface[] getLast10Commands(){
+    private static Command[] getLast10Commands(){
         return last10Commands;
     }
 
@@ -110,7 +94,7 @@ public class CommandManager {
      * Возвращает все доступные команды
      * @return выводит List из всех доступных команд
      */
-    public static List<CommandInterface> getCommands(){
+    public static List<Command> getCommands(){
         return commands;
     }
 }
