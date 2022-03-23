@@ -1,5 +1,11 @@
 package data;
 
+import lombok.Getter;
+
+/**
+ * Объекты, которые используются Route
+ */
+@Getter
 public class LocationTo {
     private Float x; //Поле не может быть null
     private Long y; //Поле не может быть null
@@ -23,18 +29,6 @@ public class LocationTo {
 
     public String toString(){
         return "LocationTo x: " + x.toString() + ", LocationTo y: " + y.toString() + ", LocationTo name: " + name;
-    }
-
-    public Float getX(){
-        return x;
-    }
-
-    public Long getY(){
-        return y;
-    }
-
-    public String getName(){
-        return name;
     }
 
     public void updateLocationTo(Float x, Long y, String name){

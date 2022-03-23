@@ -1,13 +1,16 @@
-package commands;
+package commands.impl;
 
+import annotation.ClassMeta;
+import commands.AbstractCommand;
 import exception.CommandNeedArgumentException;
 import exception.CommandNotAcceptArgumentsException;
-import utility.CollectionManager;
+import utility.JavaCollectionManager;
 
-public class RemoveByIdCommand extends AbstractCommand{
-    public RemoveByIdCommand(){
-        super("remove_by_id","удалить элемент из коллекции по его id");
-    }
+/**
+ * Команда удаляет элемент из коллекции по id
+ */
+@ClassMeta(name = "remove_by_id", description = "удалить элемент из коллекции по его id")
+public class RemoveById extends AbstractCommand {
 
     @Override
     public void execute(String argument) {
@@ -15,7 +18,7 @@ public class RemoveByIdCommand extends AbstractCommand{
             if(argument.isEmpty()) throw new CommandNeedArgumentException();
             try{
                 int id = Integer.parseInt(argument);
-                CollectionManager.getRouteCollection().removeIf(route -> (route.getId()==id));
+                JavaCollectionManager.getRouteCollection().removeIf(route -> (route.getId()==id));
                 System.out.println("Удалён элемент по id: " + id);
             }
             catch(NumberFormatException e){

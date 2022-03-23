@@ -1,5 +1,11 @@
 package data;
 
+import lombok.Getter;
+
+/**
+ * Объекты, которые используются в Route
+ */
+@Getter
 public class LocationFrom {
     private Integer x; //Поле не может быть null
     private float y;
@@ -21,18 +27,6 @@ public class LocationFrom {
 
     public String toString(){
         return "LocationFrom x: " + x.toString() + ", LocationFrom y: " + y + ", LocationFrom z: " + z;
-    }
-
-    public Integer getX(){
-        return x;
-    }
-
-    public float getY(){
-        return y;
-    }
-
-    public double getZ(){
-        return x;
     }
 }
 

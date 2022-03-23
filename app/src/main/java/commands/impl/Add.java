@@ -1,12 +1,15 @@
-package commands;
+package commands.impl;
 
+import annotation.ClassMeta;
+import commands.AbstractCommand;
 import exception.CommandNotAcceptArgumentsException;
 import utility.CreateNewElementManager;
 
-public class AddCommand extends AbstractCommand{
-    public AddCommand(){
-        super("add","добавить новый элемент в коллекцию");
-    }
+/**
+ * Команда добавить новый элемент в коллекцию
+ */
+@ClassMeta(name = "add", description = "добавить новый элемент в коллекцию")
+public class Add extends AbstractCommand {
 
     @Override
     public void execute(String argument) {

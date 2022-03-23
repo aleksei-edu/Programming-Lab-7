@@ -1,14 +1,16 @@
-package commands;
+package commands.impl;
 
+import annotation.ClassMeta;
+import commands.AbstractCommand;
 import exception.CommandNotAcceptArgumentsException;
 import exception.CommandNeedArgumentException;
 import utility.FileManager;
 
-public class ExecuteScript extends AbstractCommand{
-    public ExecuteScript(){
-        super("execute_script","считать и исполнить скрипт из указанного файла. " +
-                "В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
-    }
+/**
+ * Команда считывающая и выполняющая скрипт из файла
+ */
+@ClassMeta(name = "execute_script", description = "считать и исполнить скрипт из указанного файла.")
+public class ExecuteScript extends AbstractCommand {
 
     @Override
     public void execute(String argument) {

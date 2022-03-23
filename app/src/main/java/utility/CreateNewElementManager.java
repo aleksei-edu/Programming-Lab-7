@@ -1,5 +1,9 @@
 package utility;
 
+import commands.impl.Add;
+import commands.impl.RemoveLower;
+import commands.impl.Update;
+import commands.impl.AddIfMax;
 import data.Coordinates;
 import data.LocationFrom;
 import data.LocationTo;
@@ -16,7 +20,7 @@ public class CreateNewElementManager {
 
     /**
      * Обновить элемент {@link Route}
-     * @see commands.UpdateCommand
+     * @see Update
      * @param oldroute элемент {@link Route} который мы хотим обновить.
      */
     public static void update(Route oldroute){
@@ -32,8 +36,8 @@ public class CreateNewElementManager {
 
     /**
      * Создать новый элемент {@link Route}
-     * @see commands.AddIfMax
-     * @see commands.RemoveLower
+     * @see AddIfMax
+     * @see RemoveLower
      * @return новый {@link Route}
      */
     public static Route createNewElement(){
@@ -51,7 +55,7 @@ public class CreateNewElementManager {
 
     /**
      * Добавить новый элемент {@link Route} в коллекцию
-     * @see commands.AddCommand
+     * @see Add
      */
     public static void add(){
         Route route = new Route("",
@@ -84,7 +88,7 @@ public class CreateNewElementManager {
                 String userPrint = ConsoleManager.getUserPrint();
                 if (userPrint.equals("y")){
                     if (mode == 0) {
-                        CollectionManager.getRouteCollection().add(newRoute);
+                        JavaCollectionManager.getRouteCollection().add(newRoute);
                         System.out.println("Элемент добавлен в коллекцию");
                     }
                     else if(mode == 1){

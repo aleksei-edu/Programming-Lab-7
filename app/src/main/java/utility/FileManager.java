@@ -42,13 +42,13 @@ public class FileManager  {
             OutputStream os = new FileOutputStream(System.getenv(env));
             bWriter = new BufferedWriter(new OutputStreamWriter(os));
             writer= new CSVWriter(bWriter);
-            writer.writeAll(CollectionManager.getStringRouteCollection());
+            writer.writeAll(JavaCollectionManager.getStringRouteCollection());
         } catch (NullEnvException | FileNotFoundException e) {
             e.printStackTrace();
         } finally {
             writer.close();
             System.out.println("Коллекция успешно сохранена в " + env + ".");
-            CollectionManager.saveTimeCollection();
+            JavaCollectionManager.saveTimeCollection();
         }
     }
 
@@ -73,7 +73,7 @@ public class FileManager  {
                 for (int i = 0; i < line.length; i++){
                     line[i] = line[i].trim().toLowerCase();
                 }
-                CollectionManager.getRouteCollection().add(new Route(line[0],line[1],
+                JavaCollectionManager.getRouteCollection().add(new Route(line[0],line[1],
                         new Coordinates(Double.parseDouble(line[2]),Double.parseDouble(line[3])),line[4],
                         new LocationFrom(Integer.parseInt(line[5]),Float.parseFloat(line[6]),Double.parseDouble(line[7])),
                         new LocationTo(Float.parseFloat(line[8]), Long.parseLong(line[9]),line[10]), Long.parseLong(line[11])));

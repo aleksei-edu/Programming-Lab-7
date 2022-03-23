@@ -1,5 +1,11 @@
 package data;
 
+import lombok.Getter;
+
+/**
+ * Объекты, которые используются в Route.
+ */
+@Getter
 public class Coordinates {
     private Double x; //Максимальное значение поля: 669, Поле не может быть null
     private double y;
@@ -20,13 +26,5 @@ public class Coordinates {
     @Override
     public String toString(){
         return "Coordinate x: " + x + ", Coordinate y: " + y;
-    }
-
-    public Double getX(){
-        return x;
-    }
-
-    public double getY(){
-        return y;
     }
 }

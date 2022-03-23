@@ -4,11 +4,11 @@ import java.io.IOException;
 
 public interface Command {
     /**
-     * Имя команды, по которому пользователь, вызывает её
+     * Запускает выполнение команды
      *
-     * @return String - имя команды
+     * @param argument аргумент команды (если есть, иначе null)
      */
+    public void execute(String argument);
+    public String toString();
     public String getName();
-    public String getDescription();
-    public void execute(String argument) throws IOException;
 }

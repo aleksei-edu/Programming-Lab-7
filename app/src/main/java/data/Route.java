@@ -1,11 +1,18 @@
 package data;
-import utility.CollectionManager;
+import commands.impl.MaxByCreationDate;
+import commands.impl.MinByDistance;
+import lombok.Getter;
+import utility.JavaCollectionManager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Элементы коллекцией, которыми управляет программа
+ */
+@Getter
 public class Route implements Comparable<Route> {
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
@@ -34,11 +41,11 @@ public class Route implements Comparable<Route> {
     public Route(String id,String name, Coordinates coordinates, String creationDate,
                     LocationFrom from, LocationTo to, Long distance ){
         try {
-            if (id.equals("")) this.id = CollectionManager.getFreeNumberForId();
+            if (id.equals("")) this.id = JavaCollectionManager.getFreeNumberForId();
             else this.id = Integer.parseInt(id);
             if (name == null || name.equals("")) throw new IllegalArgumentException(); else this.name = name;
             if(coordinates == null) throw new IllegalArgumentException(); else this.coordinates = coordinates;
-            if (creationDate.equals("")) this.creationDate = CollectionManager.getLastInitTime();
+            if (creationDate.equals("")) this.creationDate = JavaCollectionManager.getLastInitTime();
             else this.creationDate = LocalDate.parse(creationDate);
             if (from == null) throw new IllegalArgumentException(); else this.from = from;
             if (to == null) throw new IllegalArgumentException(); else this.to = to;
@@ -60,20 +67,12 @@ public class Route implements Comparable<Route> {
             String[] str = {routeList.get(0), routeList.get(1), routeList.get(2), routeList.get(3), routeList.get(4),
             routeList.get(5), routeList.get(6), routeList.get(7), routeList.get(8), routeList.get(9), routeList.get(10),
             routeList.get(11)};
-            CollectionManager.addStringRouteCollection(str);
+            JavaCollectionManager.addStringRouteCollection(str);
         }
         catch(IllegalArgumentException e){
             e.printStackTrace();
         }
     }
-
-    public int getId(){
-        return id;
-    }
-
-    public LocalDate getCreationDate(){return creationDate;}
-
-    public Long getDistance(){return distance;}
 
     /**
      * Обновить поля элемента Route
@@ -102,12 +101,21 @@ public class Route implements Comparable<Route> {
         return compareId.compareTo(routeObj.getId());
     }
 
+    /**
+     * Класс для сравнения элементов Route по дистанции
+     * @see MinByDistance
+     */
     public static class ComparatorByDistance implements Comparator<Route>{
         @Override
         public int compare(Route o1, Route o2) {
             return o1.getDistance().compareTo(o2.getDistance());
         }
     }
+
+    /**
+     * Класc для сравнения элементов Route по дате создания
+     * @see MaxByCreationDate
+     */
     public static class ComparatorByCreationDate implements Comparator<Route>{
         @Override
         public int compare(Route o1, Route o2) {
