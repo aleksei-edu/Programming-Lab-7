@@ -1,9 +1,5 @@
 package utility;
 
-import java.io.*;
-import java.util.*;
-
-import annotation.Inject;
 import com.opencsv.*;
 import data.Coordinates;
 import data.LocationFrom;
@@ -13,17 +9,20 @@ import exception.NullEnvException;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.*;
+import java.util.Scanner;
+
 /**
  * Класс управляет записью/чтением из файлов
  */
-public class FileManager  {
+public class FileManager {
     /**
      * Переменная окружения
      */
     @Setter
     @Getter
     private String env;
-    private CollectionManager  collectionManager = JavaCollectionManager.getInstance();
+    private CollectionManager collectionManager = JavaCollectionManager.getInstance();
 
     /**
      * Сохранить коллекцию в файл
@@ -35,7 +34,7 @@ public class FileManager  {
             if (System.getenv(env) == null) throw new NullEnvException();
             OutputStream os = new FileOutputStream(System.getenv(env));
             bWriter = new BufferedWriter(new OutputStreamWriter(os));
-            writer= new CSVWriter(bWriter);
+            writer = new CSVWriter(bWriter);
             writer.writeAll(JavaCollectionManager.getStringRouteCollection());
         } catch (NullEnvException | FileNotFoundException e) {
             e.printStackTrace();
@@ -49,7 +48,7 @@ public class FileManager  {
     /**
      * Загрузить коллекцию из файла
      */
-    public void readCollection(){
+    public void readCollection() {
         BufferedReader reader = null;
         String[] line = null;
         try {
@@ -63,27 +62,23 @@ public class FileManager  {
                     .withSkipLines(0)
                     .withCSVParser(parser)
                     .build();
-            while((line = csvReader.readNext()) != null){
-                for (int i = 0; i < line.length; i++){
+            while ((line = csvReader.readNext()) != null) {
+                for (int i = 0; i < line.length; i++) {
                     line[i] = line[i].trim().toLowerCase();
                 }
-                collectionManager.getRouteCollection().add(new Route(line[0],line[1],
-                        new Coordinates(Double.parseDouble(line[2]),Double.parseDouble(line[3])),line[4],
-                        new LocationFrom(Integer.parseInt(line[5]),Float.parseFloat(line[6]),Double.parseDouble(line[7])),
-                        new LocationTo(Float.parseFloat(line[8]), Long.parseLong(line[9]),line[10]), Long.parseLong(line[11])));
+                collectionManager.getRouteCollection().add(new Route(line[0], line[1],
+                        new Coordinates(Double.parseDouble(line[2]), Double.parseDouble(line[3])), line[4],
+                        new LocationFrom(Integer.parseInt(line[5]), Float.parseFloat(line[6]), Double.parseDouble(line[7])),
+                        new LocationTo(Float.parseFloat(line[8]), Long.parseLong(line[9]), line[10]), Long.parseLong(line[11])));
             }
-        }
-        catch(NullEnvException e){
+        } catch (NullEnvException e) {
             e.printStackTrace();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally{
-            try{
+        } finally {
+            try {
                 reader.close();
-            }
-            catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -91,9 +86,10 @@ public class FileManager  {
 
     /**
      * Выполнить скрипт из файла
+     *
      * @param fileName
      */
-    public void readScript(String  fileName){
+    public void readScript(String fileName) {
         BufferedReader reader = null;
         try {
             File file = new File(fileName);
@@ -101,23 +97,20 @@ public class FileManager  {
             InputStream fileInput = new FileInputStream(file);
             Scanner userScanner = new Scanner(fileInput);
             ConsoleManager.setUserScanner(userScanner);
-            while (( reader.readLine()) != null) {
+            while ((reader.readLine()) != null) {
                 ConsoleManager.interactiveMode();
             }
             userScanner = new Scanner(System.in);
             ConsoleManager.setUserScanner(userScanner);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally{
-            try{
+        } finally {
+            try {
                 reader.close();
-            }
-            catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-    
+
 }

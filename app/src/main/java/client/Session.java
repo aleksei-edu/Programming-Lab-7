@@ -12,6 +12,7 @@ public class Session {
     private CollectionManager collectionManager;
     @Inject
     private FileManager fileManager;
+
     public void startUp() throws IOException {
         fileManager.setEnv("LABA");
         collectionManager.loadCollection();

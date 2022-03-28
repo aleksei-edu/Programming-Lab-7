@@ -14,15 +14,13 @@ public class Add extends AbstractCommand {
     @Override
     public void execute(String argument) {
         try {
-            if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
-            try{
+            if (!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
+            try {
                 CreateNewElementManager.add();
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        catch(CommandNotAcceptArgumentsException e){
+        } catch (CommandNotAcceptArgumentsException e) {
             e.printStackTrace();
         }
     }

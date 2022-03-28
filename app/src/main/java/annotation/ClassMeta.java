@@ -7,5 +7,6 @@ import java.lang.annotation.*;
 @Inherited
 public @interface ClassMeta {
     String name();
+
     String description() default "description is empty";
 }

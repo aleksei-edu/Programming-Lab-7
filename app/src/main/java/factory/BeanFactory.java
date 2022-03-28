@@ -21,7 +21,8 @@ public class BeanFactory {
     @Getter
     private final BeanConfigurator beanConfigurator;
     private ApplicationContext applicationContext;
-    public BeanFactory(ApplicationContext applicationContext){
+
+    public BeanFactory(ApplicationContext applicationContext) {
         this.configuration = new JavaConfiguration();
         this.beanConfigurator = new JavaBeanConfigurator(configuration.getPackageToScan());
         this.applicationContext = applicationContext;
@@ -29,7 +30,7 @@ public class BeanFactory {
 
     public <T> T getBean(Class<T> clazz) {
         Class<? extends T> implementationClass = clazz;
-        if (implementationClass.isInterface()){
+        if (implementationClass.isInterface()) {
             implementationClass = beanConfigurator.getImplementationClass(implementationClass);
         }
         T bean = null;
@@ -44,10 +45,10 @@ public class BeanFactory {
         } catch (NoSuchMethodException e) {
             System.err.println("Конструктор не найден");
         }
-        for (Field field : Arrays.stream(implementationClass.getDeclaredFields()).filter(field -> field.isAnnotationPresent(Inject.class)).collect(Collectors.toList())){
+        for (Field field : Arrays.stream(implementationClass.getDeclaredFields()).filter(field -> field.isAnnotationPresent(Inject.class)).collect(Collectors.toList())) {
             field.setAccessible(true);
             try {
-                field.set(bean,applicationContext.getBean(field.getType()));
+                field.set(bean, applicationContext.getBean(field.getType()));
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }

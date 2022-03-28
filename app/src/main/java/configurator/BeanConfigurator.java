@@ -7,6 +7,8 @@ import org.reflections.Reflections;
  */
 public interface BeanConfigurator {
     Class<?> getImplementationClass(String commandName);
+
     <T> Class<? extends T> getImplementationClass(Class<T> interfaceClass);
+
     public Reflections getScanner();
 }

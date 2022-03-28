@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"annotation"},{"l":"client"},{"l":"commands"},{"l":"commands.impl"},{"l":"config"},{"l":"configurator"},{"l":"context"},{"l":"data"},{"l":"exception"},{"l":"factory"},{"l":"postprocessor"},{"l":"utility"}];updateSearchResults();

@@ -11,18 +11,18 @@ import utility.HistoryStack;
  */
 @ClassMeta(name = "history", description = "вывести последние 10 команд (без их аргументов)")
 public class History extends AbstractCommand {
-    public History(){
+    public History() {
     }
 
+    //TODOs
     @Override
     public void execute(String argument) {
         try {
-            if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
-            for(Command command : HistoryStack.getInstance().last10()){
+            if (!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
+            for (Command command : HistoryStack.getInstance().last10()) {
                 System.out.println(command.getName());
             }
-        }
-        catch(CommandNotAcceptArgumentsException e){
+        } catch (CommandNotAcceptArgumentsException e) {
             e.printStackTrace();
         }
     }

@@ -11,12 +11,11 @@ import exception.CommandNotAcceptArgumentsException;
 public class Exit extends AbstractCommand {
 
     @Override
-    public void execute(String argument){
+    public void execute(String argument) {
         try {
-            if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
+            if (!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
             System.exit(0);
-        }
-        catch(CommandNotAcceptArgumentsException e){
+        } catch (CommandNotAcceptArgumentsException e) {
             e.printStackTrace();
         }
     }

@@ -8,7 +8,7 @@ import annotation.ClassMeta;
 
 public abstract class AbstractCommand implements Command {
     @Override
-    public String toString(){
+    public String toString() {
         ClassMeta commandMeta = this.getClass().getAnnotation(ClassMeta.class);
         return commandMeta.name() + " – " + commandMeta.description();
     }

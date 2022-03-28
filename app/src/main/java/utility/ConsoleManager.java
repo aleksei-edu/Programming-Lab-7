@@ -16,30 +16,33 @@ public class ConsoleManager {
      * Считывает из пользовательского ввода введенную команду.
      */
     public static void interactiveMode() throws IOException {
-        String[] userCommand = (userScanner.nextLine().toLowerCase().trim()+" ").split(" ",2);
-        CommandManager.execute(userCommand[0],userCommand[1].trim());
+        String[] userCommand = (userScanner.nextLine().toLowerCase().trim() + " ").split(" ", 2);
+        CommandManager.execute(userCommand[0], userCommand[1].trim());
     }
 
 
     /**
      * Возвращает пользовательский ввод очищенный от мусора.
+     *
      * @return String - из пользовательского ввода
      */
-    public static String getUserPrint(){
+    public static String getUserPrint() {
         String userPrint = null;
-        if (!userScanner.hasNext()){
+        if (!userScanner.hasNext()) {
             setUserScanner(new Scanner(System.in));
             userPrint = userScanner.nextLine().trim().toLowerCase();
+        } else {
+            userPrint = userScanner.nextLine().trim().toLowerCase();
         }
-        else{ userPrint = userScanner.nextLine().trim().toLowerCase();}
         return userPrint;
     }
 
     /**
      * Изменить канал получение пользовательского ввода
+     *
      * @param userScanner Scanner с пользовательским вводом
      */
-    public static void setUserScanner(Scanner userScanner){
+    public static void setUserScanner(Scanner userScanner) {
         ConsoleManager.userScanner = userScanner;
     }
 

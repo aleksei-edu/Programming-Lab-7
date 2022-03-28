@@ -1,7 +1,6 @@
 package commands.impl;
 
 import annotation.ClassMeta;
-import annotation.Inject;
 import commands.AbstractCommand;
 import data.Route;
 import exception.CommandNotAcceptArgumentsException;
@@ -14,18 +13,17 @@ import utility.JavaCollectionManager;
 @ClassMeta(name = "show", description = "вывести в стандартный поток вывода все элементы коллекции в строковом представлении")
 public class Show extends AbstractCommand {
     private CollectionManager collectionManager = JavaCollectionManager.getInstance();
+
     @Override
     public void execute(String argument) {
         try {
-            if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
-                if (collectionManager.getRouteCollection().size() == 0){
-                    System.out.println("Коллекция пуста.");
-                }
-                else for (Route index : collectionManager.getRouteCollection()){
-                    System.out.println(index.toString());
-                }
-        }
-        catch(CommandNotAcceptArgumentsException e){
+            if (!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
+            if (collectionManager.getRouteCollection().size() == 0) {
+                System.out.println("Коллекция пуста.");
+            } else for (Route index : collectionManager.getRouteCollection()) {
+                System.out.println(index.toString());
+            }
+        } catch (CommandNotAcceptArgumentsException e) {
             e.printStackTrace();
         }
     }

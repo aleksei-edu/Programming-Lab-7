@@ -4,9 +4,10 @@ import annotation.ClassMeta;
 import commands.AbstractCommand;
 import data.Route;
 import exception.CommandNotAcceptArgumentsException;
-import utility.JavaCollectionManager;
+import utility.CollectionManager;
 import utility.ConsoleManager;
 import utility.CreateNewElementManager;
+import utility.JavaCollectionManager;
 
 import java.util.ArrayList;
 
@@ -15,33 +16,34 @@ import java.util.ArrayList;
  */
 @ClassMeta(name = "remove_lower", description = "удалить из коллекции все элементы, меньшие, чем заданный")
 public class RemoveLower extends AbstractCommand {
+    private CollectionManager collectionManager = JavaCollectionManager.getInstance();
 
     @Override
     public void execute(String argument) {
         try {
-            if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
+            if (!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
             Route route = CreateNewElementManager.createNewElement();
             ArrayList<Route> removeArray = new ArrayList<>();
             boolean flag = false;
-            for (Route index : JavaCollectionManager.getRouteCollection()){
-                if(index.compareTo(route) < 1){
+            for (Route index : collectionManager.getRouteCollection()) {
+                if (index.compareTo(route) < 1) {
                     removeArray.add(index);
                     flag = true;
                 }
             }
-            if(flag){
+            if (flag) {
                 System.out.println("Подтвердите удаление элементов:");
-                for(Route index : removeArray){
-                    System.out.println(index.toString()); 
+                for (Route index : removeArray) {
+                    System.out.println(index.toString());
                 }
                 System.out.println("Введите y/n");
-                while (true){
+                while (true) {
                     try {
                         var userPrint = ConsoleManager.getUserPrint();
                         if (userPrint.equals("y")) {
-                            for(Route index : removeArray){
-                                JavaCollectionManager.getRouteCollection()
-                                        .removeIf(route2Delete -> (route2Delete.getId()== index.getId()));
+                            for (Route index : removeArray) {
+                                collectionManager.getRouteCollection()
+                                        .removeIf(route2Delete -> (route2Delete.getId() == index.getId()));
                             }
                             System.out.println("Элементы успешно удалены");
                             break;
@@ -49,17 +51,14 @@ public class RemoveLower extends AbstractCommand {
                             System.out.println("Удаление элементов ОТМЕНЕНО");
                             break;
                         } else throw new IllegalArgumentException("Введено что-то не то. Повторите попытку.");
-                    }
-                    catch (IllegalArgumentException e){
+                    } catch (IllegalArgumentException e) {
                         e.printStackTrace();
                     }
                 }
-            }
-            else{
+            } else {
                 System.out.println("Нет элементов меньших, чем заданный.");
             }
-        }
-        catch(CommandNotAcceptArgumentsException e){
+        } catch (CommandNotAcceptArgumentsException e) {
             e.printStackTrace();
         }
     }

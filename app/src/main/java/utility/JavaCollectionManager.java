@@ -1,21 +1,18 @@
 package utility;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-
 import annotation.Inject;
 import data.Route;
 import exception.IdOverflowException;
-import lombok.Getter;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
  * Класс управляет коллекцией
  */
-public class JavaCollectionManager implements CollectionManager{
+public class JavaCollectionManager implements CollectionManager {
     /**
      * Свободный номер для уникального id.
      */
@@ -35,15 +32,24 @@ public class JavaCollectionManager implements CollectionManager{
     private static LinkedHashSet<Route> routeCollection;
     @Inject(singleton = false)
     private static ArrayList<String[]> stringRouteCollection;
+    private static CollectionManager COLLECTION_MANAGER = new JavaCollectionManager();
     @Inject
     private FileManager fileManager;
-    private static CollectionManager COLLECTION_MANAGER = new JavaCollectionManager();
-    public static CollectionManager getInstance(){return COLLECTION_MANAGER;}
+
+    public static CollectionManager getInstance() {
+        return COLLECTION_MANAGER;
+    }
+
+    public static ArrayList<String[]> getStringRouteCollection() {
+        return stringRouteCollection;
+    }
+
     /**
      * Метод ищет новое уникальное id
+     *
      * @return уникальное id
      */
-    public int getFreeNumberForId(){
+    public int getFreeNumberForId() {
         while (true) {
             try {
                 boolean flag = true;
@@ -53,15 +59,15 @@ public class JavaCollectionManager implements CollectionManager{
                         break;
                     }
                 }
-                if(!flag) {
+                if (!flag) {
                     freeNumberForId += 1;
-                    if(freeNumberForId < 0){throw new IdOverflowException();}
-                }
-                else{
+                    if (freeNumberForId < 0) {
+                        throw new IdOverflowException();
+                    }
+                } else {
                     return freeNumberForId;
                 }
-            }
-            catch (IdOverflowException e){
+            } catch (IdOverflowException e) {
                 e.printStackTrace();
             }
         }
@@ -69,25 +75,32 @@ public class JavaCollectionManager implements CollectionManager{
 
     /**
      * Возвращает коллекцию из <b>Route</b>.
+     *
      * @return коллекция из Route.
      */
-    public Set<Route> getRouteCollection(){
+    public Set<Route> getRouteCollection() {
         return routeCollection;
     }
 
     /**
      * Записывает последнее время сохранения коллекции.
      */
-    public void saveTimeCollection(){saveTime = LocalDate.now();}
+    public void saveTimeCollection() {
+        saveTime = LocalDate.now();
+    }
 
     /**
      * Возвращает последнюю дату сохранения коллекции.
+     *
      * @return Последнюю дату сохранения.
      */
-    public LocalDate getSaveTimeCollection(){return saveTime;}
+    public LocalDate getSaveTimeCollection() {
+        return saveTime;
+    }
 
     /**
      * Возвращает последнюю дату инициализации коллекции.
+     *
      * @return последнюю дату инициализации.
      */
     public LocalDate getLastInitTime() {
@@ -97,7 +110,7 @@ public class JavaCollectionManager implements CollectionManager{
     /**
      * Загружает коллекцию из файла
      */
-    public void loadCollection(){
+    public void loadCollection() {
         lastInitTime = LocalDate.now();
         fileManager.readCollection();
     }
@@ -105,14 +118,9 @@ public class JavaCollectionManager implements CollectionManager{
     /**
      * Очищает коллекцию
      */
-    public void clear(){
+    public void clear() {
         routeCollection.clear();
         System.out.println("Коллекция успешно очищена.");
-    }
-
-
-    public static ArrayList<String[]> getStringRouteCollection() {
-        return stringRouteCollection;
     }
 
     public void addStringRouteCollection(String[] stringRoute) {

@@ -13,20 +13,19 @@ import utility.JavaCollectionManager;
 @ClassMeta(name = "remove_by_id", description = "удалить элемент из коллекции по его id")
 public class RemoveById extends AbstractCommand {
     private CollectionManager collectionManager = JavaCollectionManager.getInstance();
+
     @Override
     public void execute(String argument) {
         try {
-            if(argument.isEmpty()) throw new CommandNeedArgumentException();
-            try{
+            if (argument.isEmpty()) throw new CommandNeedArgumentException();
+            try {
                 int id = Integer.parseInt(argument);
-                collectionManager.getRouteCollection().removeIf(route -> (route.getId()==id));
+                collectionManager.getRouteCollection().removeIf(route -> (route.getId() == id));
                 System.out.println("Удалён элемент по id: " + id);
-            }
-            catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-        }
-        catch(CommandNotAcceptArgumentsException e){
+        } catch (CommandNotAcceptArgumentsException e) {
             e.printStackTrace();
         }
     }

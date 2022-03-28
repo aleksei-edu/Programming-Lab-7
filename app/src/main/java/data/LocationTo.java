@@ -13,27 +13,25 @@ public class LocationTo {
     private Long y; //Поле не может быть null
     private String name; //Поле не может быть null
 
-    public LocationTo(Float x, Long y, String name){
-        try{
-            if(x == null || y == null || name == null){
+    public LocationTo(Float x, Long y, String name) {
+        try {
+            if (x == null || y == null || name == null) {
                 throw new NullPointerException();
-            }
-            else{
+            } else {
                 this.x = x;
                 this.y = y;
                 this.name = name;
             }
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
 
-    public String toString(){
+    public String toString() {
         return "LocationTo x: " + x.toString() + ", LocationTo y: " + y.toString() + ", LocationTo name: " + name;
     }
 
-    public void updateLocationTo(Float x, Long y, String name){
+    public void updateLocationTo(Float x, Long y, String name) {
         this.x = x;
         this.y = y;
         this.name = name;

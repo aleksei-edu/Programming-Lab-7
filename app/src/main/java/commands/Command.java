@@ -11,6 +11,8 @@ public interface Command {
      * @param argument аргумент команды (если есть, иначе null)
      */
     public void execute(String argument);
+
     public String toString();
+
     public String getName();
 }

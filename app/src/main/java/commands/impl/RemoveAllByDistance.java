@@ -1,7 +1,6 @@
 package commands.impl;
 
 import annotation.ClassMeta;
-import annotation.Inject;
 import commands.AbstractCommand;
 import exception.CommandNeedArgumentException;
 import exception.CommandNotAcceptArgumentsException;
@@ -14,6 +13,7 @@ import utility.JavaCollectionManager;
 @ClassMeta(name = "remove_all_by_distance", description = "удалить из коллекции все элементы, значение поля distance которого эквивалентно заданному")
 public class RemoveAllByDistance extends AbstractCommand {
     private CollectionManager collectionManager = JavaCollectionManager.getInstance();
+
     @Override
     public void execute(String argument) {
         try {

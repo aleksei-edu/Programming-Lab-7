@@ -13,20 +13,23 @@ import java.util.concurrent.ConcurrentHashMap;
  * Обёртка над BeanFactory, контролирует жизненный цикл бинов
  */
 public class ApplicationContext {
+    private static final ApplicationContext APPLICATION_CONTEXT = new ApplicationContext();
+    private final Map<Class, Object> beanMap = new ConcurrentHashMap<>();
     @Setter
     private BeanFactory beanFactory;
-    private static final ApplicationContext APPLICATION_CONTEXT = new ApplicationContext();
-    private final Map<Class,Object> beanMap = new ConcurrentHashMap<>();
     private boolean singleton = true;
-    public ApplicationContext(){
+
+    public ApplicationContext() {
     }
-    public static ApplicationContext getInstance(){
+
+    public static ApplicationContext getInstance() {
         return APPLICATION_CONTEXT;
     }
+
     public <T> T getBean(Class<T> clazz) {
-        if(beanMap.containsKey(clazz)){
+        if (beanMap.containsKey(clazz)) {
             Inject injet = clazz.getAnnotation(Inject.class);
-            if (singleton || (injet != null && !injet.singleton())){
+            if (singleton || (injet != null && !injet.singleton())) {
                 T bean = (T) beanMap.get(clazz);
                 callPostProcessor(bean);
                 return bean;
@@ -37,15 +40,17 @@ public class ApplicationContext {
         T bean = beanFactory.getBean(clazz);
         callPostProcessor(bean);
 
-        beanMap.put(clazz,bean);
+        beanMap.put(clazz, bean);
         return bean;
     }
-    public <T> T getBean(Class<T> clazz,boolean singleton){
+
+    public <T> T getBean(Class<T> clazz, boolean singleton) {
         this.singleton = singleton;
         T bean = getBean(clazz);
         this.singleton = true;
         return bean;
     }
+
     public <T> T getBean(String className) {
         Class<T> clazz = null;
         try {
@@ -55,7 +60,8 @@ public class ApplicationContext {
         }
         return APPLICATION_CONTEXT.getBean(clazz);
     }
-    public void callPostProcessor(Object bean){
+
+    public void callPostProcessor(Object bean) {
         beanFactory.getBeanConfigurator().getScanner().getSubTypesOf(BeanPostProcessor.class)
                 .forEach(processor -> {
                     try {

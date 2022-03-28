@@ -1,4 +1,5 @@
 package configurator;
+
 import annotation.ClassMeta;
 import exception.CommandNotFoundException;
 import org.reflections.Reflections;
@@ -6,10 +7,10 @@ import org.reflections.Reflections;
 import java.util.Set;
 
 
-public class JavaBeanConfigurator implements BeanConfigurator{
+public class JavaBeanConfigurator implements BeanConfigurator {
     final Reflections scanner;
 
-    public JavaBeanConfigurator(String packageToScan){
+    public JavaBeanConfigurator(String packageToScan) {
         this.scanner = new Reflections(packageToScan);
     }
 
@@ -20,14 +21,14 @@ public class JavaBeanConfigurator implements BeanConfigurator{
     @Override
     public <T> Class<? extends T> getImplementationClass(Class<T> interfaceClass) {
         Set<Class<? extends T>> implementationClasses = scanner.getSubTypesOf(interfaceClass);
-        if (implementationClasses.size() != 1){
+        if (implementationClasses.size() != 1) {
             throw new RuntimeException("Interface has 0 or more than 1 implementation");
         }
         return implementationClasses.stream().findFirst().get();
     }
 
     @Override
-    public Class<?> getImplementationClass(String className){
+    public Class<?> getImplementationClass(String className) {
         Set<Class<?>> implementationClasses = scanner.getTypesAnnotatedWith(ClassMeta.class);
         Class<?> aClass = implementationClasses
                 .stream()

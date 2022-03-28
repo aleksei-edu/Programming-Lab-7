@@ -5,6 +5,7 @@ import annotation.Inject;
 import commands.AbstractCommand;
 import exception.CommandNotAcceptArgumentsException;
 import utility.FileManager;
+
 import java.io.IOException;
 
 /**
@@ -19,10 +20,9 @@ public class Save extends AbstractCommand {
     @Override
     public void execute(String argument) {
         try {
-            if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
+            if (!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
             fileManager.saveCollection();
-        }
-        catch(CommandNotAcceptArgumentsException | IOException e){
+        } catch (CommandNotAcceptArgumentsException | IOException e) {
             e.printStackTrace();
         }
     }

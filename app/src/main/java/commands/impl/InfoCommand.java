@@ -1,7 +1,6 @@
 package commands.impl;
 
 import annotation.ClassMeta;
-import annotation.Inject;
 import commands.AbstractCommand;
 import exception.CommandNotAcceptArgumentsException;
 import utility.CollectionManager;
@@ -17,17 +16,17 @@ public class InfoCommand extends AbstractCommand {
     @Override
     public void execute(String argument) {
         try {
-            if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
+            if (!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
             System.out.println("Сведения о коллекции:");
             System.out.println("Тип: " + collectionManager.getRouteCollection().getClass().getName());
             System.out.println("Дата инициализации: " + collectionManager.getLastInitTime());
             String saveTime = "";
-            if (collectionManager.getSaveTimeCollection() == null){saveTime = "Коллекция не сохранялась в этой сессии";}
-            else saveTime = collectionManager.getSaveTimeCollection().toString();
+            if (collectionManager.getSaveTimeCollection() == null) {
+                saveTime = "Коллекция не сохранялась в этой сессии";
+            } else saveTime = collectionManager.getSaveTimeCollection().toString();
             System.out.println("Дата сохранения: " + saveTime);
             System.out.println("Количество элементов: " + collectionManager.getRouteCollection().size());
-        }
-        catch(CommandNotAcceptArgumentsException e){
+        } catch (CommandNotAcceptArgumentsException e) {
             e.printStackTrace();
         }
     }
