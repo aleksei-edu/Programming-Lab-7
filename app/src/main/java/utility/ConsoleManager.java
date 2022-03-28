@@ -16,17 +16,10 @@ public class ConsoleManager {
      * Считывает из пользовательского ввода введенную команду.
      */
     public static void interactiveMode() throws IOException {
-        String[] userCommand = (userScanner.nextLine().toLowerCase().trim() + " ").split(" ",2);
-        CommandManager.execute(userCommand[0],userCommand[1]);
+        String[] userCommand = (userScanner.nextLine().toLowerCase().trim()+" ").split(" ",2);
+        CommandManager.execute(userCommand[0],userCommand[1].trim());
     }
 
-    /**
-     * Возвращает пользовательский ввод
-     * @return Scanner
-     */
-    public static Scanner getUserScanner(){
-        return userScanner;
-    }
 
     /**
      * Возвращает пользовательский ввод очищенный от мусора.

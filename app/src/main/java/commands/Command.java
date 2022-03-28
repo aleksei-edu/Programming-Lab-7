@@ -1,6 +1,8 @@
 package commands;
 
-import java.io.IOException;
+/**
+ * Интерфейс, который описывает основные методы всех команд
+ */
 
 public interface Command {
     /**

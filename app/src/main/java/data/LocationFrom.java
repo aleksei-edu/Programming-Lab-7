@@ -1,10 +1,12 @@
 package data;
 
+import annotation.ClassMeta;
 import lombok.Getter;
 
 /**
  * Объекты, которые используются в Route
  */
+@ClassMeta(name = "locationFrom")
 @Getter
 public class LocationFrom {
     private Integer x; //Поле не может быть null

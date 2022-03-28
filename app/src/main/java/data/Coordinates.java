@@ -1,10 +1,12 @@
 package data;
 
+import annotation.ClassMeta;
 import lombok.Getter;
 
 /**
  * Объекты, которые используются в Route.
  */
+@ClassMeta(name = "coordinates")
 @Getter
 public class Coordinates {
     private Double x; //Максимальное значение поля: 669, Поле не может быть null

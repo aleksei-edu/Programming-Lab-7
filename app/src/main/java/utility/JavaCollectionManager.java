@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import annotation.Inject;
 import data.Route;
 import exception.IdOverflowException;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.Set;
@@ -30,16 +31,19 @@ public class JavaCollectionManager implements CollectionManager{
     /**
      * Коллекция в которой хранятся {@link Route}
      */
-    @Inject
+    @Inject(singleton = false)
     private static LinkedHashSet<Route> routeCollection;
-    @Inject
+    @Inject(singleton = false)
     private static ArrayList<String[]> stringRouteCollection;
-
+    @Inject
+    private FileManager fileManager;
     /**
      * Метод ищет новое уникальное id
      * @return уникальное id
      */
-    public static int getFreeNumberForId(){
+    private static CollectionManager COLLECTION_MANAGER = new JavaCollectionManager();
+    public static CollectionManager getInstance(){return COLLECTION_MANAGER;}
+    public int getFreeNumberForId(){
         while (true) {
             try {
                 boolean flag = true;
@@ -67,26 +71,26 @@ public class JavaCollectionManager implements CollectionManager{
      * Возвращает коллекцию из <b>Route</b>.
      * @return коллекция из Route.
      */
-    public static Set<Route> getRouteCollection(){
+    public Set<Route> getRouteCollection(){
         return routeCollection;
     }
 
     /**
      * Записывает последнее время сохранения коллекции.
      */
-    public static void saveTimeCollection(){saveTime = LocalDate.now();}
+    public void saveTimeCollection(){saveTime = LocalDate.now();}
 
     /**
      * Возвращает последнюю дату сохранения коллекции.
      * @return Последнюю дату сохранения.
      */
-    public static LocalDate getSaveTimeCollection(){return saveTime;}
+    public LocalDate getSaveTimeCollection(){return saveTime;}
 
     /**
      * Возвращает последнюю дату инициализации коллекции.
      * @return последнюю дату инициализации.
      */
-    public static LocalDate getLastInitTime() {
+    public LocalDate getLastInitTime() {
         return lastInitTime;
     }
 
@@ -95,13 +99,13 @@ public class JavaCollectionManager implements CollectionManager{
      */
     public void loadCollection(){
         lastInitTime = LocalDate.now();
-        FileManager.readCollection();
+        fileManager.readCollection();
     }
 
     /**
      * Очищает коллекцию
      */
-    public static void clear(){
+    public void clear(){
         routeCollection.clear();
         System.out.println("Коллекция успешно очищена.");
     }
@@ -111,7 +115,7 @@ public class JavaCollectionManager implements CollectionManager{
         return stringRouteCollection;
     }
 
-    public static void addStringRouteCollection(String[] stringRoute) {
+    public void addStringRouteCollection(String[] stringRoute) {
         stringRouteCollection.add(stringRoute);
     }
 }

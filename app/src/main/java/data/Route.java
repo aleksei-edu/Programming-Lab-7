@@ -1,7 +1,10 @@
 package data;
+import annotation.ClassMeta;
+import annotation.Inject;
 import commands.impl.MaxByCreationDate;
 import commands.impl.MinByDistance;
 import lombok.Getter;
+import utility.CollectionManager;
 import utility.JavaCollectionManager;
 
 import java.time.LocalDate;
@@ -13,6 +16,7 @@ import java.util.List;
  * Элементы коллекцией, которыми управляет программа
  */
 @Getter
+@ClassMeta(name = "route")
 public class Route implements Comparable<Route> {
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
@@ -27,6 +31,7 @@ public class Route implements Comparable<Route> {
      * Используется для{@link #getRouteList()}
      */
     private List<String> routeList = new ArrayList<>();
+    private CollectionManager collectionManager = JavaCollectionManager.getInstance();
 
     /**
      *
@@ -41,11 +46,11 @@ public class Route implements Comparable<Route> {
     public Route(String id,String name, Coordinates coordinates, String creationDate,
                     LocationFrom from, LocationTo to, Long distance ){
         try {
-            if (id.equals("")) this.id = JavaCollectionManager.getFreeNumberForId();
+            if (id.equals("")) this.id = collectionManager.getFreeNumberForId();
             else this.id = Integer.parseInt(id);
             if (name == null || name.equals("")) throw new IllegalArgumentException(); else this.name = name;
             if(coordinates == null) throw new IllegalArgumentException(); else this.coordinates = coordinates;
-            if (creationDate.equals("")) this.creationDate = JavaCollectionManager.getLastInitTime();
+            if (creationDate.equals("")) this.creationDate = collectionManager.getLastInitTime();
             else this.creationDate = LocalDate.parse(creationDate);
             if (from == null) throw new IllegalArgumentException(); else this.from = from;
             if (to == null) throw new IllegalArgumentException(); else this.to = to;
@@ -67,7 +72,7 @@ public class Route implements Comparable<Route> {
             String[] str = {routeList.get(0), routeList.get(1), routeList.get(2), routeList.get(3), routeList.get(4),
             routeList.get(5), routeList.get(6), routeList.get(7), routeList.get(8), routeList.get(9), routeList.get(10),
             routeList.get(11)};
-            JavaCollectionManager.addStringRouteCollection(str);
+            collectionManager.addStringRouteCollection(str);
         }
         catch(IllegalArgumentException e){
             e.printStackTrace();
@@ -93,9 +98,7 @@ public class Route implements Comparable<Route> {
                 ", distance: " + distance;
     }
 
-    public List<String> getRouteList(){
-        return routeList;
-    }
+    @Override
     public int compareTo(Route routeObj){
         Integer compareId = id;
         return compareId.compareTo(routeObj.getId());

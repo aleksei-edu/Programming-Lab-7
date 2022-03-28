@@ -1,24 +1,20 @@
 package client;
 
 import annotation.Inject;
-import factory.BeanFactory;
+import utility.CollectionManager;
 import utility.ConsoleManager;
 import utility.FileManager;
-import utility.JavaCollectionManager;
 
 import java.io.IOException;
 
 public class Session {
     @Inject
-    private JavaCollectionManager javaCollectionManager;
+    private CollectionManager collectionManager;
+    @Inject
+    private FileManager fileManager;
     public void startUp() throws IOException {
-        FileManager.setEnv("LABA");
-        javaCollectionManager.loadCollection();
-        //TODO: PrintTable
-        //TODO: Не выводить stack trace
-        //TODO: паттерн команда
-        //TODO: больше интерфейсов
-        //TODO: Сделать более безопасный exit
+        fileManager.setEnv("LABA");
+        collectionManager.loadCollection();
         while (true) {
             ConsoleManager.interactiveMode();
         }

@@ -1,7 +1,8 @@
 package config;
 
-import commands.Command;
-
+/**
+ * Конфигурация
+ */
 public interface Configuration {
     String getPackageToScan();
 }

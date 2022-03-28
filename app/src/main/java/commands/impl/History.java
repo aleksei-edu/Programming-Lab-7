@@ -2,8 +2,9 @@ package commands.impl;
 
 import annotation.ClassMeta;
 import commands.AbstractCommand;
+import commands.Command;
 import exception.CommandNotAcceptArgumentsException;
-import utility.CommandManager;
+import utility.HistoryStack;
 
 /**
  * Команда, показывающая 10 последних команд
@@ -17,7 +18,9 @@ public class History extends AbstractCommand {
     public void execute(String argument) {
         try {
             if(!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
-            CommandManager.printLast10Commands();
+            for(Command command : HistoryStack.getInstance().last10()){
+                System.out.println(command.getName());
+            }
         }
         catch(CommandNotAcceptArgumentsException e){
             e.printStackTrace();

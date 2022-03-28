@@ -1,5 +1,6 @@
 package utility;
 
+import annotation.Inject;
 import commands.impl.Add;
 import commands.impl.RemoveLower;
 import commands.impl.Update;
@@ -23,6 +24,7 @@ public class CreateNewElementManager {
      * @see Update
      * @param oldroute элемент {@link Route} который мы хотим обновить.
      */
+    private static CollectionManager collectionManager = JavaCollectionManager.getInstance();
     public static void update(Route oldroute){
         Route route = new Route((Integer.valueOf(oldroute.getId()).toString()),
                 askName(),
@@ -88,7 +90,7 @@ public class CreateNewElementManager {
                 String userPrint = ConsoleManager.getUserPrint();
                 if (userPrint.equals("y")){
                     if (mode == 0) {
-                        JavaCollectionManager.getRouteCollection().add(newRoute);
+                        collectionManager.getRouteCollection().add(newRoute);
                         System.out.println("Элемент добавлен в коллекцию");
                     }
                     else if(mode == 1){

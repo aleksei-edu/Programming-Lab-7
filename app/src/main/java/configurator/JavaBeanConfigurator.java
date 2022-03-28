@@ -1,14 +1,20 @@
 package configurator;
 import annotation.ClassMeta;
+import exception.CommandNotFoundException;
 import org.reflections.Reflections;
 
 import java.util.Set;
+
 
 public class JavaBeanConfigurator implements BeanConfigurator{
     final Reflections scanner;
 
     public JavaBeanConfigurator(String packageToScan){
         this.scanner = new Reflections(packageToScan);
+    }
+
+    public Reflections getScanner() {
+        return scanner;
     }
 
     @Override
@@ -21,14 +27,15 @@ public class JavaBeanConfigurator implements BeanConfigurator{
     }
 
     @Override
-    public Class<?> getImplementationClass(String className) {
+    public Class<?> getImplementationClass(String className){
         Set<Class<?>> implementationClasses = scanner.getTypesAnnotatedWith(ClassMeta.class);
-        return implementationClasses
+        Class<?> aClass = implementationClasses
                 .stream()
                 .filter((clazz) -> clazz.getAnnotation(ClassMeta.class)
                         .name()
                         .equals(className))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(CommandNotFoundException::new);
+        return aClass;
     }
 }

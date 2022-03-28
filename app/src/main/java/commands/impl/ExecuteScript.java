@@ -1,6 +1,7 @@
 package commands.impl;
 
 import annotation.ClassMeta;
+import annotation.Inject;
 import commands.AbstractCommand;
 import exception.CommandNotAcceptArgumentsException;
 import exception.CommandNeedArgumentException;
@@ -11,12 +12,14 @@ import utility.FileManager;
  */
 @ClassMeta(name = "execute_script", description = "считать и исполнить скрипт из указанного файла.")
 public class ExecuteScript extends AbstractCommand {
+    @Inject
+    private FileManager  fileManager;
 
     @Override
     public void execute(String argument) {
         try {
             if(argument.isEmpty()) throw new CommandNeedArgumentException();
-            FileManager.readScript(argument);
+            fileManager.readScript(argument);
         }
         catch(CommandNotAcceptArgumentsException e){
             e.printStackTrace();
