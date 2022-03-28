@@ -37,12 +37,12 @@ public class JavaCollectionManager implements CollectionManager{
     private static ArrayList<String[]> stringRouteCollection;
     @Inject
     private FileManager fileManager;
+    private static CollectionManager COLLECTION_MANAGER = new JavaCollectionManager();
+    public static CollectionManager getInstance(){return COLLECTION_MANAGER;}
     /**
      * Метод ищет новое уникальное id
      * @return уникальное id
      */
-    private static CollectionManager COLLECTION_MANAGER = new JavaCollectionManager();
-    public static CollectionManager getInstance(){return COLLECTION_MANAGER;}
     public int getFreeNumberForId(){
         while (true) {
             try {

@@ -19,12 +19,12 @@ public class CreateNewElementManager {
      */
     private static final double MAX_COORDINATE_X = 699;
 
+    private static CollectionManager collectionManager = JavaCollectionManager.getInstance();
     /**
      * Обновить элемент {@link Route}
      * @see Update
      * @param oldroute элемент {@link Route} который мы хотим обновить.
      */
-    private static CollectionManager collectionManager = JavaCollectionManager.getInstance();
     public static void update(Route oldroute){
         Route route = new Route((Integer.valueOf(oldroute.getId()).toString()),
                 askName(),

@@ -27,8 +27,6 @@ public class Route implements Comparable<Route> {
     private Long distance; //Поле не может быть null, Значение поля должно быть больше 1
     /**
      * Все поля Route в виде String
-     * <p>
-     * Используется для{@link #getRouteList()}
      */
     private List<String> routeList = new ArrayList<>();
     private CollectionManager collectionManager = JavaCollectionManager.getInstance();
