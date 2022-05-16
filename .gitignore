@@ -72,7 +72,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-# Editor-based Rest Client
+# Editor-based Rest com.lapin.client.Session
 .idea/httpRequests
 
 # Android studio 3.1+ serialized cache file
@@ -145,6 +145,8 @@ main.toc
 #Idea
 .idea
 out
+#vscode
+.vscode
 # OS generated files #
 ######################
 .DS_Store
