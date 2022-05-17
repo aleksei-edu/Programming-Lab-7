@@ -1,5 +1,6 @@
 package com.lapin.network.config;
 
+import com.lapin.network.ClientType;
 import com.lapin.network.conop.ConnectionType;
 import com.lapin.network.listener.ServerListener;
 import com.lapin.network.log.NetworkLogger;
@@ -22,6 +23,7 @@ public interface NetworkConfigurator {
         }
         return host;
     };
+    public ClientType getClientType();
     //Параметры для клиента.
     public default Integer getTimeout(){
         return null;

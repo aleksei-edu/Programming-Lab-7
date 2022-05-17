@@ -12,6 +12,8 @@ public interface CollectionManager {
 
     public void saveTimeCollection();
 
+    public void add(Route route);
+
     public LocalDate getLastInitTime();
 
     public LocalDate getSaveTimeCollection();

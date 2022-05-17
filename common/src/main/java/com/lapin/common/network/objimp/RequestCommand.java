@@ -1,31 +1,37 @@
 package com.lapin.common.network.objimp;
 
+import com.lapin.common.commands.AccessType;
 import com.lapin.network.obj.NetObj;
+import com.lapin.network.obj.NetObjBodyKeys;
 
 import java.io.Serializable;
 import java.util.HashMap;
 
 public class RequestCommand extends NetObj implements Serializable {
-    public RequestCommand(HashMap<String,Object> body){
-        super("request", body);
+    public RequestCommand(HashMap<NetObjBodyKeys,Object> body){
+        super(RequestHeaderKey.REQUEST, body);
     }
-    public RequestCommand(String command, String arg, Object argObj){
-        super("request", setBody(command,arg,argObj));
+    public RequestCommand(AccessType accessType,String command, String arg, Serializable argObj){
+        super(RequestHeaderKey.REQUEST, setBody(accessType,command,arg,argObj));
     }
-    private static HashMap<String,Object> setBody(String command, String arg, Object argObj){
-        HashMap<String, Object> body = new HashMap<>();
-        body.put("command", command);
-        body.put("arg", arg);
-        body.put("argObj", argObj);
+    private static HashMap<NetObjBodyKeys,Object> setBody(AccessType accessType,String command, String arg, Serializable argObj){
+        HashMap<NetObjBodyKeys, Object> body = new HashMap<>();
+        body.put(RequestBodyKeys.ACCESS_TYPE, accessType);
+        body.put(RequestBodyKeys.COMMAND_NAME, command);
+        body.put(RequestBodyKeys.ARG, arg);
+        body.put(RequestBodyKeys.ARG_OBJ, argObj);
         return body;
     }
+    public AccessType getAccessType(){
+        return (AccessType) super.getBody().get(RequestBodyKeys.ACCESS_TYPE);
+    }
     public String getCmd(){
-        return (String) super.getBody().get("command");
+        return (String) super.getBody().get(RequestBodyKeys.COMMAND_NAME);
     }
     public String getArg(){
-        return (String) super.getBody().get("arg");
+        return (String) super.getBody().get(RequestBodyKeys.ARG);
     }
-    public String argObj(){
-        return (String) super.getBody().get("argObj");
+    public Serializable argObj(){
+        return (Serializable) super.getBody().get(RequestBodyKeys.ARG_OBJ);
     }
 }

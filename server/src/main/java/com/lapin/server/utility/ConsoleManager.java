@@ -17,7 +17,7 @@ public class ConsoleManager {
      */
     public static void interactiveMode() throws IOException {
         String[] userCommand = (userScanner.nextLine().toLowerCase().trim() + " ").split(" ", 2);
-        CommandManager.execute(userCommand[0], userCommand[1].trim());
+        CommandManager.execute(userCommand[0], userCommand[1].trim(),null);
     }
 
 

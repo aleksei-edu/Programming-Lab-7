@@ -1,6 +1,6 @@
 package com.lapin.network.listener;
 
-import com.lapin.network.State;
+import com.lapin.network.StatusCodes;
 import com.lapin.network.config.NetworkConfigurator;
 import com.lapin.network.log.NetworkLogger;
 import com.lapin.network.obj.NetObj;
@@ -18,6 +18,7 @@ import static java.nio.channels.SelectionKey.OP_ACCEPT;
 
 public class ServerListener implements Listenerable{
     protected ServerSocketChannel ssc;
+    private StatusCodes serverStatus = StatusCodes.OK;
     protected NetworkLogger netLogger;
     private static final int BUFFER_SIZE = 1024;
     protected NetworkConfigurator config;
@@ -49,7 +50,7 @@ public class ServerListener implements Listenerable{
     }
     @Override
     public void startUp() {
-        while (State.getPS()) {
+        while (!serverStatus.equals(StatusCodes.EXIT_SERVER)) {
             try {
                 int numOfKeys = sel.select();
                 if (numOfKeys == 0){
@@ -63,7 +64,7 @@ public class ServerListener implements Listenerable{
                         if (key.isAcceptable()) {
                             accept();
                         } else if (key.isReadable()) {
-                            read();
+                            read(key);
                         } else if (key.isWritable()) {
                             write();
                         }
@@ -90,20 +91,23 @@ public class ServerListener implements Listenerable{
         return address;
     }
 
-    protected void read(){
+    protected void read(SelectionKey key){
         try {
             SocketChannel channel = (SocketChannel) key.channel();
             ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
             int bytesRead = channel.read(buffer);
             if (bytesRead == -1) {
                 kill(channel);
+                return;
             }
             ByteBuffer newBuffer = ByteBuffer.allocate(channelBuffer.get(channel).capacity() + bytesRead);
             newBuffer.put(channelBuffer.get(channel).array());
             newBuffer.put(ByteBuffer.wrap(buffer.array(), 0, bytesRead));
             channelBuffer.put(channel, newBuffer);
             NetObj request = (NetObj) Serializer.deserialize(channelBuffer.get(channel).array());
-            channelBuffer.put(channel,ByteBuffer.wrap(Serializer.serialize(config.getRequestHandler().handle(request))));
+            NetObj response = config.getRequestHandler().handle(request);
+            setServerStatus((StatusCodes) response.getBody().get("statusCode"));
+            channelBuffer.put(channel,ByteBuffer.wrap(Serializer.serialize(response)));
             channel.register(sel, SelectionKey.OP_WRITE);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -127,5 +131,9 @@ public class ServerListener implements Listenerable{
         catch (IOException e){
             e.printStackTrace();
         }
-    };
+    }
+
+    public void setServerStatus(StatusCodes serverStatus) {
+        this.serverStatus = serverStatus;
+    }
 }

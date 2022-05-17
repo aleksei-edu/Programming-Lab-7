@@ -1,12 +1,19 @@
-package com.lapin.server.impl;
+package com.lapin.common.impl;
 
 
+import com.lapin.common.exception.AccessDeniedException;
+import com.lapin.common.network.objimp.RequestBodyKeys;
 import com.lapin.common.utility.OutManager;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.exception.CommandNotAcceptArgumentsException;
 import com.lapin.common.commands.AbstractCommand;
 import com.lapin.common.commands.Command;
+import com.lapin.common.commands.AccessType;
+import com.lapin.network.StatusCodes;
 import com.lapin.server.utility.HistoryStack;
+
+import java.io.Serializable;
+import java.util.HashMap;
 
 
 /**
@@ -14,20 +21,23 @@ import com.lapin.server.utility.HistoryStack;
  */
 @ClassMeta(name = "history", description = "вывести последние 10 команд (без их аргументов)")
 public class History extends AbstractCommand {
-    public History() {
+    private AccessType accessType = AccessType.ALL;
+    {
+        super.setAccessType(accessType);
     }
 
     @Override
-    public void execute(String argument) {
+    public void execute(HashMap<RequestBodyKeys,Serializable> args) {
         try {
-            if (!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
             String response = "";
             for (Command command : HistoryStack.getInstance().last10()) {
                 response += command.getName();
             }
-            OutManager.push(response);
+            OutManager.push(StatusCodes.OK,response);
+        }catch (AccessDeniedException e){
+            OutManager.push(StatusCodes.ERROR, "Access denied");
         } catch (CommandNotAcceptArgumentsException e) {
-            e.printStackTrace();
+            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 }

@@ -1,16 +1,22 @@
-package com.lapin.server.impl;
+package com.lapin.common.impl;
 
 
+import com.lapin.common.exception.AccessDeniedException;
+import com.lapin.common.network.objimp.RequestBodyKeys;
 import com.lapin.common.utility.OutManager;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.data.Route;
 import com.lapin.common.exception.CommandNotAcceptArgumentsException;
 import com.lapin.common.commands.AbstractCommand;
+import com.lapin.common.commands.AccessType;
+import com.lapin.network.StatusCodes;
 import com.lapin.server.utility.CollectionManager;
 import com.lapin.server.utility.JavaCollectionManager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * Команда выводит максимальный по creationDate элемент Route
@@ -18,11 +24,14 @@ import java.util.Collections;
 @ClassMeta(name = "max_by_creation_date", description = "вывести любой объект из коллекции, значение поля creationDate которого является максимальным")
 public class MaxByCreationDate extends AbstractCommand {
     private CollectionManager collectionManager = JavaCollectionManager.getInstance();
+    private AccessType accessType = AccessType.ALL;
+    {
+        super.setAccessType(accessType);
+    }
 
     @Override
-    public void execute(String argument) {
+    public void execute(HashMap<RequestBodyKeys,Serializable> args) {
         try {
-            if (!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
             String response = "";
             if (collectionManager.getRouteCollection().size() == 0) {
                 response += "Коллекция пуста.";
@@ -33,9 +42,11 @@ public class MaxByCreationDate extends AbstractCommand {
             }
             Collections.sort(sortArray, new Route.ComparatorByCreationDate());
             response += sortArray.get(sortArray.size() - 1).toString();
-            OutManager.push(response);
+            OutManager.push(StatusCodes.OK,response);
+        }catch (AccessDeniedException e){
+            OutManager.push(StatusCodes.ERROR, "Access denied");
         } catch (CommandNotAcceptArgumentsException e) {
-            e.printStackTrace();
+            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 }

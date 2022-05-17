@@ -1,7 +1,11 @@
 package com.lapin.common.commands;
 
 
+import com.lapin.common.network.objimp.RequestBodyKeys;
 import com.lapin.di.annotation.ClassMeta;
+
+import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Абстрактный класс, от которого наследуются все команды.
@@ -9,8 +13,9 @@ import com.lapin.di.annotation.ClassMeta;
 
 public class AbstractCommand implements Command {
     private String name;
+    private AccessType accessType;
     @Override
-    public void execute(String argument) {
+    public void execute(HashMap<RequestBodyKeys, Serializable> args) {
 
     }
     @Override
@@ -22,5 +27,13 @@ public class AbstractCommand implements Command {
     @Override
     public String getName() {
         return this.getClass().getAnnotation(ClassMeta.class).name();
+    }
+
+    @Override
+    public AccessType getAccessType() {
+        return accessType;
+    }
+    protected void setAccessType(AccessType accessType){
+        this.accessType =accessType;
     }
 }

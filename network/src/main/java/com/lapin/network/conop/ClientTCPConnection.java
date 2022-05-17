@@ -43,24 +43,28 @@ public class ClientTCPConnection implements ConnectionType {
         boolean processingStatus = true;
         while (processingStatus) {
             if(reconnectionAttempts >= 2) netLogger.info("Reconnecting to the server...");
+            else netLogger.info("Connecting to the server...");
             try {
+                socketChannel = SocketChannel.open();
                 socketChannel.connect(addr);
             } catch (IOException e) {
                 netLogger.error("Server connection error!");
                 reconnectionAttempts++;
                 if(reconnectionAttempts > config.getMaxReconnectionAttemps()){
+                    netLogger.error("Connection timed out!");
                     return false;
                 }
                 try {
-                    netLogger.info((reconnectionAttempts) +"A reconnection attempt will be made after "
+                    netLogger.info((reconnectionAttempts) +" reconnection attempt will be made after "
                             + (config.getTimeout()/1000) + " seconds.");
                     Thread.sleep(config.getTimeout());
                 } catch (InterruptedException ex) {
-                    netLogger.error("Server connection error!");
+                    netLogger.error("Client sleep error!");
                 }
                 continue;
             }
             processingStatus = false;
+            netLogger.info("Client connected!");
         }
         return true;
     }

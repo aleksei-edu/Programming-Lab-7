@@ -1,5 +1,6 @@
 package com.lapin.server.config;
 
+import com.lapin.network.ClientType;
 import com.lapin.network.config.NetworkConfigurator;
 import com.lapin.network.conop.ConnectionType;
 import com.lapin.network.conop.ServerTCPConnection;
@@ -14,9 +15,13 @@ import java.nio.channels.ServerSocketChannel;
 public class NetworkConfigFile implements NetworkConfigurator {
     @Override
     public Integer getPort() {
-        return 8888;
+        return 8000;
     }
 
+    @Override
+    public ClientType getClientType() {
+        return ClientType.ADMIN;
+    }
 
     @Override
     public ConnectionType getConnectionType() {

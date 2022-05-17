@@ -90,6 +90,11 @@ public class JavaCollectionManager implements CollectionManager {
         saveTime = LocalDate.now();
     }
 
+    @Override
+    public void add(Route route) {
+        routeCollection.add(route);
+    }
+
     /**
      * Возвращает последнюю дату сохранения коллекции.
      *
