@@ -3,6 +3,8 @@ package com.lapin.common.impl;
 
 import com.lapin.common.exception.AccessDeniedException;
 import com.lapin.common.network.objimp.RequestBodyKeys;
+import com.lapin.common.utility.CollectionManager;
+import com.lapin.common.utility.CommandManager;
 import com.lapin.common.utility.OutManager;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.data.Route;
@@ -10,10 +12,7 @@ import com.lapin.common.exception.CommandNotAcceptArgumentsException;
 import com.lapin.common.commands.AbstractCommand;
 import com.lapin.common.commands.AccessType;
 import com.lapin.network.StatusCodes;
-import com.lapin.server.utility.CollectionManager;
-import com.lapin.server.utility.ConsoleManager;
-import com.lapin.server.utility.CreateNewElementManager;
-import com.lapin.server.utility.JavaCollectionManager;
+
 
 
 import java.io.Serializable;
@@ -25,17 +24,15 @@ import java.util.HashMap;
  */
 @ClassMeta(name = "remove_lower", description = "удалить из коллекции все элементы, меньшие, чем заданный")
 public class RemoveLower extends AbstractCommand {
-    private CollectionManager collectionManager = JavaCollectionManager.getInstance();
-    private AccessType accessType = AccessType.ALL;
-    {
-        super.setAccessType(accessType);
-    }
+    private CollectionManager collectionManager = CommandManager.getCollectionManager();
 
     @Override
-    public void execute(HashMap<RequestBodyKeys,Serializable> args) {
+    public void execute(String argument, Serializable argObj) {
         try {
             String response = "";
-            Route route = CreateNewElementManager.createNewElement();
+            //Route route = CreateNewElementManager.createNewElement();
+            if(!(argObj instanceof Route)) throw new RuntimeException();
+            Route route = (Route) argObj;
             ArrayList<Route> removeArray = new ArrayList<>();
             boolean flag = false;
             for (Route index : collectionManager.getRouteCollection()) {
@@ -45,36 +42,24 @@ public class RemoveLower extends AbstractCommand {
                 }
             }
             if (flag) {
-                System.out.println("Подтвердите удаление элементов:");
-                for (Route index : removeArray) {
-                    System.out.println(index.toString());
-                }
-                System.out.println("Введите y/n");
                 while (true) {
                     try {
-                        var userPrint = ConsoleManager.getUserPrint();
-                        if (userPrint.equals("y")) {
-                            for (Route index : removeArray) {
-                                collectionManager.getRouteCollection()
-                                        .removeIf(route2Delete -> (route2Delete.getId() == index.getId()));
-                            }
-                            System.out.println("Элементы успешно удалены");
-                            break;
-                        } else if (userPrint.equals("n")) {
-                            System.out.println("Удаление элементов ОТМЕНЕНО");
-                            break;
-                        } else throw new IllegalArgumentException("Введено что-то не то. Повторите попытку.");
+                        for (Route index : removeArray) {
+                            collectionManager.getRouteCollection()
+                                    .removeIf(route2Delete -> (route2Delete.getId() == index.getId()));
+                        }
+                        OutManager.push(StatusCodes.OK,"Элементы успешно удалены");
+                        break;
                     } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
+                        OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
                     }
                 }
             } else {
-                System.out.println("Нет элементов меньших, чем заданный.");
+                OutManager.push(StatusCodes.OK,"Нет элементов меньших, чем заданный.");
             }
-        }catch (AccessDeniedException e){
-            OutManager.push(StatusCodes.ERROR, "Access denied");
-        } catch (CommandNotAcceptArgumentsException e) {
-            e.printStackTrace();
+
+        } catch (RuntimeException e) {
+            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 }

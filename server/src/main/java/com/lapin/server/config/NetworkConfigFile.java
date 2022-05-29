@@ -1,5 +1,6 @@
 package com.lapin.server.config;
 
+import com.lapin.common.utility.ClientReqHandler;
 import com.lapin.network.ClientType;
 import com.lapin.network.config.NetworkConfigurator;
 import com.lapin.network.conop.ConnectionType;
@@ -7,6 +8,7 @@ import com.lapin.network.conop.ServerTCPConnection;
 import com.lapin.network.listener.ServerListener;
 import com.lapin.network.log.NetworkLogOutputConsole;
 import com.lapin.network.log.NetworkLogger;
+import com.lapin.network.obj.ClientRequestHandler;
 import com.lapin.network.obj.RequestHandler;
 import com.lapin.server.ServerRequestHandler;
 
@@ -21,6 +23,11 @@ public class NetworkConfigFile implements NetworkConfigurator {
     @Override
     public ClientType getClientType() {
         return ClientType.ADMIN;
+    }
+
+    @Override
+    public ClientRequestHandler getClientRequestHandler() {
+        return new ClientReqHandler();
     }
 
     @Override

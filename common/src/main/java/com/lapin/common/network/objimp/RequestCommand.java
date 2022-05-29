@@ -11,12 +11,11 @@ public class RequestCommand extends NetObj implements Serializable {
     public RequestCommand(HashMap<NetObjBodyKeys,Object> body){
         super(RequestHeaderKey.REQUEST, body);
     }
-    public RequestCommand(AccessType accessType,String command, String arg, Serializable argObj){
-        super(RequestHeaderKey.REQUEST, setBody(accessType,command,arg,argObj));
+    public RequestCommand(String command, String arg, Serializable argObj){
+        super(RequestHeaderKey.REQUEST, setBody(command,arg,argObj));
     }
-    private static HashMap<NetObjBodyKeys,Object> setBody(AccessType accessType,String command, String arg, Serializable argObj){
+    private static HashMap<NetObjBodyKeys,Object> setBody(String command, String arg, Serializable argObj){
         HashMap<NetObjBodyKeys, Object> body = new HashMap<>();
-        body.put(RequestBodyKeys.ACCESS_TYPE, accessType);
         body.put(RequestBodyKeys.COMMAND_NAME, command);
         body.put(RequestBodyKeys.ARG, arg);
         body.put(RequestBodyKeys.ARG_OBJ, argObj);

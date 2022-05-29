@@ -4,6 +4,7 @@ import com.lapin.network.ClientType;
 import com.lapin.network.conop.ConnectionType;
 import com.lapin.network.listener.ServerListener;
 import com.lapin.network.log.NetworkLogger;
+import com.lapin.network.obj.ClientRequestHandler;
 import com.lapin.network.obj.RequestHandler;
 
 import java.net.InetAddress;
@@ -24,6 +25,7 @@ public interface NetworkConfigurator {
         return host;
     };
     public ClientType getClientType();
+    public ClientRequestHandler getClientRequestHandler();
     //Параметры для клиента.
     public default Integer getTimeout(){
         return null;

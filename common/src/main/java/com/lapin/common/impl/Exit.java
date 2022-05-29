@@ -20,21 +20,15 @@ import java.util.HashMap;
         name = "exit",
         description = "завершить программу (без сохранения в файл)")
 public class Exit extends AbstractCommand {
-    private AccessType accessType = AccessType.ALL;
-    {
-        super.setAccessType(accessType);
-    }
+
 
     @Override
-    public void execute(HashMap<RequestBodyKeys,Serializable> args) {
+    public void execute(String argument, Serializable argObj) {
         try {
-            if(!(args.get(RequestBodyKeys.ACCESS_TYPE)).equals(accessType))
-                throw new AccessDeniedException();
             OutManager.push(StatusCodes.EXIT_CLIENT, "Client exit");
-        }catch (AccessDeniedException e){
-            OutManager.push(StatusCodes.ERROR, "Access denied");
-        } catch (CommandNotAcceptArgumentsException e) {
-            e.printStackTrace();
+
+        } catch (RuntimeException e) {
+            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 

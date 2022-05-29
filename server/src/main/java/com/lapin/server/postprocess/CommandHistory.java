@@ -3,7 +3,7 @@ package com.lapin.server.postprocess;
 
 import com.lapin.di.postprocessor.BeanPostProcessor;
 import com.lapin.common.commands.AbstractCommand;
-import com.lapin.server.utility.HistoryStack;
+import com.lapin.common.utility.HistoryStack;
 
 
 public class CommandHistory implements BeanPostProcessor {

@@ -24,19 +24,15 @@ import java.util.HashMap;
 public class Save extends AbstractCommand {
     @Inject
     private FileManager fileManager;
-    private AccessType accessType = AccessType.ALL;
-    {
-        super.setAccessType(accessType);
-    }
+
 
     @Override
-    public void execute(HashMap<RequestBodyKeys,Serializable> args) {
+    public void execute(String argument, Serializable argObj) {
         try {
             fileManager.saveCollection();
-        }catch (AccessDeniedException e){
-            OutManager.push(StatusCodes.ERROR, "Access denied");
-        } catch (CommandNotAcceptArgumentsException | IOException e) {
-            e.printStackTrace();
+
+        } catch (RuntimeException e) {
+            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 }

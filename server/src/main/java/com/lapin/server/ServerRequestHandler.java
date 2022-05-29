@@ -8,7 +8,7 @@ import com.lapin.common.utility.Pair;
 import com.lapin.network.StatusCodes;
 import com.lapin.network.obj.NetObj;
 import com.lapin.network.obj.RequestHandler;
-import com.lapin.server.utility.CommandManager;
+import com.lapin.common.utility.CommandManager;
 
 public class ServerRequestHandler implements RequestHandler {
     @Override

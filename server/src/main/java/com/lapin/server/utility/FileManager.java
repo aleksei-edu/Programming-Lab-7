@@ -6,6 +6,7 @@ import com.lapin.common.data.LocationFrom;
 import com.lapin.common.data.LocationTo;
 import com.lapin.common.data.Route;
 import com.lapin.common.exception.NullEnvException;
+import com.lapin.common.utility.CollectionManager;
 import com.opencsv.*;
 import lombok.Getter;
 import lombok.Setter;

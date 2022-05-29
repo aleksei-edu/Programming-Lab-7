@@ -10,7 +10,6 @@ import com.lapin.di.annotation.Inject;
 import com.lapin.common.commands.AbstractCommand;
 import com.lapin.common.commands.AccessType;
 import com.lapin.network.StatusCodes;
-import com.lapin.server.utility.FileManager;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -25,21 +24,14 @@ import java.util.HashMap;
 public class ExecuteScript extends AbstractCommand {
     @Inject
     private FileManager fileManager;
-    private AccessType accessType = AccessType.ALL;
-    {
-        super.setAccessType(accessType);
-    }
+
 
     @Override
-    public void execute(HashMap<RequestBodyKeys,Serializable> args) {
+    public void execute(String argument, Serializable argObj) {
         try {
-            if(!(args.get(RequestBodyKeys.ACCESS_TYPE)).equals(accessType))
-                throw new AccessDeniedException();
             fileManager.readScript((String) args.get(RequestBodyKeys.ARG));
-        }catch (AccessDeniedException e){
-            OutManager.push(StatusCodes.ERROR, "Access denied");
-        } catch (CommandNotAcceptArgumentsException e) {
-            e.printStackTrace();
+        } catch (RuntimeException e) {
+            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 }

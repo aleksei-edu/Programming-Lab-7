@@ -1,4 +1,4 @@
-package com.lapin.server.utility;
+package com.lapin.common.utility;
 
 import com.lapin.common.data.Route;
 
@@ -13,6 +13,8 @@ public interface CollectionManager {
     public void saveTimeCollection();
 
     public void add(Route route);
+
+    public boolean update(Integer id);
 
     public LocalDate getLastInitTime();
 

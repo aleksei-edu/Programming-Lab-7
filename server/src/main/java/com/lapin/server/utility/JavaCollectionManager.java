@@ -1,6 +1,7 @@
 package com.lapin.server.utility;
 
 
+import com.lapin.common.utility.CollectionManager;
 import com.lapin.di.annotation.Inject;
 import com.lapin.common.data.Route;
 import com.lapin.common.exception.IdOverflowException;
@@ -8,6 +9,7 @@ import com.lapin.common.exception.IdOverflowException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -42,7 +44,27 @@ public class JavaCollectionManager implements CollectionManager {
     }
 
     public static ArrayList<String[]> getStringRouteCollection() {
-        return stringRouteCollection;
+        ArrayList<String[]> strRouteCol = new ArrayList<>();
+        for(Route route : routeCollection){
+            List<String> routeList = new ArrayList<>();
+            routeList.add(((Integer) route.getId()).toString());
+            routeList.add(route.getName());
+            routeList.add(route.getCoordinates().getX().toString());
+            routeList.add(((Double) route.getCoordinates().getY()).toString());
+            routeList.add(route.getCreationDate().toString());
+            routeList.add(route.getFrom().getX().toString());
+            routeList.add(((Float) route.getFrom().getY()).toString());
+            routeList.add(((Double) route.getFrom().getZ()).toString());
+            routeList.add(route.getTo().getX().toString());
+            routeList.add(route.getTo().getY().toString());
+            routeList.add(route.getTo().getName());
+            routeList.add(route.getDistance().toString());
+            String[] str = {routeList.get(0), routeList.get(1), routeList.get(2), routeList.get(3), routeList.get(4),
+                    routeList.get(5), routeList.get(6), routeList.get(7), routeList.get(8), routeList.get(9), routeList.get(10),
+                    routeList.get(11)};
+            strRouteCol.add(str);
+        }
+        return strRouteCol;
     }
 
     /**
@@ -93,6 +115,17 @@ public class JavaCollectionManager implements CollectionManager {
     @Override
     public void add(Route route) {
         routeCollection.add(route);
+    }
+
+    @Override
+    public boolean update(Integer id) {
+        for (Route route : routeCollection) {
+            if (route.getId() == id) {
+                this.add(route);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

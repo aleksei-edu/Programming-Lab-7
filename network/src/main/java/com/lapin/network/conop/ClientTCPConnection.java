@@ -4,6 +4,8 @@ import com.lapin.network.config.NetworkConfigurator;
 import com.lapin.network.log.NetworkLogger;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -73,4 +75,3 @@ public class ClientTCPConnection implements ConnectionType {
     public boolean run() {
         return false;
     }
-}

@@ -1,4 +1,4 @@
-package com.lapin.server.utility;
+package com.lapin.common.utility;
 
 
 import com.lapin.common.commands.Command;

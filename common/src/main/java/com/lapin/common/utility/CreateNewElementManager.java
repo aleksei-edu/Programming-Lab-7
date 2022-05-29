@@ -1,9 +1,10 @@
-package com.lapin.server.utility;
+package com.lapin.common.utility;
 
 import com.lapin.common.impl.Add;
 import com.lapin.common.impl.AddIfMax;
 import com.lapin.common.impl.RemoveLower;
 import com.lapin.common.impl.Update;
+import com.lapin.common.utility.CollectionManager;
 import com.lapin.server.impl.*;
 import com.lapin.common.data.Coordinates;
 import com.lapin.common.data.LocationFrom;
@@ -20,7 +21,6 @@ public class CreateNewElementManager {
      */
     private static final double MAX_COORDINATE_X = 699;
 
-    private static CollectionManager collectionManager = JavaCollectionManager.getInstance();
 
     /**
      * Обновить элемент {@link Route}
@@ -65,7 +65,7 @@ public class CreateNewElementManager {
      * @see Add
      */
     public static void add() {
-        Route route = new Route(collectionManager.getFreeNumberForId(),
+        Route route = new Route("",
                 askName(),
                 new Coordinates(askCoordinateX(), askCoordinateY()),
                 collectionManager.getLastInitTime(),

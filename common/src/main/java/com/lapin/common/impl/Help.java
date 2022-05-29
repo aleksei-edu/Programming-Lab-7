@@ -24,12 +24,8 @@ import java.util.Set;
         name = "help",
         description = "вывести справку по доступным командам")
 public class Help extends AbstractCommand {
-    private AccessType accessType = AccessType.ALL;
-    {
-        super.setAccessType(accessType);
-    }
     @Override
-    public void execute(HashMap<RequestBodyKeys,Serializable> args) {
+    public void execute(String argument, Serializable argObj) {
         try {
             Reflections scanner = new Reflections("commands");
             Set<Class<? extends Command>> implementationClasses = scanner.getSubTypesOf(Command.class);
@@ -41,9 +37,8 @@ public class Help extends AbstractCommand {
                 }
             }
             OutManager.push(StatusCodes.OK,response);
-        }catch (AccessDeniedException e){
-            OutManager.push(StatusCodes.ERROR, "Access denied");
-        } catch (CommandNotAcceptArgumentsException e) {
+
+        } catch (RuntimeException e) {
             OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }

@@ -20,8 +20,8 @@ public class OutManager {
     public static void println(String str){
         System.out.println(str);
     }
-    public static void print(String str){
-        System.out.print(str);
+    public static void println(){
+        System.out.print(OutManager.pop().getSecond());
     }
 
 }

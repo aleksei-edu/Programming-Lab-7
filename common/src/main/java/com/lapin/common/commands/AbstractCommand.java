@@ -15,7 +15,7 @@ public class AbstractCommand implements Command {
     private String name;
     private AccessType accessType;
     @Override
-    public void execute(HashMap<RequestBodyKeys, Serializable> args) {
+    public void execute(String arg, Serializable argObj) {
 
     }
     @Override
