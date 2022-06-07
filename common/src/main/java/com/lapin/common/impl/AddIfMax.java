@@ -26,6 +26,10 @@ import java.util.HashMap;
 )
 public class AddIfMax extends AbstractCommand {
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    {
+        super.accessType = AccessType.ALL;
+        super.NeedObj = true;
+    }
 
     @Override
     public void execute(String argument, Serializable argObj) {

@@ -21,7 +21,9 @@ import java.util.HashMap;
  */
 @ClassMeta(name = "history", description = "вывести последние 10 команд (без их аргументов)")
 public class History extends AbstractCommand {
-
+    {
+        super.accessType = AccessType.ALL;
+    }
 
     @Override
     public void execute(String argument, Serializable argObj) {

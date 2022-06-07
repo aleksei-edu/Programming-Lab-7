@@ -16,47 +16,35 @@ import java.util.List;
 
 public class ClientListener implements Listenerable{
     private NetworkConfigurator config;
-    private Reader reader;
     private ClientType clientType;
     private StatusCodes clientStatus;
     private NetworkLogger netLogger;
     private SocketChannel socketChannel;
+
     public ClientListener(NetworkConfigurator config, SocketChannel socketChannel){
-        this(config,new InputStreamReader(System.in),socketChannel);
-    }
-    public ClientListener(NetworkConfigurator config, Reader reader, SocketChannel socketChannel){
         this.config = config;
-        this.reader = reader;
         this.socketChannel = socketChannel;
         this.netLogger = config.getNetLogger();
         this.clientType = config.getClientType();
     }
-    @Override
-    public void startUp() {
-        while(!clientStatus.equals(StatusCodes.EXIT_CLIENT)){
-            try(BufferedReader in = new Buffered-Reader(reader)) {
-                String input = in.readLine();
-                if (input == null) {
-                    break;
-                }
-                if (!"".equals(input)) {
-                    NetObj request = config.getClientRequestHandler().handle(input,config);
-                    if (request == null){
-                        continue;
-                    }
-                    else {
-                        write(request);
-                        NetObj response = read();
 
-                    }
-                }
-
-                } catch (IOException e) {
-                netLogger.error("Error on start-up!");
-            }
+    public NetObj handle(NetObj request){
+        try {
+            write(request);
+        } catch (IOException e) {
+            netLogger.error("Failed to send a request to the server");
         }
+        NetObj response = null;
+        try {
+            response = read();
+        } catch (IOException e){
+            netLogger.error("Failed to get a response from the server");
+        }
+        return response;
     }
-    private void write(NetObj request) throws IOException {
+
+
+    public void write(NetObj request) throws IOException {
         byte[] bytes = Serializer.serialize(request);
         getOutputStream().write(bytes);
     }
@@ -92,6 +80,7 @@ public class ClientListener implements Listenerable{
             if (response != null) {
                 return response;
             }
+            else throw new IOException();
         }
     }
     private OutputStream getOutputStream(){

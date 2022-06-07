@@ -1,4 +1,4 @@
-package com.lapin.server.utility;
+package com.lapin.common.utility;
 
 
 import com.lapin.common.data.Coordinates;
@@ -7,6 +7,7 @@ import com.lapin.common.data.LocationTo;
 import com.lapin.common.data.Route;
 import com.lapin.common.exception.NullEnvException;
 import com.lapin.common.utility.CollectionManager;
+import com.lapin.common.utility.ConsoleManager;
 import com.opencsv.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,12 +26,16 @@ public class FileManager {
     @Setter
     @Getter
     private String env;
-    private CollectionManager collectionManager = JavaCollectionManager.getInstance();
+    private CollectionManager collectionManager;
+    private ConsoleManager consoleManager;
 
     /**
      * Сохранить коллекцию в файл
      */
-    public void saveCollection() throws IOException {
+    public FileManager(ConsoleManager consoleManager){
+        this.consoleManager = consoleManager;
+    }
+    public void saveCollection(CollectionManager collectionManager) throws IOException {
         BufferedWriter bWriter = null;
         CSVWriter writer = null;
         try {
@@ -38,7 +43,7 @@ public class FileManager {
             OutputStream os = new FileOutputStream(System.getenv(env));
             bWriter = new BufferedWriter(new OutputStreamWriter(os));
             writer = new CSVWriter(bWriter);
-            writer.writeAll(JavaCollectionManager.getStringRouteCollection());
+            writer.writeAll(collectionManager.getStringRouteCollection());
         } catch (NullEnvException | FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -69,8 +74,8 @@ public class FileManager {
                 for (int i = 0; i < line.length; i++) {
                     line[i] = line[i].trim().toLowerCase();
                 }
-                collectionManager.getRouteCollection().add(new Route(Integer.parseInt(line[0]), line[1],
-                        new Coordinates(Double.parseDouble(line[2]), Double.parseDouble(line[3])), LocalDate.parse(line[4]),
+                collectionManager.getRouteCollection().add(new Route(line[0], line[1],
+                        new Coordinates(Double.parseDouble(line[2]), Double.parseDouble(line[3])), line[4],
                         new LocationFrom(Integer.parseInt(line[5]), Float.parseFloat(line[6]), Double.parseDouble(line[7])),
                         new LocationTo(Float.parseFloat(line[8]), Long.parseLong(line[9]), line[10]), Long.parseLong(line[11])));
             }
@@ -101,7 +106,7 @@ public class FileManager {
             Scanner userScanner = new Scanner(fileInput);
             ConsoleManager.setUserScanner(userScanner);
             while ((reader.readLine()) != null) {
-                ConsoleManager.interactiveMode();
+                consoleManager.interactiveMode();
             }
             userScanner = new Scanner(System.in);
             ConsoleManager.setUserScanner(userScanner);

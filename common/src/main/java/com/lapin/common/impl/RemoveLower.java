@@ -25,7 +25,10 @@ import java.util.HashMap;
 @ClassMeta(name = "remove_lower", description = "удалить из коллекции все элементы, меньшие, чем заданный")
 public class RemoveLower extends AbstractCommand {
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
-
+    {
+        super.accessType = AccessType.ALL;
+        super.NeedObj = true;
+    }
     @Override
     public void execute(String argument, Serializable argObj) {
         try {

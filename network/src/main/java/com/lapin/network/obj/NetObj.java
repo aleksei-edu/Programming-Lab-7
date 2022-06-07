@@ -7,18 +7,11 @@ import java.util.HashMap;
  * It's abstract impl of Requestable interface
  */
 public class NetObj implements Serializable, NetObjects {
-    private NetObjHeaderKeys header;
     private HashMap<NetObjBodyKeys,Object> body;
     public NetObj(){
-
     }
-    public NetObj(NetObjHeaderKeys header, HashMap<NetObjBodyKeys,Object> body){
-        this.header = header;
+    public NetObj(HashMap<NetObjBodyKeys,Object> body){
         this.body = body;
-    }
-    @Override
-    public NetObjHeaderKeys getHeader() {
-        return header;
     }
 
     @Override

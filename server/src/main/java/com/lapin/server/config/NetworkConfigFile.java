@@ -1,6 +1,5 @@
 package com.lapin.server.config;
 
-import com.lapin.common.utility.ClientReqHandler;
 import com.lapin.network.ClientType;
 import com.lapin.network.config.NetworkConfigurator;
 import com.lapin.network.conop.ConnectionType;
@@ -22,7 +21,7 @@ public class NetworkConfigFile implements NetworkConfigurator {
 
     @Override
     public ClientType getClientType() {
-        return ClientType.ADMIN;
+        return ClientType.LOCAL;
     }
 
     @Override

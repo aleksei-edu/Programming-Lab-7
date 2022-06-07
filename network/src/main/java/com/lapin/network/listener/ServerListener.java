@@ -46,10 +46,8 @@ public class ServerListener implements Listenerable{
         } catch (ClosedChannelException e) {
             netLogger.error("Failed key registration");
         }
-        startUp();
     }
-    @Override
-    public void startUp() {
+    public void listen() {
         while (!serverStatus.equals(StatusCodes.EXIT_SERVER)) {
             try {
                 int numOfKeys = sel.select();

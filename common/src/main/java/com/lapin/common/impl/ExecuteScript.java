@@ -4,6 +4,7 @@ import com.lapin.common.exception.AccessDeniedException;
 import com.lapin.common.exception.CommandNeedArgumentException;
 import com.lapin.common.exception.CommandNotAcceptArgumentsException;
 import com.lapin.common.network.objimp.RequestBodyKeys;
+import com.lapin.common.utility.FileManager;
 import com.lapin.common.utility.OutManager;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.di.annotation.Inject;
@@ -22,14 +23,16 @@ import java.util.HashMap;
         name = "execute_script",
         description = "считать и исполнить скрипт из указанного файла.")
 public class ExecuteScript extends AbstractCommand {
-    @Inject
     private FileManager fileManager;
-
+    {
+        super.accessType = AccessType.ALL;
+        super.executingLocal = true;
+    }
 
     @Override
     public void execute(String argument, Serializable argObj) {
         try {
-            fileManager.readScript((String) args.get(RequestBodyKeys.ARG));
+            fileManager.readScript(argument);
         } catch (RuntimeException e) {
             OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }

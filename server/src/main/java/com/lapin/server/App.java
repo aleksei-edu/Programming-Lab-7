@@ -2,6 +2,7 @@ package com.lapin.server;
 
 
 import com.lapin.network.TCPConnection;
+import com.lapin.network.listener.ServerListener;
 import com.lapin.server.config.NetworkConfigFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ public class App {
             = LoggerFactory.getLogger(App.class);
     public static void main(String[] args){
         TCPConnection server = new TCPConnection(new NetworkConfigFile());
-        server.run();
+        ServerListener serverListener = (ServerListener) server.start();
+        serverListener.listen();
     }
 }

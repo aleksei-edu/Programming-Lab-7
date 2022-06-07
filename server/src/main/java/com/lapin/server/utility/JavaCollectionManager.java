@@ -2,6 +2,7 @@ package com.lapin.server.utility;
 
 
 import com.lapin.common.utility.CollectionManager;
+import com.lapin.common.utility.FileManager;
 import com.lapin.di.annotation.Inject;
 import com.lapin.common.data.Route;
 import com.lapin.common.exception.IdOverflowException;
@@ -43,7 +44,7 @@ public class JavaCollectionManager implements CollectionManager {
         return COLLECTION_MANAGER;
     }
 
-    public static ArrayList<String[]> getStringRouteCollection() {
+    public ArrayList<String[]> getStringRouteCollection() {
         ArrayList<String[]> strRouteCol = new ArrayList<>();
         for(Route route : routeCollection){
             List<String> routeList = new ArrayList<>();

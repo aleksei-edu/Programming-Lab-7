@@ -1,6 +1,5 @@
 package com.lapin.client;
 
-import com.lapin.common.utility.ClientReqHandler;
 import com.lapin.network.ClientType;
 import com.lapin.network.config.NetworkConfigurator;
 import com.lapin.network.conop.ClientTCPConnection;
@@ -29,7 +28,7 @@ public class NetworkConfigFile implements NetworkConfigurator {
 
     @Override
     public ClientType getClientType() {
-        return ClientType.USER;
+        return ClientType.REMOTE;
     }
 
     @Override

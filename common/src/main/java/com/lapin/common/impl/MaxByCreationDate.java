@@ -25,7 +25,9 @@ import java.util.HashMap;
 @ClassMeta(name = "max_by_creation_date", description = "вывести любой объект из коллекции, значение поля creationDate которого является максимальным")
 public class MaxByCreationDate extends AbstractCommand {
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
-
+    {
+        super.accessType = AccessType.ALL;
+    }
 
     @Override
     public void execute(String argument, Serializable argObj) {

@@ -11,9 +11,11 @@ import java.util.HashMap;
  * Абстрактный класс, от которого наследуются все команды.
  */
 
-public class AbstractCommand implements Command {
+public abstract class AbstractCommand implements Command {
     private String name;
-    private AccessType accessType;
+    protected AccessType accessType = AccessType.NO_ONE;
+    protected boolean NeedObj = false;
+    protected boolean executingLocal = false;
     @Override
     public void execute(String arg, Serializable argObj) {
 
@@ -23,6 +25,12 @@ public class AbstractCommand implements Command {
         ClassMeta commandMeta = this.getClass().getAnnotation(ClassMeta.class);
         return commandMeta.name() + " – " + commandMeta.description();
     }
+    @Override
+    public boolean getNeedObj(){
+        return NeedObj;
+    }
+    @Override
+    public boolean getExecutingLocal(){return executingLocal;}
 
     @Override
     public String getName() {

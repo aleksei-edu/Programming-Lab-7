@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class ResponseCommand extends NetObj implements Serializable {
     public ResponseCommand(StatusCodes statusCode, String ans){
-        super(ResponseHeaderKey.RESPONSE, setBody(statusCode,ans));
+        super(setBody(statusCode,ans));
     }
     private static HashMap<NetObjBodyKeys,Object> setBody(StatusCodes statusCode, String ans){
         HashMap<NetObjBodyKeys, Object> body = new HashMap<>();

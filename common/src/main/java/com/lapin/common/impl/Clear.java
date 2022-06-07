@@ -24,7 +24,9 @@ import java.util.HashMap;
         description = "очистить коллекцию")
 public class Clear extends AbstractCommand {
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
-
+    {
+        super.accessType = AccessType.ALL;
+    }
 
     @Override
     public void execute(String argument, Serializable argObj) {

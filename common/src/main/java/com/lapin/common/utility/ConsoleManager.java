@@ -1,6 +1,4 @@
-package com.lapin.server.utility;
-
-import com.lapin.common.utility.CommandManager;
+package com.lapin.common.utility;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -12,14 +10,19 @@ public class ConsoleManager {
     /**
      * Пользовательский ввод с консоли (по умолчанию).
      */
+    private CommandManager commandManager;
     private static Scanner userScanner = new Scanner(System.in);
+
+    public ConsoleManager(CommandManager commandManager){
+        this.commandManager = commandManager;
+    }
 
     /**
      * Считывает из пользовательского ввода введенную команду.
      */
-    public static void interactiveMode() throws IOException {
+    public void interactiveMode() {
         String[] userCommand = (userScanner.nextLine().toLowerCase().trim() + " ").split(" ", 2);
-        CommandManager.execute(userCommand[0], userCommand[1].trim(),null);
+        commandManager.execute(userCommand[0], userCommand[1].trim());
     }
 
 

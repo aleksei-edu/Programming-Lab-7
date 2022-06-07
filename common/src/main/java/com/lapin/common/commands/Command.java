@@ -1,10 +1,6 @@
 package com.lapin.common.commands;
 
-import com.lapin.common.interaction.StatusCodes;
-import com.lapin.common.network.objimp.RequestBodyKeys;
-
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * Интерфейс, который описывает основные методы всех команд
@@ -19,6 +15,8 @@ public interface Command {
     public void execute(String arg, Serializable argObj);
 
     public String toString();
+    public boolean getNeedObj();
+    public boolean getExecutingLocal();
 
     public String getName();
 

@@ -13,7 +13,7 @@ import com.lapin.common.utility.CommandManager;
 public class ServerRequestHandler implements RequestHandler {
     @Override
     public NetObj handle(NetObj netObj) {
-        if(netObj != null && netObj.getHeader().equals(RequestHeaderKey.REQUEST)){
+        if(netObj != null){
             RequestCommand rc = (RequestCommand) netObj;
             CommandManager.execute(rc.getCmd(), rc.getArg(), rc.argObj());
             Pair response = OutManager.pop();

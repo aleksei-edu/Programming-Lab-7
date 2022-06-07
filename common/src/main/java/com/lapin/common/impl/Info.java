@@ -22,7 +22,9 @@ import java.util.HashMap;
 @ClassMeta(name = "info", description = "вывести в стандартный поток вывода информацию о коллекции тип, дата инициализации, количество элементов и т.д.")
 public class Info extends AbstractCommand {
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
-
+    {
+        super.accessType = AccessType.ALL;
+    }
 
     @Override
     public void execute(String argument, Serializable argObj) {

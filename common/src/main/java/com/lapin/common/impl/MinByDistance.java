@@ -26,6 +26,9 @@ import java.util.HashMap;
 @ClassMeta(name = "min_by_distance", description = "вывести любой объект из коллекции, значение поля distance которого является минимальным")
 public class MinByDistance extends AbstractCommand {
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    {
+        super.accessType = AccessType.ALL;
+    }
 
 
     @Override

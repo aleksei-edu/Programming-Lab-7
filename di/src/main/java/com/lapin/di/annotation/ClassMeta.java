@@ -1,6 +1,5 @@
 package com.lapin.di.annotation;
 
-import com.lapin.common.commands.AccessType;
 
 import java.lang.annotation.*;
 
@@ -11,5 +10,5 @@ public @interface ClassMeta {
     String name();
 
     String description() default "description is empty";
-    AccessType access() default AccessType.NO_ONE;
+    //AccessType access() default AccessType.NO_ONE;
 }

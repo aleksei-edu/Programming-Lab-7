@@ -25,7 +25,10 @@ import java.util.HashMap;
 @ClassMeta(name = "update", description = "обновить значение элемента коллекции, id которого равен заданному")
 public class Update extends AbstractCommand {
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
-
+    {
+        super.accessType = AccessType.ALL;
+        super.NeedObj = true;
+    }
     @Override
     public void execute(String argument, Serializable argObj) {
         try {

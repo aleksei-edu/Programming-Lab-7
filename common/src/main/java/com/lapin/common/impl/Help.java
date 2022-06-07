@@ -24,19 +24,22 @@ import java.util.Set;
         name = "help",
         description = "вывести справку по доступным командам")
 public class Help extends AbstractCommand {
+    {
+        super.accessType = AccessType.ALL;
+    }
     @Override
     public void execute(String argument, Serializable argObj) {
         try {
-            Reflections scanner = new Reflections("commands");
+            Reflections scanner = new Reflections("");
             Set<Class<? extends Command>> implementationClasses = scanner.getSubTypesOf(Command.class);
-            String response = "";
+            StringBuilder response = new StringBuilder();
             for (Class<? extends Command> clazz : implementationClasses) {
                 ClassMeta annotation = clazz.getAnnotation(ClassMeta.class);
                 if (annotation != null) {
-                    response += annotation.name() + " – " + annotation.description();
+                    response.append(annotation.name()).append(" – ").append(annotation.description()).append("\n");
                 }
             }
-            OutManager.push(StatusCodes.OK,response);
+            OutManager.push(StatusCodes.OK, response.toString());
 
         } catch (RuntimeException e) {
             OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");

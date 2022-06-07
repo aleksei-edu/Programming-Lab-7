@@ -22,6 +22,9 @@ import java.util.HashMap;
 @ClassMeta(name = "remove_all_by_distance", description = "удалить из коллекции все элементы, значение поля distance которого эквивалентно заданному")
 public class RemoveAllByDistance extends AbstractCommand {
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    {
+        super.accessType = AccessType.ALL;
+    }
 
 
     @Override

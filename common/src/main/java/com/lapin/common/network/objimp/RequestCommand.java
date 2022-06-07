@@ -9,10 +9,10 @@ import java.util.HashMap;
 
 public class RequestCommand extends NetObj implements Serializable {
     public RequestCommand(HashMap<NetObjBodyKeys,Object> body){
-        super(RequestHeaderKey.REQUEST, body);
+        super(body);
     }
     public RequestCommand(String command, String arg, Serializable argObj){
-        super(RequestHeaderKey.REQUEST, setBody(command,arg,argObj));
+        super(setBody(command,arg,argObj));
     }
     private static HashMap<NetObjBodyKeys,Object> setBody(String command, String arg, Serializable argObj){
         HashMap<NetObjBodyKeys, Object> body = new HashMap<>();

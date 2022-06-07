@@ -27,7 +27,10 @@ import java.util.HashMap;
         description = "добавить новый элемент в коллекцию")
 public class Add extends AbstractCommand {
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
-
+    {
+        super.accessType = AccessType.ALL;
+        super.NeedObj = true;
+    }
     @Override
     public void execute(String argument, Serializable argObj) {
         try {

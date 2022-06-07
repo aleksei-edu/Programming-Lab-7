@@ -26,6 +26,9 @@ import java.util.HashMap;
         description = "вывести в стандартный поток вывода все элементы коллекции в строковом представлении")
 public class Show extends AbstractCommand {
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    {
+        super.accessType = AccessType.ALL;
+    }
 
 
     @Override
