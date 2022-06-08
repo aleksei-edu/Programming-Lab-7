@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public interface CollectionManager {
-    public CollectionManager getInstance();
-    public CollectionManager setInstance();
+
     public int getFreeNumberForId();
 
     public Set<Route> getRouteCollection();
@@ -19,7 +18,7 @@ public interface CollectionManager {
 
     public void add(Route route);
 
-    public boolean update(Integer id);
+    public boolean update(Route newRoute,Integer id);
 
     public LocalDate getLastInitTime();
 

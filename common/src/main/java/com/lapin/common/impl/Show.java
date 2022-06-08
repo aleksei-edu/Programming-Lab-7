@@ -7,6 +7,7 @@ import com.lapin.common.network.objimp.RequestBodyKeys;
 import com.lapin.common.utility.CollectionManager;
 import com.lapin.common.utility.CommandManager;
 import com.lapin.common.utility.OutManager;
+import com.lapin.common.utility.RemoveLastChar;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.data.Route;
 import com.lapin.common.exception.CommandNotAcceptArgumentsException;
@@ -38,8 +39,9 @@ public class Show extends AbstractCommand {
             if (collectionManager.getRouteCollection().size() == 0) {
                 response += "Коллекция пуста.";
             } else for (Route index : collectionManager.getRouteCollection()) {
-                response += index.toString();
+                response += index.toString()+"\n";
             }
+            response = RemoveLastChar.remove(response);
             OutManager.push(StatusCodes.OK,response);
 
         } catch (RuntimeException e) {

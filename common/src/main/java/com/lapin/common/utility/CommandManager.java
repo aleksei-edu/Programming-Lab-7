@@ -21,6 +21,7 @@ import java.util.*;
 @Getter
 public class CommandManager {
     private static CollectionManager collectionManager;
+    private static FileManager fileManager;
     private final ClientType clientType;
     private Client_IO clientIO;
     private static final HashSet<String> CLIENT_COMMANDS = new HashSet<>();
@@ -31,8 +32,15 @@ public class CommandManager {
         this.clientType = clientType;
     }
 
+    public static FileManager getFileManager() {
+        return fileManager;
+    }
+
     public static void setCollectionManager(CollectionManager collectionManager){
         CommandManager.collectionManager = collectionManager;
+    }
+    public static void setFileManager(FileManager fileManager){
+        CommandManager.fileManager = fileManager;
     }
     public void setClientIO(Client_IO clientIO){
         this.clientIO = clientIO;
@@ -92,7 +100,7 @@ public class CommandManager {
         } catch (CommandNotFoundException e) {
             OutManager.push(StatusCodes.ERROR,"Command not found!");
         } catch (Exception e) {
-            System.err.println("Failed to execute command!");
+            OutManager.push(StatusCodes.ERROR,"Failed to execute command!");
         }
     }
 

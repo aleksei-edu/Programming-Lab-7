@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 public class JavaBeanConfigurator implements BeanConfigurator {
-    final Reflections scanner;
+    Reflections scanner;
 
     public JavaBeanConfigurator(String packageToScan) {
         this.scanner = new Reflections(packageToScan);
@@ -20,6 +20,8 @@ public class JavaBeanConfigurator implements BeanConfigurator {
     public Reflections getScanner() {
         return scanner;
     }
+
+    public void setScanner(String packageToScan){this.scanner = new Reflections(packageToScan);}
 
     @Override
     public <T> Class<? extends T> getImplementationClass(Class<T> interfaceClass) {

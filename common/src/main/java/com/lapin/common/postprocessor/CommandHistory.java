@@ -1,4 +1,4 @@
-package com.lapin.server.postprocess;
+package com.lapin.common.postprocessor;
 
 
 import com.lapin.di.postprocessor.BeanPostProcessor;

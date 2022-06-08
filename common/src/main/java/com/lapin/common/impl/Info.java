@@ -6,6 +6,7 @@ import com.lapin.common.network.objimp.RequestBodyKeys;
 import com.lapin.common.utility.CollectionManager;
 import com.lapin.common.utility.CommandManager;
 import com.lapin.common.utility.OutManager;
+import com.lapin.common.utility.RemoveLastChar;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.exception.CommandNotAcceptArgumentsException;
 import com.lapin.common.commands.AbstractCommand;
@@ -31,14 +32,14 @@ public class Info extends AbstractCommand {
 
         try {
             String response = "";
-            response += "Сведения о коллекции:";
-            response += "Тип: " + collectionManager.getRouteCollection().getClass().getName();
-            response += "Дата инициализации: " + collectionManager.getLastInitTime();
+            response += "Сведения о коллекции:\n";
+            response += "Тип: " + collectionManager.getRouteCollection().getClass().getName()+"\n";
+            response += "Дата инициализации: " + collectionManager.getLastInitTime()+"\n";
             String saveTime = "";
             if (collectionManager.getSaveTimeCollection() == null) {
                 saveTime = "Коллекция не сохранялась в этой сессии";
             } else saveTime = collectionManager.getSaveTimeCollection().toString();
-            response += "Дата сохранения: " + saveTime;
+            response += "Дата сохранения: " + saveTime+"\n";
             response += "Количество элементов: " + collectionManager.getRouteCollection().size();
             OutManager.push(StatusCodes.OK,response);
 

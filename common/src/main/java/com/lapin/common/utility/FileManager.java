@@ -5,6 +5,7 @@ import com.lapin.common.data.Coordinates;
 import com.lapin.common.data.LocationFrom;
 import com.lapin.common.data.LocationTo;
 import com.lapin.common.data.Route;
+import com.lapin.common.exception.MaxRecursionExceededException;
 import com.lapin.common.exception.NullEnvException;
 import com.lapin.common.utility.CollectionManager;
 import com.lapin.common.utility.ConsoleManager;
@@ -26,18 +27,23 @@ public class FileManager {
     @Setter
     @Getter
     private String env;
-    private CollectionManager collectionManager;
-    private ConsoleManager consoleManager;
+    private static CollectionManager collectionManager;
+    private static ConsoleManager consoleManager;
+    private static final int MaxRecursionDepth = 3;
+    private static int CurrentRecursionDepth = 0;
 
-    public void setConsoleManager(ConsoleManager consoleManager) {
-        this.consoleManager = consoleManager;
+    public static void setConsoleManager(ConsoleManager consoleManager) {
+        FileManager.consoleManager = consoleManager;
+    }
+    public static void setCollectionManager(CollectionManager collectionManager){
+        FileManager.collectionManager = collectionManager;
     }
 
     /**
      * Сохранить коллекцию в файл
      */
 
-    public void saveCollection(CollectionManager collectionManager) throws IOException {
+    public String saveCollection(CollectionManager collectionManager) throws IOException,NullEnvException,FileNotFoundException {
         BufferedWriter bWriter = null;
         CSVWriter writer = null;
         try {
@@ -50,8 +56,9 @@ public class FileManager {
             e.printStackTrace();
         } finally {
             writer.close();
-            System.out.println("Коллекция успешно сохранена в " + env + ".");
+            String response = "Коллекция успешно сохранена в " + env + ".";
             collectionManager.saveTimeCollection();
+            return response;
         }
     }
 
@@ -76,7 +83,7 @@ public class FileManager {
                 for (int i = 0; i < line.length; i++) {
                     line[i] = line[i].trim().toLowerCase();
                 }
-                collectionManager.getRouteCollection().add(new Route(line[0], line[1],
+                collectionManager.add(new Route(line[0], line[1],
                         new Coordinates(Double.parseDouble(line[2]), Double.parseDouble(line[3])), line[4],
                         new LocationFrom(Integer.parseInt(line[5]), Float.parseFloat(line[6]), Double.parseDouble(line[7])),
                         new LocationTo(Float.parseFloat(line[8]), Long.parseLong(line[9]), line[10]), Long.parseLong(line[11])));
@@ -99,28 +106,33 @@ public class FileManager {
      *
      * @param fileName
      */
-    public void readScript(String fileName) {
-        BufferedReader reader = null;
-        try {
-            File file = new File(fileName);
-            reader = new BufferedReader(new FileReader(file));
-            InputStream fileInput = new FileInputStream(file);
-            Scanner userScanner = new Scanner(fileInput);
-            ConsoleManager.setUserScanner(userScanner);
-            while ((reader.readLine()) != null) {
-                consoleManager.interactiveMode();
-            }
-            userScanner = new Scanner(System.in);
-            ConsoleManager.setUserScanner(userScanner);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+    public static void readScript(String fileName) throws MaxRecursionExceededException {
+        CurrentRecursionDepth+=1;
+        if(MaxRecursionDepth >= CurrentRecursionDepth) {
+            BufferedReader reader = null;
             try {
-                reader.close();
-            } catch (IOException e) {
+                File file = new File(fileName);
+                reader = new BufferedReader(new FileReader(file));
+                InputStream fileInput = new FileInputStream(file);
+                Scanner userScanner = new Scanner(fileInput);
+                ConsoleManager.setUserScanner(userScanner);
+                while ((reader.readLine()) != null) {
+                    consoleManager.interactiveMode();
+                }
+                userScanner = new Scanner(System.in);
+                CurrentRecursionDepth -= 1;
+                ConsoleManager.setUserScanner(userScanner);
+            } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+        else throw new MaxRecursionExceededException();
     }
 
 }

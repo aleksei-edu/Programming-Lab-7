@@ -3,6 +3,7 @@ package com.lapin.common.utility;
 
 import com.lapin.common.network.objimp.RequestCommand;
 import com.lapin.common.network.objimp.ResponseBodyKeys;
+import com.lapin.common.network.objimp.ResponseCommand;
 import com.lapin.network.config.NetworkConfigurator;
 import com.lapin.network.listener.ClientListener;
 import com.lapin.network.obj.NetObj;

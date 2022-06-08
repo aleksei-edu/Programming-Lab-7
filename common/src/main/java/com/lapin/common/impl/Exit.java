@@ -18,7 +18,7 @@ import java.util.HashMap;
  */
 @ClassMeta(
         name = "exit",
-        description = "завершить программу (без сохранения в файл)")
+        description = "завершить клиентскую программу (без сохранения в файл)")
 public class Exit extends AbstractCommand {
     {
         super.accessType = AccessType.USER;

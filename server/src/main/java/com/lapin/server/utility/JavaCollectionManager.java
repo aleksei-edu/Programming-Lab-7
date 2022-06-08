@@ -32,10 +32,8 @@ public class JavaCollectionManager implements CollectionManager {
     /**
      * Коллекция в которой хранятся {@link Route}
      */
-    @Inject(singleton = false)
-    private static LinkedHashSet<Route> routeCollection;
-    @Inject(singleton = false)
-    private static ArrayList<String[]> stringRouteCollection;
+    private static final LinkedHashSet<Route> routeCollection = new LinkedHashSet<>();
+    private static final ArrayList<String[]> stringRouteCollection = new ArrayList<>();
     private FileManager fileManager;
     public JavaCollectionManager(FileManager fileManager){
         this.fileManager = fileManager;
@@ -116,10 +114,11 @@ public class JavaCollectionManager implements CollectionManager {
     }
 
     @Override
-    public boolean update(Integer id) {
+    public boolean update(Route newRoute,Integer id) {
         for (Route route : routeCollection) {
             if (route.getId() == id) {
-                this.add(route);
+                this.getRouteCollection().remove(route);
+                this.add(newRoute);
                 return true;
             }
         }

@@ -3,6 +3,7 @@ package com.lapin.common.impl;
 import com.lapin.common.exception.AccessDeniedException;
 import com.lapin.common.exception.CommandNeedArgumentException;
 import com.lapin.common.exception.CommandNotAcceptArgumentsException;
+import com.lapin.common.exception.MaxRecursionExceededException;
 import com.lapin.common.network.objimp.RequestBodyKeys;
 import com.lapin.common.utility.FileManager;
 import com.lapin.common.utility.OutManager;
@@ -23,7 +24,6 @@ import java.util.HashMap;
         name = "execute_script",
         description = "считать и исполнить скрипт из указанного файла.")
 public class ExecuteScript extends AbstractCommand {
-    private FileManager fileManager;
     {
         super.accessType = AccessType.ALL;
         super.executingLocal = true;
@@ -32,8 +32,12 @@ public class ExecuteScript extends AbstractCommand {
     @Override
     public void execute(String argument, Serializable argObj) {
         try {
-            fileManager.readScript(argument);
-        } catch (RuntimeException e) {
+            FileManager.readScript(argument);
+            OutManager.push(StatusCodes.OK,"The script is executed");
+        }catch (MaxRecursionExceededException e){
+            OutManager.push(StatusCodes.ERROR, "Maximum recursion is exceeded!");
+        }
+        catch (RuntimeException e) {
             OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }

@@ -1,31 +1,23 @@
 package com.lapin.common.impl;
 
-import com.lapin.common.exception.AccessDeniedException;
-import com.lapin.common.exception.CommandNotAcceptArgumentsException;
+import com.lapin.common.commands.AbstractCommand;
+import com.lapin.common.commands.AccessType;
 import com.lapin.common.exception.NullEnvException;
-import com.lapin.common.network.objimp.RequestBodyKeys;
 import com.lapin.common.utility.CollectionManager;
 import com.lapin.common.utility.CommandManager;
 import com.lapin.common.utility.FileManager;
 import com.lapin.common.utility.OutManager;
 import com.lapin.di.annotation.ClassMeta;
-import com.lapin.di.annotation.Inject;
-import com.lapin.common.commands.AbstractCommand;
-import com.lapin.common.commands.AccessType;
 import com.lapin.network.StatusCodes;
-
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
 
-/**
- * Команда сохраняет коллекцию в файл
- */
-
-@ClassMeta(name = "save", description = "сохранить коллекцию в файл")
-public class Save extends AbstractCommand {
+@ClassMeta(
+        name = "exit_server",
+        description = "завершает работу серверного приложения (с сохранением в файл)")
+public class ServerExit extends AbstractCommand {
     private FileManager fileManager = CommandManager.getFileManager();
     private CollectionManager collectionManager = CommandManager.getCollectionManager();
     {
@@ -34,10 +26,11 @@ public class Save extends AbstractCommand {
     }
 
     @Override
-    public void execute(String argument, Serializable argObj) {
-        try {
+    public void execute(String arg, Serializable argObj) {
+        try{
             String response = fileManager.saveCollection(collectionManager);
             OutManager.push(StatusCodes.OK,response);
+            System.exit(0);
 
         } catch (NullEnvException e) {
             OutManager.push(StatusCodes.ERROR, "Failed to find env. Try again.");

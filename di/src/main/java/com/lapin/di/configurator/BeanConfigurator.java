@@ -11,4 +11,5 @@ public interface BeanConfigurator {
     <T> Class<? extends T> getImplementationClass(Class<T> interfaceClass);
 
     public Reflections getScanner();
+    public void setScanner(String packageToScan);
 }

@@ -1,9 +1,6 @@
 package com.lapin.common.client;
 
-import com.lapin.common.utility.Client_IO;
-import com.lapin.common.utility.Client_Network_IO;
-import com.lapin.common.utility.CommandManager;
-import com.lapin.common.utility.ConsoleManager;
+import com.lapin.common.utility.*;
 import com.lapin.di.context.ApplicationContext;
 import com.lapin.di.factory.BeanFactory;
 import com.lapin.network.ClientType;
@@ -29,6 +26,7 @@ public class Client implements Runnable{
             commandManager.setClientIO(client_io);
         }
         ConsoleManager consoleManager = new ConsoleManager(commandManager);
+        FileManager.setConsoleManager(consoleManager);
         while (true){
             consoleManager.interactiveMode();
         }

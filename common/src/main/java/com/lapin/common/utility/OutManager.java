@@ -12,16 +12,13 @@ public class OutManager {
     }
     public static Pair pop(){
         if (out.empty()){
-            return null;
+            return new Pair(StatusCodes.OK,"I have nothing to say here :(");
         }
         return out.pop();
     }
 
-    public static void println(String str){
-        System.out.println(str);
-    }
     public static void println(){
-        System.out.print(OutManager.pop().getSecond());
+        System.out.println(OutManager.pop().getSecond());
     }
 
 }

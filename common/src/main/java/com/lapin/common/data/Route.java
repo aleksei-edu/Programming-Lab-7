@@ -2,6 +2,7 @@ package com.lapin.common.data;
 
 import com.lapin.di.annotation.ClassMeta;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.List;
 @ClassMeta(name = "route")
 public class Route implements Comparable<Route>, Serializable {
     @Getter
+    @Setter
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     @Getter
     private String name; //Поле не может быть null, Строка не может быть пустой
@@ -29,8 +31,8 @@ public class Route implements Comparable<Route>, Serializable {
     private LocationTo to; //Поле не может быть null
     @Getter
     private Long distance; //Поле не может быть null, Значение поля должно быть больше 1
-
-    private static int lastIdNum;
+    @Getter
+    private static int lastIdNum =0;
     /**
      * Все поля Route в виде String
      */
@@ -71,26 +73,21 @@ public class Route implements Comparable<Route>, Serializable {
         }
     }
 
-    /**
-     * Обновить поля элемента Route
-     *
-     * @param route новый элемент Route
-     */
-    public void updateRoute(Route route) {
-        this.name = route.name;
-        this.coordinates = route.coordinates;
-        this.from = route.from;
-        this.to = route.to;
-        this.distance = route.distance;
-    }
 
-    private static int getNewId(){
-        return lastIdNum+1;
+    public static int getNewId(){
+        lastIdNum=lastIdNum+1;
+        return lastIdNum;
     }
 
     @Override
     public String toString() {
         return "id: " + id + ", name: " + name + ", " + coordinates.toString() +
+                ", creationDate: " + creationDate + ", " + from.toString() + ", " + to.toString() +
+                ", distance: " + distance;
+    }
+
+    public String toStringWithoutId() {
+        return  "name: " + name + ", " + coordinates.toString() +
                 ", creationDate: " + creationDate + ", " + from.toString() + ", " + to.toString() +
                 ", distance: " + distance;
     }

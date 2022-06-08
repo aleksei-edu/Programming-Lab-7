@@ -65,6 +65,7 @@ public class ApplicationContext {
     }
 
     public void callPostProcessor(Object bean) {
+        //beanFactory.getBeanConfigurator().setScanner("com.lapin.common.postprocessor");
         beanFactory.getBeanConfigurator().getScanner().getSubTypesOf(BeanPostProcessor.class)
                 .forEach(processor -> {
                     try {

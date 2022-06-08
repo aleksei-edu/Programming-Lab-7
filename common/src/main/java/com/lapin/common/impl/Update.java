@@ -37,7 +37,8 @@ public class Update extends AbstractCommand {
             if(!(argObj instanceof Route)) throw new RuntimeException();
             try {
                     int id = Integer.parseInt(argument);
-                    boolean flag = collectionManager.update(id);
+                    ((Route) argObj).setId(id);
+                    boolean flag = collectionManager.update((Route) argObj,id);
                     if (flag) {
                         OutManager.push(StatusCodes.OK,"The element was successfully updated.");
                     }

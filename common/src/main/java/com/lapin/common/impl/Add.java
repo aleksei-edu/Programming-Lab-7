@@ -36,7 +36,11 @@ public class Add extends AbstractCommand {
         try {
             if (!argument.isEmpty()) throw new CommandNotAcceptArgumentsException();
             if(!(argObj instanceof Route)) throw new RuntimeException();
-            else collectionManager.add((Route) argObj);
+            else{
+                ((Route) argObj).setId(Route.getNewId());
+                collectionManager.add((Route) argObj);
+            }
+            OutManager.push(StatusCodes.OK,"The element is added");
         }
         catch (RuntimeException e) {
             OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");

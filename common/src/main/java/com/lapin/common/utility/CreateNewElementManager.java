@@ -20,30 +20,9 @@ public class CreateNewElementManager {
      */
     private static final double MAX_COORDINATE_X = 699;
 
-
-    /**
-     * Обновить элемент {@link Route}
-     *
-     * @param oldroute элемент {@link Route} который мы хотим обновить.
-     * @see Update
-     */
-//    public static void update(Route oldroute) {
-//        Route route = new Route((Integer.valueOf(oldroute.getId())),
-//                askName(),
-//                new Coordinates(askCoordinateX(), askCoordinateY()),
-//                oldroute.getCreationDate(),
-//                new LocationFrom(askLocationFromX(), askLocationFromY(), askLocationFromZ()),
-//                new LocationTo(askLocationToX(), askLocationToY(), askLocationToName()),
-//                askDistance());
-//        updateCollection(1, route, oldroute);
-//    }
-
     /**
      * Создать новый элемент {@link Route}
-     *
-     * @return новый {@link Route}
-     * @see AddIfMax
-     * @see RemoveLower
+     * @return Route
      */
     public static Route createNewElement() {
         Route route = new Route("",
@@ -54,72 +33,10 @@ public class CreateNewElementManager {
                 new LocationTo(askLocationToX(), askLocationToY(), askLocationToName()),
                 askDistance());
         System.out.println("Preview:");
-        System.out.println(route.toString());
+        System.out.println(route.toStringWithoutId());
         return route;
     }
 
-    /**
-     * Добавить новый элемент {@link Route} в коллекцию
-     *
-     * @see Add
-     */
-//    public static void add() {
-//        Route route = new Route("",
-//                askName(),
-//                new Coordinates(askCoordinateX(), askCoordinateY()),
-//                collectionManager.getLastInitTime(),
-//                new LocationFrom(askLocationFromX(), askLocationFromY(), askLocationFromZ()),
-//                new LocationTo(askLocationToX(), askLocationToY(), askLocationToName()),
-//                askDistance());
-//        updateCollection(0, route, null);
-//    }
-
-    /**
-     * Обновление коллекции
-     *
-     * @param mode     режим работы. 0 - добавление элемента в коллекцию, 1 - обновление элемента коллекции
-     * @param newRoute новый элемент {@link Route}
-     * @param oldRoute элемент {@link Route} который хотим обновить (если есть, иначе null)
-     */
-//    private static void updateCollection(Integer mode, Route newRoute, Route oldRoute) {
-//        while (true) {
-//            try {
-//                if (mode == 0) {
-//                    System.out.println("Добавить элемент в коллекцию?");
-//                } else if (mode == 1) {
-//                    System.out.println("Обновить элемент в коллекции?");
-//                }
-//                System.out.println(newRoute.toString());
-//                System.out.println("Введите y/n");
-//                String userPrint = ConsoleManager.getUserPrint();
-//                if (userPrint.equals("y")) {
-//                    if (mode == 0) {
-//                        collectionManager.getRouteCollection().add(newRoute);
-//                        System.out.println("Элемент добавлен в коллекцию");
-//                    } else if (mode == 1) {
-//                        oldRoute.updateRoute(newRoute);
-//                        System.out.println("Элемент обновлен");
-//                    }
-//                    break;
-//                } else if (userPrint.equals("n")) {
-//                    if (mode == 0) {
-//                        System.out.println("Добаление элемента в коллекцию ОТМЕНЕНО.");
-//                    } else if (mode == 1) {
-//                        System.out.println("Обновление элемента ОТМЕНЕНО.");
-//                    }
-//                    break;
-//                } else throw new IllegalArgumentException("Введено что-то не то. Повторите попытку.");
-//            } catch (IllegalArgumentException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
-    /**
-     * Спросить Имя {@link Route}
-     *
-     * @return Route name
-     */
     private static String askName() {
         while (true) {
             System.out.println("Введите Route name (тип: String, не может быть пустой):");

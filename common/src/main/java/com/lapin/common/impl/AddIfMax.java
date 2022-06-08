@@ -34,10 +34,10 @@ public class AddIfMax extends AbstractCommand {
     @Override
     public void execute(String argument, Serializable argObj) {
         try {
-            //Route route = CreateNewElementManager.createNewElement();
             if(!(argObj instanceof Route)) throw new RuntimeException();
-            String responce = "";
+            String response = "";
             boolean flag = true;
+            ((Route) argObj).setId(Route.getNewId());
             Route route = (Route) argObj;
             for (Route index : collectionManager.getRouteCollection()) {
                 if (route.compareTo(index) < 1) {
@@ -46,11 +46,11 @@ public class AddIfMax extends AbstractCommand {
             }
             if (flag) {
                 collectionManager.add(route);
-                responce += "Элемент добавлен";
+                response += "Элемент добавлен";
             } else {
-                responce += "Элемент НЕ добавлен";
+                response += "Элемент НЕ добавлен";
             }
-            OutManager.push(StatusCodes.OK, responce);
+            OutManager.push(StatusCodes.OK, response);
         } catch (AccessDeniedException e){
             OutManager.push(StatusCodes.ERROR, "Access denied");
         }

@@ -20,7 +20,7 @@ public class ServerListener implements Listenerable, Runnable{
     protected ServerSocketChannel ssc;
     private StatusCodes serverStatus = StatusCodes.OK;
     protected NetworkLogger netLogger;
-    private static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 1024*10;
     protected NetworkConfigurator config;
     protected final Map<SocketChannel, ByteBuffer> channelBuffer = new HashMap<>();
     protected Selector sel;

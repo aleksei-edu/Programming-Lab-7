@@ -3,9 +3,11 @@ package com.lapin.server;
 
 import com.lapin.common.client.Client;
 import com.lapin.common.utility.CollectionManager;
+import com.lapin.common.utility.CommandManager;
 import com.lapin.common.utility.FileManager;
 import com.lapin.di.context.ApplicationContext;
 import com.lapin.di.factory.BeanFactory;
+import com.lapin.network.ClientType;
 import com.lapin.network.TCPConnection;
 import com.lapin.network.listener.ServerListener;
 import com.lapin.server.config.NetworkConfigFile;
@@ -23,7 +25,13 @@ public class App {
         BeanFactory beanFactory = new BeanFactory(ApplicationContext.getInstance());
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
         FileManager fileManager = new FileManager();
+        fileManager.setEnv("LABA");
         CollectionManager collectionManager = new JavaCollectionManager(fileManager);
+        CommandManager commandManager = new CommandManager(ClientType.LOCAL);
+        CommandManager.setCollectionManager(collectionManager);
+        FileManager.setCollectionManager(collectionManager);
+        CommandManager.setFileManager(fileManager);
+        collectionManager.loadCollection();
         TCPConnection server = new TCPConnection(config);
         ServerListener serverListener = (ServerListener) server.start();
         Thread serverThread = new Thread(serverListener);

@@ -7,6 +7,7 @@ public class Serializer {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutput objectOutput = new ObjectOutputStream(byteArrayOutputStream);
         objectOutput.writeObject(objectToSerialize);
+        objectOutput.flush();
 
         return byteArrayOutputStream.toByteArray();
     }
@@ -14,8 +15,13 @@ public class Serializer {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(serializedObject);
         ObjectInputStream objectInput = new ObjectInputStream(byteArrayInputStream);
         try {
-            return (Serializable) objectInput.readObject();
-        } catch (ClassNotFoundException | IOException e) {
+            Serializable obj = (Serializable) objectInput.readObject();
+            return obj;
+        }
+        catch (EOFException e) {
+            return null;
+        }
+        catch (ClassNotFoundException | IOException e) {
             return null;
         }
     }

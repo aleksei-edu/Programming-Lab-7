@@ -32,6 +32,7 @@ public class Clear extends AbstractCommand {
     public void execute(String argument, Serializable argObj) {
         try {
             collectionManager.clear();
+            OutManager.push(StatusCodes.OK,"Collection is cleared.");
         }catch (CommandNotAcceptArgumentsException e) {
             OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
