@@ -25,7 +25,6 @@ public interface NetworkConfigurator {
         return host;
     };
     public ClientType getClientType();
-    public ClientRequestHandler getClientRequestHandler();
     //Параметры для клиента.
     public default Integer getTimeout(){
         return null;

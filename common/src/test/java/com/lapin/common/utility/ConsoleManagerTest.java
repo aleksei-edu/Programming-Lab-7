@@ -4,40 +4,36 @@ import com.lapin.common.impl.Help;
 import com.lapin.di.context.ApplicationContext;
 import com.lapin.di.factory.BeanFactory;
 import com.lapin.network.ClientType;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CommandManagerTest {
-    CommandManager commandManager;
-
+class ConsoleManagerTest {
 
     @Test
-    void executeLocalHelp(){
+    void interactiveModeLocalHelp() {
         BeanFactory beanFactory = new BeanFactory(ApplicationContext.getInstance());
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
-        CommandManager commandManager = new CommandManager(ClientType.LOCAL);
-
+        ConsoleManager consoleManager = new ConsoleManager(new CommandManager(ClientType.LOCAL));
+        String consoleInput = "help";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(consoleInput.getBytes(StandardCharsets.UTF_8));
+        Scanner scanner = new Scanner(inputStream);
+        ConsoleManager.setUserScanner(scanner);
         String consoleOutput;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(1024);
         PrintStream capture = new PrintStream(outputStream);
         System.setOut(capture);
-        commandManager.execute("help","");
-        consoleOutput = outputStream.toString();
+        consoleManager.interactiveMode();
         capture.flush();
+        consoleOutput = outputStream.toString();
         System.setOut(System.out);
-
-        Help help = new Help();
+        System.setIn(System.in);
+        Help help =new Help();
         help.execute("",null);
-        String res = (String) OutManager.pop().getSecond();
-        assertEquals(res,consoleOutput);
+        assertEquals(OutManager.pop().getSecond(),consoleOutput);
     }
-
 }

@@ -29,12 +29,14 @@ public class FileManager {
     private CollectionManager collectionManager;
     private ConsoleManager consoleManager;
 
+    public void setConsoleManager(ConsoleManager consoleManager) {
+        this.consoleManager = consoleManager;
+    }
+
     /**
      * Сохранить коллекцию в файл
      */
-    public FileManager(ConsoleManager consoleManager){
-        this.consoleManager = consoleManager;
-    }
+
     public void saveCollection(CollectionManager collectionManager) throws IOException {
         BufferedWriter bWriter = null;
         CSVWriter writer = null;

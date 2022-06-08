@@ -16,7 +16,7 @@ import java.util.Set;
 
 import static java.nio.channels.SelectionKey.OP_ACCEPT;
 
-public class ServerListener implements Listenerable{
+public class ServerListener implements Listenerable, Runnable{
     protected ServerSocketChannel ssc;
     private StatusCodes serverStatus = StatusCodes.OK;
     protected NetworkLogger netLogger;
@@ -47,7 +47,7 @@ public class ServerListener implements Listenerable{
             netLogger.error("Failed key registration");
         }
     }
-    public void listen() {
+    public void run() {
         while (!serverStatus.equals(StatusCodes.EXIT_SERVER)) {
             try {
                 int numOfKeys = sel.select();
@@ -64,7 +64,7 @@ public class ServerListener implements Listenerable{
                         } else if (key.isReadable()) {
                             read(key);
                         } else if (key.isWritable()) {
-                            write();
+                            write(key);
                         }
                     }
                 }
@@ -104,15 +104,15 @@ public class ServerListener implements Listenerable{
             channelBuffer.put(channel, newBuffer);
             NetObj request = (NetObj) Serializer.deserialize(channelBuffer.get(channel).array());
             NetObj response = config.getRequestHandler().handle(request);
-            setServerStatus((StatusCodes) response.getBody().get("statusCode"));
+           // setServerStatus((StatusCodes) response.getBody().get("statusCode"));
             channelBuffer.put(channel,ByteBuffer.wrap(Serializer.serialize(response)));
             channel.register(sel, SelectionKey.OP_WRITE);
             } catch (IOException e) {
-                e.printStackTrace();
+                netLogger.error("Failed to process request!");
             }
     }
 
-    protected void write(){
+    protected void write(SelectionKey key){
         try {
             SocketChannel channel = (SocketChannel) key.channel();
             ByteBuffer buffer = channelBuffer.get(channel);
@@ -127,7 +127,7 @@ public class ServerListener implements Listenerable{
             channel.register(sel, SelectionKey.OP_READ);
         }
         catch (IOException e){
-            e.printStackTrace();
+            netLogger.error("Failed to send response!");
         }
     }
 

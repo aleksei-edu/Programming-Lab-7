@@ -25,11 +25,6 @@ public class NetworkConfigFile implements NetworkConfigurator {
     }
 
     @Override
-    public ClientRequestHandler getClientRequestHandler() {
-        return new ClientReqHandler();
-    }
-
-    @Override
     public ConnectionType getConnectionType() {
         return new ServerTCPConnection(this);
     }

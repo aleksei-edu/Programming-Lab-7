@@ -31,10 +31,6 @@ public class NetworkConfigFile implements NetworkConfigurator {
         return ClientType.REMOTE;
     }
 
-    @Override
-    public ClientRequestHandler getClientRequestHandler() {
-        return new ClientReqHandler();
-    }
 
     public Integer getTimeout() {
         return 1*60*100;

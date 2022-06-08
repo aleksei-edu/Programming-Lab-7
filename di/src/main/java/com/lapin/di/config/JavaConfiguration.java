@@ -5,7 +5,7 @@ import java.nio.file.Path;
 public class JavaConfiguration implements Configuration {
     @Override
     public String getPackageToScan() {
-        return "";
+        return "com.lapin.common";
     }
 
 }

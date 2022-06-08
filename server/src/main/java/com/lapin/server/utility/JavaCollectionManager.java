@@ -36,12 +36,9 @@ public class JavaCollectionManager implements CollectionManager {
     private static LinkedHashSet<Route> routeCollection;
     @Inject(singleton = false)
     private static ArrayList<String[]> stringRouteCollection;
-    private static CollectionManager COLLECTION_MANAGER = new JavaCollectionManager();
-    @Inject
     private FileManager fileManager;
-
-    public static CollectionManager getInstance() {
-        return COLLECTION_MANAGER;
+    public JavaCollectionManager(FileManager fileManager){
+        this.fileManager = fileManager;
     }
 
     public ArrayList<String[]> getStringRouteCollection() {

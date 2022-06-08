@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public interface CollectionManager {
+    public CollectionManager getInstance();
+    public CollectionManager setInstance();
     public int getFreeNumberForId();
 
     public Set<Route> getRouteCollection();
