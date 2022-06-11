@@ -1,20 +1,16 @@
 package com.lapin.common.impl;
 
 
-import com.lapin.common.exception.AccessDeniedException;
-import com.lapin.common.network.objimp.RequestBodyKeys;
 import com.lapin.common.utility.HistoryStack;
 import com.lapin.common.utility.OutManager;
-import com.lapin.common.utility.RemoveLastChar;
 import com.lapin.di.annotation.ClassMeta;
-import com.lapin.common.exception.CommandNotAcceptArgumentsException;
 import com.lapin.common.commands.AbstractCommand;
 import com.lapin.common.commands.Command;
-import com.lapin.common.commands.AccessType;
+import com.lapin.network.AccessType;
 import com.lapin.network.StatusCodes;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.stream.Collectors;
 
 
 /**
@@ -30,10 +26,11 @@ public class History extends AbstractCommand {
     public void execute(String argument, Serializable argObj) {
         try {
             String response = "";
-            for (Command command : HistoryStack.getInstance().last10()) {
-                response += command.getName()+"\n";
-            }
-            response = RemoveLastChar.remove(response);
+            response = HistoryStack.getInstance().last10().stream().map(Command::getName).collect(Collectors.joining("\n"));
+//            for (Command command : HistoryStack.getInstance().last10()) {
+//                response += command.getName()+"\n";
+//            }
+//            response = RemoveLastChar.remove(response);
             OutManager.push(StatusCodes.OK,response);
 
         } catch (RuntimeException e) {

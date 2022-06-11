@@ -1,11 +1,10 @@
 package com.lapin.common.commands;
 
 
-import com.lapin.common.network.objimp.RequestBodyKeys;
+import com.lapin.network.AccessType;
 import com.lapin.di.annotation.ClassMeta;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * Абстрактный класс, от которого наследуются все команды.

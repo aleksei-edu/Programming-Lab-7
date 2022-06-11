@@ -1,7 +1,7 @@
 package com.lapin.common.impl;
 
 import com.lapin.common.commands.AbstractCommand;
-import com.lapin.common.commands.AccessType;
+import com.lapin.network.AccessType;
 import com.lapin.common.exception.NullEnvException;
 import com.lapin.common.utility.CollectionManager;
 import com.lapin.common.utility.CommandManager;
@@ -29,8 +29,8 @@ public class ServerExit extends AbstractCommand {
     public void execute(String arg, Serializable argObj) {
         try{
             String response = fileManager.saveCollection(collectionManager);
-            OutManager.push(StatusCodes.OK,response);
-            System.exit(0);
+            OutManager.push(StatusCodes.EXIT_SERVER,response);
+            //System.exit(0);
 
         } catch (NullEnvException e) {
             OutManager.push(StatusCodes.ERROR, "Failed to find env. Try again.");

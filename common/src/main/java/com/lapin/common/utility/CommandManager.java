@@ -1,5 +1,6 @@
 package com.lapin.common.utility;
 
+import com.lapin.common.client.Client;
 import com.lapin.common.commands.CheckAccess;
 import com.lapin.common.data.Route;
 import com.lapin.common.exception.CommandNotFoundException;
@@ -22,18 +23,24 @@ import java.util.*;
 public class CommandManager {
     private static CollectionManager collectionManager;
     private static FileManager fileManager;
-    private final ClientType clientType;
+    private final Client client;
     private Client_IO clientIO;
-    private static final HashSet<String> CLIENT_COMMANDS = new HashSet<>();
-    private static final HashSet<String> SERVER_COMMANDS = new HashSet<>();
-    private static final HashSet<String> COMMANDS_EXECUTING_WITHOUT_SENDING = new HashSet<>();
-    private static final HashSet<String> COMMANDS_NEED_OBJ = new HashSet<>();
-    public CommandManager(ClientType clientType){
-        this.clientType = clientType;
+    private static CommandManager commandManager;
+    public CommandManager(Client client){
+        this.client = client;
+        commandManager = this;
+    }
+
+    public static CommandManager getCommandManager() {
+        return commandManager;
     }
 
     public static FileManager getFileManager() {
         return fileManager;
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     public static void setCollectionManager(CollectionManager collectionManager){
@@ -61,16 +68,18 @@ public class CommandManager {
             Object obj = ApplicationContext.getInstance().getBean(userCommand);
             Command command = (Command) (obj instanceof Command ? obj : null);
             if (command != null) {
-                if(CheckAccess.check(clientType,command.getAccessType())){
+                if(CheckAccess.check(client.getClientType(),command.getAccessType())){
                     Route argObj = null;
                     if(command.getNeedObj()){
                         argObj = CreateNewElementManager.createNewElement();
                     }
-                    if(command.getExecutingLocal() || clientType.equals(ClientType.LOCAL)){
+                    if(command.getExecutingLocal() || client.getClientType().equals(ClientType.LOCAL)){
                         command.execute(argument,argObj);
                     }
                     else{
-                        OutManager.push(StatusCodes.OK, clientIO.handle(userCommand, argument, argObj));
+                        Pair response = clientIO.handle(userCommand, argument, argObj);
+                        client.setStatusCode((StatusCodes) response.getFirst());
+                        OutManager.push( (StatusCodes) response.getFirst(), (String) response.getSecond());
                     }
                 }
                 else OutManager.push(StatusCodes.ERROR,"Access denied!");
@@ -84,7 +93,9 @@ public class CommandManager {
             OutManager.push(StatusCodes.ERROR,"Failed to execute command!");
         }
         finally {
-            OutManager.println();
+            Pair response = OutManager.pop();
+            client.setStatusCode((StatusCodes) response.getFirst());
+            System.out.println((String)response.getSecond());
         }
     }
     public static void execute(String userCommand, String argument, Serializable argObj) {

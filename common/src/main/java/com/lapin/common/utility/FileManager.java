@@ -106,7 +106,7 @@ public class FileManager {
      *
      * @param fileName
      */
-    public static void readScript(String fileName) throws MaxRecursionExceededException {
+    public static void readScript(String fileName) throws MaxRecursionExceededException, FileNotFoundException, IOException {
         CurrentRecursionDepth+=1;
         if(MaxRecursionDepth >= CurrentRecursionDepth) {
             BufferedReader reader = null;
@@ -122,14 +122,8 @@ public class FileManager {
                 userScanner = new Scanner(System.in);
                 CurrentRecursionDepth -= 1;
                 ConsoleManager.setUserScanner(userScanner);
-            } catch (Exception e) {
-                e.printStackTrace();
             } finally {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                reader.close();
             }
         }
         else throw new MaxRecursionExceededException();

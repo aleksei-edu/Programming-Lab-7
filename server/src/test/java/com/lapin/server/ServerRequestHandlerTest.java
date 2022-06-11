@@ -2,12 +2,12 @@ package com.lapin.server;
 
 import com.lapin.common.impl.Help;
 import com.lapin.common.network.objimp.RequestCommand;
-import com.lapin.common.network.objimp.ResponseBodyKeys;
 import com.lapin.common.network.objimp.ResponseCommand;
 import com.lapin.common.utility.OutManager;
 import com.lapin.common.utility.Pair;
 import com.lapin.di.context.ApplicationContext;
 import com.lapin.di.factory.BeanFactory;
+import com.lapin.network.obj.ResponseBodyKeys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

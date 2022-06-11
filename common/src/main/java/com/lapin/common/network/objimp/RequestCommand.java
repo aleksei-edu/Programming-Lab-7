@@ -1,6 +1,6 @@
 package com.lapin.common.network.objimp;
 
-import com.lapin.common.commands.AccessType;
+import com.lapin.network.AccessType;
 import com.lapin.network.obj.NetObj;
 import com.lapin.network.obj.NetObjBodyKeys;
 

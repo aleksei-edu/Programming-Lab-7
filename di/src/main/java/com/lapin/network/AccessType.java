@@ -1,4 +1,4 @@
-package com.lapin.common.commands;
+package com.lapin.network;
 
 import java.io.Serializable;
 

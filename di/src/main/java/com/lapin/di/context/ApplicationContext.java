@@ -28,20 +28,27 @@ public class ApplicationContext {
     public static ApplicationContext getInstance() {
         return APPLICATION_CONTEXT;
     }
+    public <T> T getBean(Class<T> clazz){
+        return getBean(clazz, singleton,true);
+    }
 
-    public <T> T getBean(Class<T> clazz) {
+    public <T> T getBean(Class<T> clazz, boolean singleton, boolean postprocessor) {
         if (beanMap.containsKey(clazz)) {
             Inject injet = clazz.getAnnotation(Inject.class);
             if (singleton || (injet != null && !injet.singleton())) {
                 T bean = (T) beanMap.get(clazz);
-                callPostProcessor(bean);
+                if(postprocessor) {
+                    callPostProcessor(bean);
+                }
                 return bean;
             }
 
 
         }
         T bean = beanFactory.getBean(clazz);
-        callPostProcessor(bean);
+        if(postprocessor) {
+            callPostProcessor(bean);
+        }
 
         beanMap.put(clazz, bean);
         return bean;

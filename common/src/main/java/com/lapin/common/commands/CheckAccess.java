@@ -1,5 +1,6 @@
 package com.lapin.common.commands;
 
+import com.lapin.network.AccessType;
 import com.lapin.network.ClientType;
 
 public class CheckAccess {

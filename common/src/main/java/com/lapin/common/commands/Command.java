@@ -1,5 +1,7 @@
 package com.lapin.common.commands;
 
+import com.lapin.network.AccessType;
+
 import java.io.Serializable;
 
 /**

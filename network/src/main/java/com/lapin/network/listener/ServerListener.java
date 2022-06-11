@@ -4,6 +4,7 @@ import com.lapin.network.StatusCodes;
 import com.lapin.network.config.NetworkConfigurator;
 import com.lapin.network.log.NetworkLogger;
 import com.lapin.network.obj.NetObj;
+import com.lapin.network.obj.ResponseBodyKeys;
 import com.lapin.network.obj.Serializer;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class ServerListener implements Listenerable, Runnable{
 
     public ServerListener(NetworkConfigurator config, ServerSocketChannel ssc){
         this.config = config;
-        this.netLogger=config.getNetLogger();
+        this.netLogger= config.getNetLogger();
         this.ssc = ssc;
         try {
             sel = Selector.open();
@@ -104,7 +105,7 @@ public class ServerListener implements Listenerable, Runnable{
             channelBuffer.put(channel, newBuffer);
             NetObj request = (NetObj) Serializer.deserialize(channelBuffer.get(channel).array());
             NetObj response = config.getRequestHandler().handle(request);
-           // setServerStatus((StatusCodes) response.getBody().get("statusCode"));
+            this.setServerStatus((StatusCodes)response.getBody().get(ResponseBodyKeys.STATUS_CODE));
             channelBuffer.put(channel,ByteBuffer.wrap(Serializer.serialize(response)));
             channel.register(sel, SelectionKey.OP_WRITE);
             } catch (IOException e) {

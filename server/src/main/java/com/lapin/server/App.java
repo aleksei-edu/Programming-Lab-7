@@ -27,7 +27,6 @@ public class App {
         FileManager fileManager = new FileManager();
         fileManager.setEnv("LABA");
         CollectionManager collectionManager = new JavaCollectionManager(fileManager);
-        CommandManager commandManager = new CommandManager(ClientType.LOCAL);
         CommandManager.setCollectionManager(collectionManager);
         FileManager.setCollectionManager(collectionManager);
         CommandManager.setFileManager(fileManager);

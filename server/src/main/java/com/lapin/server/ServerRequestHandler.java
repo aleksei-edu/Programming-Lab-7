@@ -1,7 +1,6 @@
 package com.lapin.server;
 
 import com.lapin.common.network.objimp.RequestCommand;
-import com.lapin.common.network.objimp.RequestHeaderKey;
 import com.lapin.common.network.objimp.ResponseCommand;
 import com.lapin.common.utility.OutManager;
 import com.lapin.common.utility.Pair;
