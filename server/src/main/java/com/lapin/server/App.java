@@ -16,11 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class App {
-    private static final int PORT = 8000;
-    private static final int SOTIMEOUT = 60 * 1000;
     private static final NetworkConfigFile config = new NetworkConfigFile();
-    public static final Logger logger
-            = LoggerFactory.getLogger(App.class);
     public static void main(String[] args){
         BeanFactory beanFactory = new BeanFactory(ApplicationContext.getInstance());
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
@@ -34,7 +30,7 @@ public class App {
         TCPConnection server = new TCPConnection(config);
         ServerListener serverListener = (ServerListener) server.start();
         Thread serverThread = new Thread(serverListener);
-        Client admin = new Client(config);
+        Client admin = new Client(config, serverListener);
         Thread adminSession = new Thread(admin);
         adminSession.start();
         serverThread.start();

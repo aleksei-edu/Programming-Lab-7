@@ -70,7 +70,7 @@ public class ServerListener implements Listenerable, Runnable{
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                netLogger.error("Failed in listen!");
             }
         }
     }
@@ -105,6 +105,7 @@ public class ServerListener implements Listenerable, Runnable{
             channelBuffer.put(channel, newBuffer);
             NetObj request = (NetObj) Serializer.deserialize(channelBuffer.get(channel).array());
             NetObj response = config.getRequestHandler().handle(request);
+            serverStatus = config.getRequestHandler().getStatusCode();
             this.setServerStatus((StatusCodes)response.getBody().get(ResponseBodyKeys.STATUS_CODE));
             channelBuffer.put(channel,ByteBuffer.wrap(Serializer.serialize(response)));
             channel.register(sel, SelectionKey.OP_WRITE);

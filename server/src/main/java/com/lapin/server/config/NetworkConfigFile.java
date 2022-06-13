@@ -6,10 +6,12 @@ import com.lapin.network.conop.ConnectionType;
 import com.lapin.network.conop.ServerTCPConnection;
 import com.lapin.network.listener.ServerListener;
 import com.lapin.network.log.NetworkLogOutputConsole;
+import com.lapin.network.log.NetworkLogOutputLogback;
 import com.lapin.network.log.NetworkLogger;
 import com.lapin.network.obj.ClientRequestHandler;
 import com.lapin.network.obj.RequestHandler;
 import com.lapin.server.ServerRequestHandler;
+import org.slf4j.LoggerFactory;
 
 import java.nio.channels.ServerSocketChannel;
 

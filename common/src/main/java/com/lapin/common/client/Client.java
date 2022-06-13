@@ -8,14 +8,21 @@ import com.lapin.network.StatusCodes;
 import com.lapin.network.TCPConnection;
 import com.lapin.network.config.NetworkConfigurator;
 import com.lapin.network.listener.ClientListener;
+import com.lapin.network.listener.ServerListener;
 import lombok.Getter;
 
 public class Client implements Runnable{
     private final NetworkConfigurator config;
     @Getter
     private final ClientType clientType;
+    private ServerListener serverListener;
     private StatusCodes sc = StatusCodes.OK;
     public Client(NetworkConfigurator config){
+        this.config = config;
+        clientType = config.getClientType();
+    }
+    public Client(NetworkConfigurator config, ServerListener serverListener){
+        this.serverListener = serverListener;
         this.config = config;
         clientType = config.getClientType();
     }
@@ -36,6 +43,10 @@ public class Client implements Runnable{
         }
     }
     public void setStatusCode(StatusCodes sc){
-        this.sc = sc;
+        if(sc.equals(StatusCodes.EXIT_SERVER) && serverListener != null){
+            serverListener.setServerStatus(sc);
+            this.sc = StatusCodes.EXIT_CLIENT;
+        }
+        else this.sc = sc;
     }
 }

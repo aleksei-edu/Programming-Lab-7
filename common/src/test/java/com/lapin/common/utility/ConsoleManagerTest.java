@@ -1,9 +1,13 @@
 package com.lapin.common.utility;
 
+import com.lapin.common.client.Client;
 import com.lapin.common.impl.Help;
 import com.lapin.di.context.ApplicationContext;
 import com.lapin.di.factory.BeanFactory;
 import com.lapin.network.ClientType;
+import com.lapin.network.config.NetworkConfigurator;
+import com.lapin.network.conop.ConnectionType;
+import com.lapin.network.log.NetworkLogger;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -18,7 +22,9 @@ class ConsoleManagerTest {
     void interactiveModeLocalHelp() {
         BeanFactory beanFactory = new BeanFactory(ApplicationContext.getInstance());
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
-        ConsoleManager consoleManager = new ConsoleManager(new CommandManager(ClientType.LOCAL));
+        NetworkConfigurator config = new NetworkConfigurator() {};
+        Client client = new Client(config);
+        ConsoleManager consoleManager = new ConsoleManager(new CommandManager(client));
         String consoleInput = "help";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(consoleInput.getBytes(StandardCharsets.UTF_8));
         Scanner scanner = new Scanner(inputStream);
@@ -34,6 +40,6 @@ class ConsoleManagerTest {
         System.setIn(System.in);
         Help help =new Help();
         help.execute("",null);
-        assertEquals(OutManager.pop().getSecond(),consoleOutput);
+        assertEquals(OutManager.pop().getSecond()+"\n",consoleOutput);
     }
 }
