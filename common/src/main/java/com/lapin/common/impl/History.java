@@ -2,7 +2,7 @@ package com.lapin.common.impl;
 
 
 import com.lapin.common.utility.CommandManager;
-import com.lapin.common.utility.HistoryStack;
+import com.lapin.common.utility.HistoryQueue;
 import com.lapin.common.utility.OutManager;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.commands.AbstractCommand;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 @ClassMeta(name = "history", description = "вывести последние 10 команд (без их аргументов)")
 public class History extends AbstractCommand {
-    private HistoryStack historyStack = CommandManager.getClient().getHistory();
+    private HistoryQueue historyQueue = CommandManager.getClient().getHistory();
     {
         super.accessType = AccessType.ALL;
         super.executingLocal = true;
@@ -29,7 +29,7 @@ public class History extends AbstractCommand {
     public void execute(String argument, Serializable argObj) {
         try {
             String response = "";
-            response = historyStack
+            response = historyQueue
                     .last10()
                     .stream()
                     .map(Command::getName)

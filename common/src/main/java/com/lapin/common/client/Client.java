@@ -19,7 +19,7 @@ import java.util.Properties;
 public class Client implements Runnable{
     @Getter
     private final ClientType clientType;
-    private final HistoryStack historyStack;
+    private final HistoryQueue historyQueue;
     private ServerListener serverListener;
     private Properties properties;
     private File configPath;
@@ -30,7 +30,7 @@ public class Client implements Runnable{
     }
     public Client(File configPath){
         this.configPath = configPath;
-        historyStack = new HistoryStack();
+        historyQueue = new HistoryQueue();
         properties = new Properties();
         try {
             properties.load(new FileInputStream(configPath));
@@ -64,7 +64,7 @@ public class Client implements Runnable{
         }
         else this.sc = sc;
     }
-    public HistoryStack getHistory(){
-        return historyStack;
+    public HistoryQueue getHistory(){
+        return historyQueue;
     }
 }

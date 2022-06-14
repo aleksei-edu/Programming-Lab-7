@@ -13,9 +13,11 @@ import com.lapin.network.listener.ServerListener;
 import com.lapin.server.utility.JavaCollectionManager;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class App {
-    public static void main(String[] args){
+    public static void main(String[] args) throws URISyntaxException {
         BeanFactory beanFactory = new BeanFactory(ApplicationContext.getInstance());
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
         FileManager fileManager = new FileManager();
@@ -25,7 +27,9 @@ public class App {
         FileManager.setCollectionManager(collectionManager);
         CommandManager.setFileManager(fileManager);
         collectionManager.loadCollection();
-        File configPath = new File("server/src/main/resources/config.properties");
+        //File configPath = new File("server/src/main/resources/config.properties");
+        URL resource = App.class.getClassLoader().getResource("config.properties");
+        File configPath = new File(resource.toURI());
         TCPConnection server = new TCPConnection(new ServerTCPConnection(new ServerRequestHandler(),configPath));
         ServerListener serverListener = (ServerListener) server.start();
         Thread serverThread = new Thread(serverListener);

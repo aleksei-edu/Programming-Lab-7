@@ -68,7 +68,7 @@ public class CommandManager {
             Object obj = ApplicationContext.getInstance().getBean(userCommand);
             Command command = (Command) (obj instanceof Command ? obj : null);
             if (command != null) {
-                client.getHistory().push(command);
+                client.getHistory().add(command);
                 if(CheckAccess.check(client.getClientType(),command.getAccessType())){
                     Route argObj = null;
                     if(command.getNeedObj()){

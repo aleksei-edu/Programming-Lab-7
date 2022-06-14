@@ -30,6 +30,7 @@ public class ServerListener implements Listenerable, Runnable{
     protected SelectionKey key;
 
     public ServerListener(RequestHandler requestHandler, ServerSocketChannel ssc){
+       this.requestHandler =requestHandler;
        netLogger = ApplicationContext.getInstance().getBean(NetworkLogger.class);
        netLogger.setLogOutput(new NetworkLogOutputConsole());
         this.ssc = ssc;
