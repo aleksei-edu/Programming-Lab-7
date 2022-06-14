@@ -33,20 +33,15 @@ public class JavaBeanConfigurator implements BeanConfigurator {
     }
 
     @Override
-    public Class<?> getImplementationClass(String className) {
+    public Class<?> getImplementationClass(String className) throws ClassNotFoundException {
         Set<Class<?>> implementationClasses = scanner.getTypesAnnotatedWith(ClassMeta.class);
-        Class<?> aClass = null;
-        try {
-            aClass = implementationClasses
-                    .stream()
-                    .filter((clazz) -> clazz.getAnnotation(ClassMeta.class)
-                            .name()
-                            .equals(className))
-                    .findFirst()
-                    .orElseThrow(ClassNotFoundException::new);
-        } catch (ClassNotFoundException e) {
-            System.err.println("Класс не найден");
-        }
+        Class<?> aClass = implementationClasses
+                .stream()
+                .filter((clazz) -> clazz.getAnnotation(ClassMeta.class)
+                        .name()
+                        .equals(className))
+                .findFirst()
+                .orElseThrow(ClassNotFoundException::new);
         return aClass;
     }
 }

@@ -23,11 +23,11 @@ import java.util.*;
 public class CommandManager {
     private static CollectionManager collectionManager;
     private static FileManager fileManager;
-    private final Client client;
+    private static Client client;
     private Client_IO clientIO;
     private static CommandManager commandManager;
     public CommandManager(Client client){
-        this.client = client;
+        CommandManager.client = client;
         commandManager = this;
     }
 
@@ -39,7 +39,7 @@ public class CommandManager {
         return fileManager;
     }
 
-    public Client getClient() {
+    public static Client getClient() {
         return client;
     }
 
@@ -68,6 +68,7 @@ public class CommandManager {
             Object obj = ApplicationContext.getInstance().getBean(userCommand);
             Command command = (Command) (obj instanceof Command ? obj : null);
             if (command != null) {
+                client.getHistory().push(command);
                 if(CheckAccess.check(client.getClientType(),command.getAccessType())){
                     Route argObj = null;
                     if(command.getNeedObj()){

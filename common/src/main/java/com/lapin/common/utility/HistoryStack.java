@@ -8,11 +8,6 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class HistoryStack extends Stack {
-    private static HistoryStack HISTORY = new HistoryStack();
-
-    public static HistoryStack getInstance() {
-        return HISTORY;
-    }
 
     /**
      * Метод возвращает последние 10 команд

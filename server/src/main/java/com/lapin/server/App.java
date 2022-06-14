@@ -7,16 +7,14 @@ import com.lapin.common.utility.CommandManager;
 import com.lapin.common.utility.FileManager;
 import com.lapin.di.context.ApplicationContext;
 import com.lapin.di.factory.BeanFactory;
-import com.lapin.network.ClientType;
 import com.lapin.network.TCPConnection;
+import com.lapin.network.conop.ServerTCPConnection;
 import com.lapin.network.listener.ServerListener;
-import com.lapin.server.config.NetworkConfigFile;
 import com.lapin.server.utility.JavaCollectionManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 public class App {
-    private static final NetworkConfigFile config = new NetworkConfigFile();
     public static void main(String[] args){
         BeanFactory beanFactory = new BeanFactory(ApplicationContext.getInstance());
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
@@ -27,10 +25,11 @@ public class App {
         FileManager.setCollectionManager(collectionManager);
         CommandManager.setFileManager(fileManager);
         collectionManager.loadCollection();
-        TCPConnection server = new TCPConnection(config);
+        File configPath = new File("server/src/main/resources/config.properties");
+        TCPConnection server = new TCPConnection(new ServerTCPConnection(new ServerRequestHandler(),configPath));
         ServerListener serverListener = (ServerListener) server.start();
         Thread serverThread = new Thread(serverListener);
-        Client admin = new Client(config, serverListener);
+        Client admin = new Client(configPath,serverListener);
         Thread adminSession = new Thread(admin);
         adminSession.start();
         serverThread.start();

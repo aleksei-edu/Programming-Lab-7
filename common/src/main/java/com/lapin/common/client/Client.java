@@ -6,34 +6,49 @@ import com.lapin.di.factory.BeanFactory;
 import com.lapin.network.ClientType;
 import com.lapin.network.StatusCodes;
 import com.lapin.network.TCPConnection;
-import com.lapin.network.config.NetworkConfigurator;
+import com.lapin.network.conop.ClientTCPConnection;
 import com.lapin.network.listener.ClientListener;
 import com.lapin.network.listener.ServerListener;
 import lombok.Getter;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 public class Client implements Runnable{
-    private final NetworkConfigurator config;
     @Getter
     private final ClientType clientType;
+    private final HistoryStack historyStack;
     private ServerListener serverListener;
+    private Properties properties;
+    private File configPath;
     private StatusCodes sc = StatusCodes.OK;
-    public Client(NetworkConfigurator config){
-        this.config = config;
-        clientType = config.getClientType();
-    }
-    public Client(NetworkConfigurator config, ServerListener serverListener){
+    public Client(File configPath, ServerListener serverListener){
+        this(configPath);
         this.serverListener = serverListener;
-        this.config = config;
-        clientType = config.getClientType();
+    }
+    public Client(File configPath){
+        this.configPath = configPath;
+        historyStack = new HistoryStack();
+        properties = new Properties();
+        try {
+            properties.load(new FileInputStream(configPath));
+        } catch (IOException e) {
+            System.err.println("Не удалось загрузить config");
+        }
+        if(properties.getProperty("ClientType").equals("Local")){
+            clientType = ClientType.LOCAL;
+        }else clientType = ClientType.REMOTE;
     }
     public void run(){
         BeanFactory beanFactory = new BeanFactory(ApplicationContext.getInstance());
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
         CommandManager commandManager = new CommandManager(this);
         if (clientType.equals(ClientType.REMOTE)) {
-            TCPConnection session = new TCPConnection(config);
+            TCPConnection session = new TCPConnection(new ClientTCPConnection(configPath));
             ClientListener listener = (ClientListener) session.start();
-            Client_IO client_io = new Client_Network_IO(config, listener);
+            Client_IO client_io = new Client_Network_IO(listener);
             commandManager.setClientIO(client_io);
         }
         ConsoleManager consoleManager = new ConsoleManager(commandManager);
@@ -48,5 +63,8 @@ public class Client implements Runnable{
             this.sc = StatusCodes.EXIT_CLIENT;
         }
         else this.sc = sc;
+    }
+    public HistoryStack getHistory(){
+        return historyStack;
     }
 }

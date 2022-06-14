@@ -1,10 +1,9 @@
 package com.lapin.network.listener;
 
-import com.lapin.network.ClientType;
+import com.lapin.di.context.ApplicationContext;
 import com.lapin.network.StatusCodes;
-import com.lapin.network.config.NetworkConfigurator;
+import com.lapin.network.log.NetworkLogOutputConsole;
 import com.lapin.network.log.NetworkLogger;
-import com.lapin.network.obj.ClientRequestHandler;
 import com.lapin.network.obj.NetObj;
 import com.lapin.network.obj.Serializer;
 
@@ -15,17 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientListener implements Listenerable{
-    private NetworkConfigurator config;
-    private ClientType clientType;
     private StatusCodes clientStatus;
     private NetworkLogger netLogger;
     private SocketChannel socketChannel;
+    private File configpath;
 
-    public ClientListener(NetworkConfigurator config, SocketChannel socketChannel){
-        this.config = config;
+    public ClientListener(SocketChannel socketChannel, File configPath){
+        this.configpath = configPath;
+        netLogger = ApplicationContext.getInstance().getBean(NetworkLogger.class);
+        netLogger.setLogOutput(new NetworkLogOutputConsole());
         this.socketChannel = socketChannel;
-        this.netLogger = config.getNetLogger();
-        this.clientType = config.getClientType();
     }
 
     public NetObj handle(NetObj request){

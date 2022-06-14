@@ -1,16 +1,16 @@
-package com.lapin.common.postprocessor;
-
-
-import com.lapin.di.postprocessor.BeanPostProcessor;
-import com.lapin.common.commands.AbstractCommand;
-import com.lapin.common.utility.HistoryStack;
-
-
-public class CommandHistory implements BeanPostProcessor {
-    @Override
-    public void process(Object bean) {
-        if (bean.getClass().getSuperclass().equals(AbstractCommand.class)) {
-            HistoryStack.getInstance().push(bean);
-        }
-    }
-}
+//package com.lapin.common.postprocessor;
+//
+//
+//import com.lapin.di.postprocessor.BeanPostProcessor;
+//import com.lapin.common.commands.AbstractCommand;
+//import com.lapin.common.utility.HistoryStack;
+//
+//
+//public class CommandHistory implements BeanPostProcessor {
+//    @Override
+//    public void process(Object bean) {
+//        if (bean.getClass().getSuperclass().equals(AbstractCommand.class)) {
+//            HistoryStack.getInstance().push(bean);
+//        }
+//    }
+//}

@@ -1,9 +1,11 @@
 package com.lapin.network.listener;
 
+import com.lapin.di.context.ApplicationContext;
 import com.lapin.network.StatusCodes;
-import com.lapin.network.config.NetworkConfigurator;
+import com.lapin.network.log.NetworkLogOutputConsole;
 import com.lapin.network.log.NetworkLogger;
 import com.lapin.network.obj.NetObj;
+import com.lapin.network.obj.RequestHandler;
 import com.lapin.network.obj.ResponseBodyKeys;
 import com.lapin.network.obj.Serializer;
 
@@ -21,15 +23,15 @@ public class ServerListener implements Listenerable, Runnable{
     protected ServerSocketChannel ssc;
     private StatusCodes serverStatus = StatusCodes.OK;
     protected NetworkLogger netLogger;
+    protected RequestHandler requestHandler;
     private static final int BUFFER_SIZE = 1024*10;
-    protected NetworkConfigurator config;
     protected final Map<SocketChannel, ByteBuffer> channelBuffer = new HashMap<>();
     protected Selector sel;
     protected SelectionKey key;
 
-    public ServerListener(NetworkConfigurator config, ServerSocketChannel ssc){
-        this.config = config;
-        this.netLogger= config.getNetLogger();
+    public ServerListener(RequestHandler requestHandler, ServerSocketChannel ssc){
+       netLogger = ApplicationContext.getInstance().getBean(NetworkLogger.class);
+       netLogger.setLogOutput(new NetworkLogOutputConsole());
         this.ssc = ssc;
         try {
             sel = Selector.open();
@@ -104,8 +106,8 @@ public class ServerListener implements Listenerable, Runnable{
             newBuffer.put(ByteBuffer.wrap(buffer.array(), 0, bytesRead));
             channelBuffer.put(channel, newBuffer);
             NetObj request = (NetObj) Serializer.deserialize(channelBuffer.get(channel).array());
-            NetObj response = config.getRequestHandler().handle(request);
-            serverStatus = config.getRequestHandler().getStatusCode();
+            NetObj response = requestHandler.handle(request);
+            serverStatus = requestHandler.getStatusCode();
             this.setServerStatus((StatusCodes)response.getBody().get(ResponseBodyKeys.STATUS_CODE));
             channelBuffer.put(channel,ByteBuffer.wrap(Serializer.serialize(response)));
             channel.register(sel, SelectionKey.OP_WRITE);

@@ -2,7 +2,6 @@ package com.lapin.common.utility;
 
 
 import com.lapin.common.network.objimp.RequestCommand;
-import com.lapin.network.config.NetworkConfigurator;
 import com.lapin.network.listener.ClientListener;
 import com.lapin.network.obj.NetObj;
 import com.lapin.network.obj.ResponseBodyKeys;
@@ -10,10 +9,8 @@ import com.lapin.network.obj.ResponseBodyKeys;
 import java.io.Serializable;
 
 public class Client_Network_IO implements Client_IO{
-    NetworkConfigurator config;
     ClientListener listener;
-    public Client_Network_IO(NetworkConfigurator config, ClientListener listener){
-        this.config = config;
+    public Client_Network_IO(ClientListener listener){
         this.listener = listener;
     }
     @Override

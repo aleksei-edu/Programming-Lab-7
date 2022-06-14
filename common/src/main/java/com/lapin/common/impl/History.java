@@ -1,6 +1,7 @@
 package com.lapin.common.impl;
 
 
+import com.lapin.common.utility.CommandManager;
 import com.lapin.common.utility.HistoryStack;
 import com.lapin.common.utility.OutManager;
 import com.lapin.di.annotation.ClassMeta;
@@ -18,19 +19,21 @@ import java.util.stream.Collectors;
  */
 @ClassMeta(name = "history", description = "вывести последние 10 команд (без их аргументов)")
 public class History extends AbstractCommand {
+    private HistoryStack historyStack = CommandManager.getClient().getHistory();
     {
         super.accessType = AccessType.ALL;
+        super.executingLocal = true;
     }
 
     @Override
     public void execute(String argument, Serializable argObj) {
         try {
             String response = "";
-            response = HistoryStack.getInstance().last10().stream().map(Command::getName).collect(Collectors.joining("\n"));
-//            for (Command command : HistoryStack.getInstance().last10()) {
-//                response += command.getName()+"\n";
-//            }
-//            response = RemoveLastChar.remove(response);
+            response = historyStack
+                    .last10()
+                    .stream()
+                    .map(Command::getName)
+                    .collect(Collectors.joining("\n"));
             OutManager.push(StatusCodes.OK,response);
 
         } catch (RuntimeException e) {

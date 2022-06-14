@@ -1,5 +1,6 @@
 package com.lapin.common.impl;
 
+import com.lapin.common.data.Route;
 import com.lapin.common.utility.CollectionManager;
 import com.lapin.common.utility.CommandManager;
 import com.lapin.common.utility.OutManager;
@@ -29,8 +30,17 @@ public class RemoveById extends AbstractCommand {
             String response = "";
             try {
                 int id = Integer.parseInt(argument);
-                collectionManager.getRouteCollection().removeIf(route -> (route.getId() == id));
-                response += "Удалён элемент по id: " + id;
+                Route route1 = (Route)collectionManager
+                        .getRouteCollection()
+                        .stream()
+                        .filter(route -> (route.getId() == id)).findFirst().orElse(null);
+                if (route1 == null){
+                    response += "Элемент не найден.";
+                }
+                else {
+                    collectionManager.getRouteCollection().remove(route1);
+                    response += "Удалён элемент по id: " + id;
+                }
                 OutManager.push(StatusCodes.OK,response);
             } catch (NumberFormatException e) {
                 OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
