@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @ClassMeta(name = "remove_by_id", description = "удалить элемент из коллекции по его id")
 public class RemoveById extends AbstractCommand {
-    private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    private CollectionManager collectionManager = CommandManager.getInstance().getCollectionManager();
     {
         super.accessType = AccessType.ALL;
     }

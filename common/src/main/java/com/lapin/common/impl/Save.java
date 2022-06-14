@@ -21,8 +21,8 @@ import java.io.Serializable;
 
 @ClassMeta(name = "save", description = "сохранить коллекцию в файл")
 public class Save extends AbstractCommand {
-    private FileManager fileManager = CommandManager.getFileManager();
-    private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    private FileManager fileManager = CommandManager.getInstance().getFileManager();
+    private CollectionManager collectionManager = CommandManager.getInstance().getCollectionManager();
     {
         super.accessType = AccessType.ADMIN;
         super.executingLocal = true;

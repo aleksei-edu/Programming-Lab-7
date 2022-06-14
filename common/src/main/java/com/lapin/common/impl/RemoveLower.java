@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 @ClassMeta(name = "remove_lower", description = "удалить из коллекции все элементы, меньшие, чем заданный")
 public class RemoveLower extends AbstractCommand {
-    private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    private CollectionManager collectionManager = CommandManager.getInstance().getCollectionManager();
     {
         super.accessType = AccessType.ALL;
         super.NeedObj = true;

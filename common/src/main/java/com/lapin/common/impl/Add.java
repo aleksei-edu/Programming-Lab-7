@@ -22,7 +22,7 @@ import java.io.Serializable;
         name = "add",
         description = "добавить новый элемент в коллекцию")
 public class Add extends AbstractCommand {
-    private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    private CollectionManager collectionManager = CommandManager.getInstance().getCollectionManager();
     {
         super.accessType = AccessType.ALL;
         super.NeedObj = true;

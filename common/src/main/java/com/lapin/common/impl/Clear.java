@@ -20,7 +20,7 @@ import java.io.Serializable;
         name = "clear",
         description = "очистить коллекцию")
 public class Clear extends AbstractCommand {
-    private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    private CollectionManager collectionManager = CommandManager.getInstance().getCollectionManager();
     {
         super.accessType = AccessType.ALL;
     }

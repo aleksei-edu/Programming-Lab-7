@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 @ClassMeta(name = "history", description = "вывести последние 10 команд (без их аргументов)")
 public class History extends AbstractCommand {
-    private HistoryQueue historyQueue = CommandManager.getClient().getHistory();
+    private HistoryQueue historyQueue = CommandManager.getInstance().getClient().getHistory();
     {
         super.accessType = AccessType.ALL;
         super.executingLocal = true;

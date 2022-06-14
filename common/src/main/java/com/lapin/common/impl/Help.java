@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
         name = "help",
         description = "вывести справку по доступным командам")
 public class Help extends AbstractCommand {
-    private ClientType clientType = CommandManager.getCommandManager().getClient().getClientType();
+    private ClientType clientType = CommandManager.getInstance().getClient().getClientType();
     {
         super.accessType = AccessType.ALL;
         super.executingLocal =true;

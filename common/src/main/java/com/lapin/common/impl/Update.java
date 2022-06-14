@@ -20,7 +20,7 @@ import java.io.Serializable;
  */
 @ClassMeta(name = "update", description = "обновить значение элемента коллекции, id которого равен заданному")
 public class Update extends AbstractCommand {
-    private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    private CollectionManager collectionManager = CommandManager.getInstance().getCollectionManager();
     {
         super.accessType = AccessType.ALL;
         super.NeedObj = true;

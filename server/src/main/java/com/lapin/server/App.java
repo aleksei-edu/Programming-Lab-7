@@ -23,9 +23,9 @@ public class App {
         FileManager fileManager = new FileManager();
         fileManager.setEnv("LABA");
         CollectionManager collectionManager = new JavaCollectionManager(fileManager);
-        CommandManager.setCollectionManager(collectionManager);
+        CommandManager.getInstance().setCollectionManager(collectionManager);
         FileManager.setCollectionManager(collectionManager);
-        CommandManager.setFileManager(fileManager);
+        CommandManager.getInstance().setFileManager(fileManager);
         collectionManager.loadCollection();
         //File configPath = new File("server/src/main/resources/config.properties");
         URL resource = App.class.getClassLoader().getResource("config.properties");

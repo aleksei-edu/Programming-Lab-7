@@ -44,14 +44,14 @@ public class Client implements Runnable{
     public void run(){
         BeanFactory beanFactory = new BeanFactory(ApplicationContext.getInstance());
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
-        CommandManager commandManager = new CommandManager(this);
+        CommandManager.getInstance().setClient(this);
         if (clientType.equals(ClientType.REMOTE)) {
             TCPConnection session = new TCPConnection(new ClientTCPConnection(configPath));
             ClientListener listener = (ClientListener) session.start();
             Client_IO client_io = new Client_Network_IO(listener);
-            commandManager.setClientIO(client_io);
+            CommandManager.getInstance().setClientIO(client_io);
         }
-        ConsoleManager consoleManager = new ConsoleManager(commandManager);
+        ConsoleManager consoleManager = new ConsoleManager(CommandManager.getInstance());
         FileManager.setConsoleManager(consoleManager);
         while (!sc.equals(StatusCodes.EXIT_CLIENT)){
             consoleManager.interactiveMode();

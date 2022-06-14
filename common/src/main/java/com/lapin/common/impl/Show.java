@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
         name = "show",
         description = "вывести в стандартный поток вывода все элементы коллекции в строковом представлении")
 public class Show extends AbstractCommand {
-    private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    private CollectionManager collectionManager = CommandManager.getInstance().getCollectionManager();
     {
         super.accessType = AccessType.ALL;
     }

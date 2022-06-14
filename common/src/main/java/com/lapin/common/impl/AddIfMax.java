@@ -22,7 +22,7 @@ import java.io.Serializable;
         description = "добавить новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции"
 )
 public class AddIfMax extends AbstractCommand {
-    private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    private CollectionManager collectionManager = CommandManager.getInstance().getCollectionManager();
     {
         super.accessType = AccessType.ALL;
         super.NeedObj = true;

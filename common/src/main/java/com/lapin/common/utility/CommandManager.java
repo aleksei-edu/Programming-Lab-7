@@ -13,7 +13,6 @@ import com.lapin.network.StatusCodes;
 import lombok.Getter;
 
 import java.io.Serializable;
-import java.util.*;
 
 
 /**
@@ -21,39 +20,39 @@ import java.util.*;
  */
 @Getter
 public class CommandManager {
-    private static CollectionManager collectionManager;
-    private static FileManager fileManager;
-    private static Client client;
+    private CollectionManager collectionManager;
+    private FileManager fileManager;
+    private Client client;
     private Client_IO clientIO;
-    private static CommandManager commandManager;
-    public CommandManager(Client client){
-        CommandManager.client = client;
-        commandManager = this;
+    private static final CommandManager COMMAND_MANAGER = new CommandManager();
+    private CommandManager(){
+    }
+    public void setClient(Client client){
+        COMMAND_MANAGER.client = client;
+    }
+    public static CommandManager getInstance() {
+        return COMMAND_MANAGER;
     }
 
-    public static CommandManager getCommandManager() {
-        return commandManager;
-    }
-
-    public static FileManager getFileManager() {
+    public FileManager getFileManager() {
         return fileManager;
     }
 
-    public static Client getClient() {
+    public Client getClient() {
         return client;
     }
 
-    public static void setCollectionManager(CollectionManager collectionManager){
-        CommandManager.collectionManager = collectionManager;
+    public void setCollectionManager(CollectionManager collectionManager){
+        COMMAND_MANAGER.collectionManager = collectionManager;
     }
-    public static void setFileManager(FileManager fileManager){
-        CommandManager.fileManager = fileManager;
+    public void setFileManager(FileManager fileManager){
+        COMMAND_MANAGER.fileManager = fileManager;
     }
     public void setClientIO(Client_IO clientIO){
         this.clientIO = clientIO;
     }
 
-    public static CollectionManager getCollectionManager(){
+    public CollectionManager getCollectionManager(){
         return collectionManager;
     }
 

@@ -18,8 +18,8 @@ import java.io.Serializable;
         name = "exit_server",
         description = "завершает работу серверного приложения (с сохранением в файл)")
 public class ServerExit extends AbstractCommand {
-    private FileManager fileManager = CommandManager.getFileManager();
-    private CollectionManager collectionManager = CommandManager.getCollectionManager();
+    private FileManager fileManager = CommandManager.getInstance().getFileManager();
+    private CollectionManager collectionManager = CommandManager.getInstance().getCollectionManager();
     {
         super.accessType = AccessType.ADMIN;
         super.executingLocal = true;
