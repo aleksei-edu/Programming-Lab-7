@@ -41,6 +41,6 @@ public abstract class AbstractCommand implements Command {
         return accessType;
     }
     protected void setAccessType(AccessType accessType){
-        this.accessType =accessType;
+        this.accessType = accessType;
     }
 }

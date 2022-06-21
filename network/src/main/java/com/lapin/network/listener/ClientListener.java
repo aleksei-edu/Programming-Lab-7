@@ -14,13 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientListener implements Listenerable{
-    private StatusCodes clientStatus;
-    private NetworkLogger netLogger;
-    private SocketChannel socketChannel;
-    private File configpath;
+    private final NetworkLogger netLogger;
+    private final SocketChannel socketChannel;
 
-    public ClientListener(SocketChannel socketChannel, File configPath){
-        this.configpath = configPath;
+    public ClientListener(SocketChannel socketChannel){
         netLogger = ApplicationContext.getInstance().getBean(NetworkLogger.class);
         netLogger.setLogOutput(new NetworkLogOutputConsole());
         this.socketChannel = socketChannel;
@@ -96,8 +93,5 @@ public class ClientListener implements Listenerable{
             netLogger.error("Failed to open InputStream");
         }
         return null;
-    }
-    private void setClientStatus(StatusCodes clientStatus){
-        this.clientStatus = clientStatus;
     }
 }

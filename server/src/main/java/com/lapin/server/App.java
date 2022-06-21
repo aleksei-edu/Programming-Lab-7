@@ -13,8 +13,11 @@ import com.lapin.network.listener.ServerListener;
 import com.lapin.server.utility.JavaCollectionManager;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Properties;
 
 public class App {
     public static void main(String[] args) throws URISyntaxException {
@@ -27,13 +30,12 @@ public class App {
         FileManager.setCollectionManager(collectionManager);
         CommandManager.getInstance().setFileManager(fileManager);
         collectionManager.loadCollection();
-        //File configPath = new File("server/src/main/resources/config.properties");
-        URL resource = App.class.getClassLoader().getResource("config.properties");
-        File configPath = new File(resource.toURI());
-        TCPConnection server = new TCPConnection(new ServerTCPConnection(new ServerRequestHandler(),configPath));
+        URL config = App.class.getClassLoader().getResource("config.properties");
+        File resources = new File(config.toURI());
+        TCPConnection server = new TCPConnection(new ServerTCPConnection(new ServerRequestHandler(),resources));
         ServerListener serverListener = (ServerListener) server.start();
         Thread serverThread = new Thread(serverListener);
-        Client admin = new Client(configPath,serverListener);
+        Client admin = new Client(resources,serverListener);
         Thread adminSession = new Thread(admin);
         adminSession.start();
         serverThread.start();

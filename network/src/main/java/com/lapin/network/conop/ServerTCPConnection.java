@@ -7,11 +7,10 @@ import com.lapin.network.log.NetworkLogOutputConsole;
 import com.lapin.network.log.NetworkLogger;
 import com.lapin.network.obj.RequestHandler;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.net.URLStreamHandler;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.HashMap;
@@ -25,13 +24,13 @@ public class ServerTCPConnection implements ConnectionType {
     private Properties properties;
     private NetworkLogger netLogger;
 
-    public ServerTCPConnection(RequestHandler requestHandler, File configPath) {
+    public ServerTCPConnection(RequestHandler requestHandler, File resources) {
         netLogger = ApplicationContext.getInstance().getBean(NetworkLogger.class);
         netLogger.setLogOutput(new NetworkLogOutputConsole());
         this.requestHandler = requestHandler;
         properties = new Properties();
         try {
-            properties.load(new FileInputStream(configPath));
+            properties.load(new FileInputStream(resources));
         } catch (IOException e) {
             netLogger.error("Не удалось загрузить config");
         }

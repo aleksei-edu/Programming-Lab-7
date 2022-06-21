@@ -14,6 +14,7 @@ import lombok.Getter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class Client implements Runnable{
@@ -22,18 +23,18 @@ public class Client implements Runnable{
     private final HistoryQueue historyQueue;
     private ServerListener serverListener;
     private Properties properties;
-    private File configPath;
+    private File resources;
     private StatusCodes sc = StatusCodes.OK;
-    public Client(File configPath, ServerListener serverListener){
-        this(configPath);
+    public Client(File resources, ServerListener serverListener){
+        this(resources);
         this.serverListener = serverListener;
     }
-    public Client(File configPath){
-        this.configPath = configPath;
+    public Client(File resources){
+        this.resources = resources;
         historyQueue = new HistoryQueue();
         properties = new Properties();
         try {
-            properties.load(new FileInputStream(configPath));
+            properties.load(new FileInputStream(resources));
         } catch (IOException e) {
             System.err.println("Не удалось загрузить config");
         }
@@ -46,7 +47,7 @@ public class Client implements Runnable{
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
         CommandManager.getInstance().setClient(this);
         if (clientType.equals(ClientType.REMOTE)) {
-            TCPConnection session = new TCPConnection(new ClientTCPConnection(configPath));
+            TCPConnection session = new TCPConnection(new ClientTCPConnection(resources));
             ClientListener listener = (ClientListener) session.start();
             Client_IO client_io = new Client_Network_IO(listener);
             CommandManager.getInstance().setClientIO(client_io);

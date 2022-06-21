@@ -9,6 +9,7 @@ import com.lapin.network.log.NetworkLogger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -20,16 +21,14 @@ public class ClientTCPConnection implements ConnectionType {
     private SocketChannel socketChannel;
     private SocketAddress addr;
     private final NetworkLogger netLogger;
-    private File configPath;
     private Properties properties;
 
-    public ClientTCPConnection(File configPath) {
-        this.configPath = configPath;
+    public ClientTCPConnection(File resources) {
         netLogger = ApplicationContext.getInstance().getBean(NetworkLogger.class);
         netLogger.setLogOutput(new NetworkLogOutputConsole());
         properties = new Properties();
         try {
-            properties.load(new FileInputStream(configPath));
+            properties.load(new FileInputStream(resources));
         } catch (IOException e) {
             netLogger.error("Не удалось загрузить config");
         }
@@ -83,7 +82,7 @@ public class ClientTCPConnection implements ConnectionType {
             processingStatus = false;
             netLogger.info("Client connected!");
         }
-        return new ClientListener(socketChannel,configPath);
+        return new ClientListener(socketChannel);
     }
 
 }
