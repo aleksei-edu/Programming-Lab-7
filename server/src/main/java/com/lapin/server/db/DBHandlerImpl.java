@@ -26,6 +26,12 @@ public class DBHandlerImpl implements DBHandler {
     }
 
     public synchronized long addUser(User user) {
+        if(checkLogin(user) == -1){
+            return -1;
+        }
+        else if (!(checkLogin(user) == 0)){
+            return 0;
+        }
         try (Connection connection = dbConnector.connect();
              PreparedStatement addUserToTable = connection.prepareStatement(DBQuery.INSERT_USER.getQuery()))
         {
@@ -34,11 +40,30 @@ public class DBHandlerImpl implements DBHandler {
 
             ResultSet resultSet = addUserToTable.executeQuery();
             resultSet.next();
-            long userId = resultSet.getLong("user_id");
+            long userId = resultSet.getLong("id");
             user.setId(userId);
             Logger.info("New user added to database with id - " + userId);
             return userId;
         } catch (SQLException e) {
+            Logger.error(e.getMessage());
+            return -1;
+        }
+    }
+
+    public synchronized long checkLogin(User user){
+        try (Connection connection = dbConnector.connect();
+             PreparedStatement checkLogin = connection.prepareStatement(DBQuery.SELECT_USER_BY_LOGIN.getQuery());
+        ) {
+            checkLogin.setString(1, user.getLogin());
+            ResultSet resultSet = checkLogin.executeQuery();
+            if (resultSet.next()) {
+                long userId = resultSet.getLong("id");
+                Logger.info("User with id - " + userId + " found");
+                return userId;
+            }
+            return 0;
+        }
+        catch (SQLException e) {
             Logger.error(e.getMessage());
             return -1;
         }
@@ -53,13 +78,13 @@ public class DBHandlerImpl implements DBHandler {
 
             ResultSet resultSet = checkUser.executeQuery();
             if (resultSet.next()) {
-                long userId = resultSet.getLong("user_id");
+                long userId = resultSet.getLong("id");
                 Logger.info("User with id - " + userId + " found");
                 return userId;
             }
             return 0;
         } catch (SQLException e) {
-            Logger.error("User not found.");
+            Logger.error(e.getMessage());
             return -1;
         }
     }

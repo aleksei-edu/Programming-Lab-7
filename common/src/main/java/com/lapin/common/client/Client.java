@@ -1,10 +1,7 @@
 package com.lapin.common.client;
 
 import com.lapin.common.client.clientpostprocessor.ClientPostProcessor;
-import com.lapin.common.controllers.CommandManagerImpl;
-import com.lapin.common.controllers.ConsoleManager;
-import com.lapin.common.controllers.ConsoleManagerImpl;
-import com.lapin.common.controllers.FileManagerImpl;
+import com.lapin.common.controllers.*;
 import com.lapin.common.data.User;
 import com.lapin.common.utility.*;
 import com.lapin.di.context.ApplicationContext;
@@ -55,13 +52,14 @@ public class Client implements Runnable{
     public void run(){
         BeanFactory beanFactory = new BeanFactory(ApplicationContext.getInstance());
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
-        CommandManagerImpl.getInstance().setClient(this);
+        CommandManager commandManager = ApplicationContext.getInstance().getBean(CommandManager.class);
         if (clientType.equals(ClientType.REMOTE)) {
             TCPConnection session = new TCPConnection(new ClientTCPConnection(resources));
             ClientListener listener = (ClientListener) session.start();
             Client_IO client_io = new Client_Network_IO(listener);
-            CommandManagerImpl.getInstance().setClientIO(client_io);
+            commandManager.setClientIO(client_io);
         }
+        commandManager.setClient(this);
         ConsoleManager consoleManager = ApplicationContext.getInstance().getBean(ConsoleManager.class);
         callPostProcessor();
         while (!sc.equals(StatusCodes.EXIT_CLIENT)){

@@ -36,8 +36,8 @@ public class ApplicationContext {
 
     public <T> T getBean(Class<T> clazz, boolean singleton, boolean postprocessor) {
         if (beanMap.containsKey(clazz)) {
-            Inject injet = clazz.getAnnotation(Inject.class);
-            if (singleton || (injet != null && !injet.singleton())) {
+            Inject inject = clazz.getAnnotation(Inject.class);
+            if (singleton || (inject != null && !inject.singleton())) {
                 T bean = (T) beanMap.get(clazz);
                 if(postprocessor) {
                     callPostProcessor(bean);

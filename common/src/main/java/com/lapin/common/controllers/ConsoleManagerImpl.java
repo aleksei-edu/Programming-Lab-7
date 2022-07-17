@@ -1,5 +1,7 @@
 package com.lapin.common.controllers;
 
+import com.lapin.di.annotation.Inject;
+
 import java.util.Scanner;
 
 /**
@@ -9,19 +11,17 @@ public class ConsoleManagerImpl implements ConsoleManager{
     /**
      * Пользовательский ввод с консоли (по умолчанию).
      */
-    private CommandManagerImpl commandManagerImpl;
+    @Inject
+    private CommandManager commandManager;
     private static Scanner userScanner = new Scanner(System.in);
 
-    public ConsoleManagerImpl(CommandManagerImpl commandManagerImpl){
-        this.commandManagerImpl = commandManagerImpl;
-    }
 
     /**
      * Считывает из пользовательского ввода введенную команду.
      */
     public void interactiveMode() {
         String[] userCommand = (userScanner.nextLine().toLowerCase().trim() + " ").split(" ", 2);
-        commandManagerImpl.execute(userCommand[0], userCommand[1].trim(), null);
+        commandManager.handle(userCommand[0], userCommand[1].trim(), null);
     }
 
 

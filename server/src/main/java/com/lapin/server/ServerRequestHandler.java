@@ -1,5 +1,6 @@
 package com.lapin.server;
 
+import com.lapin.common.controllers.CommandManager;
 import com.lapin.common.network.objimp.RequestCommand;
 import com.lapin.common.network.objimp.ResponseCommand;
 import com.lapin.common.utility.OutManager;
@@ -15,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class ServerRequestHandler implements RequestHandler {
     private StatusCodes statusCodes;
+    private CommandManager commandManager = ApplicationContext.getInstance().getBean(CommandManager.class);
     @Override
     public NetObj handle(NetObj netObj) {
         if(netObj != null){
@@ -28,7 +30,7 @@ public class ServerRequestHandler implements RequestHandler {
     }
     private void execute(RequestCommand rc){
         if(callBeforeRequestExecute(rc)){
-            CommandManagerImpl.execute(rc.getCmd(), rc.getArg(), rc.argObj());
+            commandManager.execute(rc.getCmd(), rc.getArg(), rc.argObj());
         }
     }
     private boolean callBeforeRequestExecute(RequestCommand rc) {

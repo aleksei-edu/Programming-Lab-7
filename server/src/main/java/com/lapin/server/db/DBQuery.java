@@ -37,8 +37,9 @@ public enum DBQuery {
             "\tLOGIN VARCHAR(80) UNIQUE NOT NULL CHECK(LENGTH(LOGIN) >= 1),\n" +
             "\tHASH VARCHAR(256) NOT NULL CHECK(LENGTH(HASH) >= 6)\n" +
             ")"),
-    INSERT_USER("INSERT INTO users (login, password) values(?, ?) RETURNING user_id"),
-    SELECT_USER_BY_LOGIN_AND_PASSWORD("SELECT user_id from users where login = ? and password = ?"),
+    INSERT_USER("INSERT INTO users (login, hash) values(?, ?) RETURNING id"),
+    SELECT_USER_BY_LOGIN_AND_PASSWORD("SELECT id from users where login = ? and hash = ?"),
+    SELECT_USER_BY_LOGIN("SELECT id from users where login = ?"),
     SELECT_ALL_ROUTES("SELECT ROUTE.ID, ROUTE.NAME, COORD_X, COORD_Y, CREATION_DATE,\n" +
             "LOC_FROM_X, LOC_FROM_Y, LOC_FROM_Z,\n" +
             "LOC_TO_X, LOC_TO_Y, LOC_TO_NAME,\n" +

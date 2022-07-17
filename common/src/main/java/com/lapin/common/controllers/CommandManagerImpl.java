@@ -5,6 +5,7 @@ import com.lapin.common.commands.CheckAccess;
 import com.lapin.common.data.Route;
 import com.lapin.common.exception.CommandNotFoundException;
 import com.lapin.common.utility.*;
+import com.lapin.di.annotation.Inject;
 import com.lapin.di.context.ApplicationContext;
 
 import com.lapin.common.commands.Command;
@@ -21,38 +22,15 @@ import java.io.Serializable;
  * Класс управляет командами
  */
 @Getter
-public class CommandManagerImpl {
-    private CollectionManager collectionManager;
-    private FileManagerImpl fileManagerImpl;
-    private Client client;
+public class CommandManagerImpl implements CommandManager {
     @Setter
     @Getter
     private DBHandler dbHandler;
+    @Setter
+    private Client client;
+    @Setter
     private Client_IO clientIO;
-    private static final CommandManagerImpl COMMAND_MANAGER = new CommandManagerImpl();
-    private CommandManagerImpl(){
-    }
-    public void setClient(Client client){
-        COMMAND_MANAGER.client = client;
-    }
-    public static CommandManagerImpl getInstance() {
-        return COMMAND_MANAGER;
-    }
 
-    public FileManagerImpl getFileManagerImpl() {
-        return fileManagerImpl;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setFileManagerImpl(FileManagerImpl fileManagerImpl){
-        COMMAND_MANAGER.fileManagerImpl = fileManagerImpl;
-    }
-    public void setClientIO(Client_IO clientIO){
-        this.clientIO = clientIO;
-    }
 
 
     /**
@@ -61,7 +39,7 @@ public class CommandManagerImpl {
      * @param userCommand команда введенная пользователем
      * @param argument    аргумент команды введенной пользователем
      */
-    public void execute(String userCommand, String argument, Route argObj) {
+    public StatusCodes handle(String userCommand, String argument, Serializable argObj) {
         try {
             Object obj = ApplicationContext.getInstance().getBean(userCommand);
             Command command = (Command) (obj instanceof Command ? obj : null);
@@ -80,7 +58,9 @@ public class CommandManagerImpl {
                         OutManager.push( (StatusCodes) response.getFirst(), (String) response.getSecond());
                     }
                 }
-                else OutManager.push(StatusCodes.ERROR,"Access denied!");
+                else {
+                    OutManager.push(StatusCodes.ERROR,"Access denied!");
+                }
             }
             else {
                 OutManager.push(StatusCodes.ERROR,"Command not found!");
@@ -94,9 +74,10 @@ public class CommandManagerImpl {
             Pair response = OutManager.pop();
             client.setStatusCode((StatusCodes) response.getFirst());
             System.out.println((String)response.getSecond());
+            return (StatusCodes) response.getFirst();
         }
     }
-    public static void execute(String userCommand, String argument, Serializable argObj) {
+    public void execute(String userCommand, String argument, Serializable argObj) {
         try {
             Object obj = ApplicationContext.getInstance().getBean(userCommand);
             Command command = (Command) (obj instanceof Command ? obj : null);
