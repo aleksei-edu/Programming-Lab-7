@@ -6,5 +6,6 @@ public enum RequestBodyKeys implements NetObjBodyKeys {
     ACCESS_TYPE,
     COMMAND_NAME,
     ARG,
-    ARG_OBJ
+    ARG_OBJ,
+    USER
 }

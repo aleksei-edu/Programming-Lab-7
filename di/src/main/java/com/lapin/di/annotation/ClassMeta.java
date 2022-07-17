@@ -10,5 +10,4 @@ public @interface ClassMeta {
     String name();
 
     String description() default "description is empty";
-    //AccessType access() default AccessType.NO_ONE;
 }

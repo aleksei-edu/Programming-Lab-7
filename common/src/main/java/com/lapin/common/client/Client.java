@@ -1,5 +1,11 @@
 package com.lapin.common.client;
 
+import com.lapin.common.client.clientpostprocessor.ClientPostProcessor;
+import com.lapin.common.controllers.CommandManagerImpl;
+import com.lapin.common.controllers.ConsoleManager;
+import com.lapin.common.controllers.ConsoleManagerImpl;
+import com.lapin.common.controllers.FileManagerImpl;
+import com.lapin.common.data.User;
 import com.lapin.common.utility.*;
 import com.lapin.di.context.ApplicationContext;
 import com.lapin.di.factory.BeanFactory;
@@ -10,16 +16,20 @@ import com.lapin.network.conop.ClientTCPConnection;
 import com.lapin.network.listener.ClientListener;
 import com.lapin.network.listener.ServerListener;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
 public class Client implements Runnable{
     @Getter
     private final ClientType clientType;
+    @Getter
+    @Setter
+    private User user;
     private final HistoryQueue historyQueue;
     private ServerListener serverListener;
     private Properties properties;
@@ -45,18 +55,33 @@ public class Client implements Runnable{
     public void run(){
         BeanFactory beanFactory = new BeanFactory(ApplicationContext.getInstance());
         ApplicationContext.getInstance().setBeanFactory(beanFactory);
-        CommandManager.getInstance().setClient(this);
+        CommandManagerImpl.getInstance().setClient(this);
         if (clientType.equals(ClientType.REMOTE)) {
             TCPConnection session = new TCPConnection(new ClientTCPConnection(resources));
             ClientListener listener = (ClientListener) session.start();
             Client_IO client_io = new Client_Network_IO(listener);
-            CommandManager.getInstance().setClientIO(client_io);
+            CommandManagerImpl.getInstance().setClientIO(client_io);
         }
-        ConsoleManager consoleManager = new ConsoleManager(CommandManager.getInstance());
-        FileManager.setConsoleManager(consoleManager);
+        ConsoleManager consoleManager = ApplicationContext.getInstance().getBean(ConsoleManager.class);
+        callPostProcessor();
         while (!sc.equals(StatusCodes.EXIT_CLIENT)){
             consoleManager.interactiveMode();
         }
+    }
+    public void callPostProcessor() {
+        ApplicationContext
+                .getInstance()
+                .getBeanFactory()
+                .getBeanConfigurator()
+                .getScanner()
+                .getSubTypesOf(ClientPostProcessor.class)
+                .forEach(processor -> {
+                    try {
+                        processor.getDeclaredConstructor().newInstance().process(this);
+                    } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+                });
     }
     public void setStatusCode(StatusCodes sc){
         if(sc.equals(StatusCodes.EXIT_SERVER) && serverListener != null){

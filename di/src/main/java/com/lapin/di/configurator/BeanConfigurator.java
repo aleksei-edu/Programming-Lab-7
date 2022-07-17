@@ -8,7 +8,7 @@ import org.reflections.Reflections;
 public interface BeanConfigurator {
     Class<?> getImplementationClass(String commandName) throws ClassNotFoundException;
 
-    <T> Class<? extends T> getImplementationClass(Class<T> interfaceClass);
+    <T> Class<? extends T> getImplementationClass(Class<T> interfaceClass) throws ClassNotFoundException;
 
     public Reflections getScanner();
     public void setScanner(String packageToScan);

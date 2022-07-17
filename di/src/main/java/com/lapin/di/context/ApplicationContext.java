@@ -5,6 +5,7 @@ import com.lapin.di.config.Configuration;
 import com.lapin.di.factory.BeanFactory;
 
 import com.lapin.di.postprocessor.BeanPostProcessor;
+import lombok.Getter;
 import lombok.Setter;
 
 
@@ -19,6 +20,7 @@ public class ApplicationContext {
     private static final ApplicationContext APPLICATION_CONTEXT = new ApplicationContext();
     private final Map<Class, Object> beanMap = new ConcurrentHashMap<>();
     @Setter
+    @Getter
     private BeanFactory beanFactory;
     private boolean singleton = true;
 
@@ -72,7 +74,6 @@ public class ApplicationContext {
     }
 
     public void callPostProcessor(Object bean) {
-        //beanFactory.getBeanConfigurator().setScanner("com.lapin.common.postprocessor");
         beanFactory.getBeanConfigurator().getScanner().getSubTypesOf(BeanPostProcessor.class)
                 .forEach(processor -> {
                     try {

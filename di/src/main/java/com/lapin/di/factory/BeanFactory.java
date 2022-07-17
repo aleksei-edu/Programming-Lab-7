@@ -18,14 +18,12 @@ import java.util.stream.Collectors;
  * Фабрика бинов
  */
 public class BeanFactory {
-    private final Configuration configuration;
     @Getter
     private final BeanConfigurator beanConfigurator;
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     public BeanFactory(ApplicationContext applicationContext) {
-        //this.config = config;
-        this.configuration = new JavaConfiguration();
+        Configuration configuration = new JavaConfiguration();
         this.beanConfigurator = new JavaBeanConfigurator(configuration.getPackageToScan());
         this.applicationContext = applicationContext;
     }
@@ -33,7 +31,11 @@ public class BeanFactory {
     public <T> T getBean(Class<T> clazz) {
         Class<? extends T> implementationClass = clazz;
         if (implementationClass.isInterface()) {
-            implementationClass = beanConfigurator.getImplementationClass(implementationClass);
+            try {
+                implementationClass = beanConfigurator.getImplementationClass(implementationClass);
+            }catch (ClassNotFoundException e){
+                return null;
+            }
         }
         T bean = null;
         try {

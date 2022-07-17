@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,6 +63,26 @@ public class Route implements Comparable<Route>, Serializable {
             else this.coordinates = coordinates;
             if (creationDate.equals("")) this.creationDate = LocalDate.now();
             else this.creationDate = LocalDate.parse(creationDate);
+            if (from == null) throw new IllegalArgumentException();
+            else this.from = from;
+            if (to == null) throw new IllegalArgumentException();
+            else this.to = to;
+            if (distance < 1 || distance == null) throw new IllegalArgumentException("distance incorrect");
+            else this.distance = distance;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Route(int id, String name, Coordinates coordinates, LocalDate creationDate,
+                 LocationFrom from, LocationTo to, Long distance) {
+        try {
+            this.id = id;
+            if (name == null || name.equals("")) throw new IllegalArgumentException();
+            else this.name = name;
+            if (coordinates == null) throw new IllegalArgumentException();
+            else this.coordinates = coordinates;
+            this.creationDate = creationDate;
             if (from == null) throw new IllegalArgumentException();
             else this.from = from;
             if (to == null) throw new IllegalArgumentException();

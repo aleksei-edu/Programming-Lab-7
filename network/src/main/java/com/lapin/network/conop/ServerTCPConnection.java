@@ -8,6 +8,7 @@ import com.lapin.network.log.NetworkLogger;
 import com.lapin.network.obj.RequestHandler;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.URLStreamHandler;

@@ -24,8 +24,11 @@ public class JavaBeanConfigurator implements BeanConfigurator {
     public void setScanner(String packageToScan){this.scanner = new Reflections(packageToScan);}
 
     @Override
-    public <T> Class<? extends T> getImplementationClass(Class<T> interfaceClass) {
+    public <T> Class<? extends T> getImplementationClass(Class<T> interfaceClass) throws ClassNotFoundException {
         Set<Class<? extends T>> implementationClasses = scanner.getSubTypesOf(interfaceClass);
+        if (implementationClasses.size() == 0){
+            throw new ClassNotFoundException("Interface not found");
+        }
         if (implementationClasses.size() != 1) {
             throw new RuntimeException("Interface has 0 or more than 1 implementation");
         }

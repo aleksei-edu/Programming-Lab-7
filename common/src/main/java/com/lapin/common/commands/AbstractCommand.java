@@ -1,10 +1,13 @@
 package com.lapin.common.commands;
 
 
+import com.lapin.common.utility.UserRights;
 import com.lapin.network.AccessType;
 import com.lapin.di.annotation.ClassMeta;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Абстрактный класс, от которого наследуются все команды.

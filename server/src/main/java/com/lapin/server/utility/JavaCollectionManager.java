@@ -1,11 +1,12 @@
 package com.lapin.server.utility;
 
 
-import com.lapin.common.utility.CollectionManager;
-import com.lapin.common.utility.FileManager;
-import com.lapin.di.annotation.Inject;
+import com.lapin.common.controllers.CollectionManager;
+import com.lapin.common.controllers.FileManager;
+import com.lapin.common.controllers.FileManagerImpl;
 import com.lapin.common.data.Route;
 import com.lapin.common.exception.IdOverflowException;
+import com.lapin.di.annotation.Inject;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,10 +35,8 @@ public class JavaCollectionManager implements CollectionManager {
      */
     private static final LinkedHashSet<Route> routeCollection = new LinkedHashSet<>();
     private static final ArrayList<String[]> stringRouteCollection = new ArrayList<>();
+    @Inject
     private FileManager fileManager;
-    public JavaCollectionManager(FileManager fileManager){
-        this.fileManager = fileManager;
-    }
 
     public ArrayList<String[]> getStringRouteCollection() {
         ArrayList<String[]> strRouteCol = new ArrayList<>();
