@@ -2,6 +2,7 @@ package com.lapin.common.commands.impl;
 
 
 import com.lapin.common.client.Client;
+import com.lapin.common.controllers.CommandManager;
 import com.lapin.common.controllers.CommandManagerImpl;
 import com.lapin.common.utility.HistoryQueue;
 import com.lapin.common.utility.OutManager;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @ClassMeta(name = "history", description = "вывести последние 10 команд (без их аргументов)")
 public class History extends AbstractCommand {
     @Inject
-    private Client client;
+    private CommandManager commandManager;
     {
         super.accessType = AccessType.ALL;
         super.executingLocal = true;
@@ -32,7 +33,8 @@ public class History extends AbstractCommand {
     public void execute(String argument, Serializable argObj) {
         try {
             String response = "";
-            response = client
+            response = commandManager
+                    .getClient()
                     .getHistory()
                     .last10()
                     .stream()

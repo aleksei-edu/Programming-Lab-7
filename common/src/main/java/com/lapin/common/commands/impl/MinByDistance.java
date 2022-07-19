@@ -1,6 +1,7 @@
 package com.lapin.common.commands.impl;
 
 
+import com.lapin.common.controllers.Controllers;
 import com.lapin.common.data.Route;
 import com.lapin.common.controllers.CollectionManager;
 import com.lapin.common.controllers.CommandManagerImpl;
@@ -20,8 +21,7 @@ import java.io.Serializable;
  */
 @ClassMeta(name = "min_by_distance", description = "вывести любой объект из коллекции, значение поля distance которого является минимальным")
 public class MinByDistance extends AbstractCommand {
-    @Inject
-    private CollectionManager collectionManager;
+    private CollectionManager collectionManager = Controllers.getCollectionManager();;
     {
         super.accessType = AccessType.ALL;
     }

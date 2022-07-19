@@ -3,6 +3,7 @@ package com.lapin.common.commands.impl;
 
 import com.lapin.common.controllers.CollectionManager;
 import com.lapin.common.controllers.CommandManagerImpl;
+import com.lapin.common.controllers.Controllers;
 import com.lapin.common.utility.OutManager;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.data.Route;
@@ -19,8 +20,7 @@ import java.io.Serializable;
  */
 @ClassMeta(name = "max_by_creation_date", description = "вывести любой объект из коллекции, значение поля creationDate которого является максимальным")
 public class MaxByCreationDate extends AbstractCommand {
-    @Inject
-    private CollectionManager collectionManager;
+    private CollectionManager collectionManager = Controllers.getCollectionManager();
     {
         super.accessType = AccessType.ALL;
     }

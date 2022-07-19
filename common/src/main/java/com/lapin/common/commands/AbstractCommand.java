@@ -18,6 +18,7 @@ public abstract class AbstractCommand implements Command {
     protected AccessType accessType = AccessType.NO_ONE;
     protected boolean NeedObj = false;
     protected boolean executingLocal = false;
+    protected boolean hide = false;
     @Override
     public void execute(String arg, Serializable argObj) {
 

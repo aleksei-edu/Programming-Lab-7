@@ -1,13 +1,10 @@
 package com.lapin.common.commands.impl;
 
 import com.lapin.common.commands.AbstractCommand;
-import com.lapin.common.controllers.FileManager;
+import com.lapin.common.controllers.*;
 import com.lapin.di.annotation.Inject;
 import com.lapin.network.AccessType;
 import com.lapin.common.exception.NullEnvException;
-import com.lapin.common.controllers.CollectionManager;
-import com.lapin.common.controllers.CommandManagerImpl;
-import com.lapin.common.controllers.FileManagerImpl;
 import com.lapin.common.utility.OutManager;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.network.StatusCodes;
@@ -22,8 +19,7 @@ import java.io.Serializable;
 public class ServerExit extends AbstractCommand {
     @Inject
     private FileManager fileManager;
-    @Inject
-    private CollectionManager collectionManager;
+    private CollectionManager collectionManager = Controllers.getCollectionManager();;
     {
         super.accessType = AccessType.ADMIN;
         super.executingLocal = true;

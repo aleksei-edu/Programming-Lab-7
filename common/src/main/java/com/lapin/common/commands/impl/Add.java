@@ -1,6 +1,7 @@
 package com.lapin.common.commands.impl;
 
 
+import com.lapin.common.controllers.Controllers;
 import com.lapin.common.data.Route;
 import com.lapin.common.controllers.CollectionManager;
 import com.lapin.common.controllers.CommandManagerImpl;
@@ -24,8 +25,7 @@ import java.io.Serializable;
         name = "add",
         description = "добавить новый элемент в коллекцию")
 public class Add extends AbstractCommand {
-    @Inject
-    private CollectionManager collectionManager;
+    private CollectionManager collectionManager = Controllers.getCollectionManager();
     {
         super.accessType = AccessType.ALL;
         super.NeedObj = true;

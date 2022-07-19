@@ -3,6 +3,7 @@ package com.lapin.common.commands.impl;
 
 import com.lapin.common.client.Client;
 import com.lapin.common.commands.CheckAccess;
+import com.lapin.common.controllers.CommandManager;
 import com.lapin.common.controllers.CommandManagerImpl;
 import com.lapin.common.utility.OutManager;
 import com.lapin.di.annotation.ClassMeta;
@@ -13,6 +14,7 @@ import com.lapin.network.AccessType;
 import com.lapin.di.context.ApplicationContext;
 import com.lapin.network.ClientType;
 import com.lapin.network.StatusCodes;
+import org.postgresql.plugin.AuthenticationPlugin;
 import org.reflections.Reflections;
 
 
@@ -29,8 +31,7 @@ import java.util.stream.Collectors;
         name = "help",
         description = "вывести справку по доступным командам")
 public class Help extends AbstractCommand {
-    @Inject
-    private Client client;
+    private CommandManager commandManager = ApplicationContext.getInstance().getBean(CommandManager.class);
     {
         super.accessType = AccessType.ALL;
         super.executingLocal =true;
@@ -47,9 +48,15 @@ public class Help extends AbstractCommand {
                         obj = ApplicationContext.getInstance().getBean(clazz,true,false);
                         Command command = (Command) (obj instanceof Command ? obj : null);
                         try {
-                            Field field = clazz.getSuperclass().getDeclaredField("accessType");
-                            field.setAccessible(true);
-                            boolean flag = CheckAccess.check(client.getClientType(), (AccessType) field.get(command));
+                            Field accessTypeField = clazz.getSuperclass().getDeclaredField("accessType");
+                            accessTypeField.setAccessible(true);
+                            Field hideField = clazz.getSuperclass().getDeclaredField("hide");
+                            hideField.setAccessible(true);
+                            boolean flag = CheckAccess
+                                    .check(
+                                            commandManager.getClient().getClientType(),
+                                            (AccessType) accessTypeField.get(command)
+                                    ) && !((Boolean) hideField.get(command));
                             return flag;
                         } catch (NoSuchFieldException | IllegalAccessException e) {
                             return false;

@@ -27,6 +27,7 @@ public class CommandManagerImpl implements CommandManager {
     @Getter
     private DBHandler dbHandler;
     @Setter
+    @Getter
     private Client client;
     @Setter
     private Client_IO clientIO;

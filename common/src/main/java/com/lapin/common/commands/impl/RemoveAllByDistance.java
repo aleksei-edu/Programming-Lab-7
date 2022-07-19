@@ -1,5 +1,6 @@
 package com.lapin.common.commands.impl;
 
+import com.lapin.common.controllers.Controllers;
 import com.lapin.common.exception.CommandNeedArgumentException;
 import com.lapin.common.controllers.CollectionManager;
 import com.lapin.common.controllers.CommandManagerImpl;
@@ -18,8 +19,7 @@ import java.io.Serializable;
  */
 @ClassMeta(name = "remove_all_by_distance", description = "удалить из коллекции все элементы, значение поля distance которого эквивалентно заданному")
 public class RemoveAllByDistance extends AbstractCommand {
-    @Inject
-    private CollectionManager collectionManager;
+    private CollectionManager collectionManager = Controllers.getCollectionManager();;
     {
         super.accessType = AccessType.ALL;
     }

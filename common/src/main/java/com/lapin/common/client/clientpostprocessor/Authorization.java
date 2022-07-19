@@ -33,7 +33,7 @@ public class Authorization implements ClientPostProcessor{
                                 "# LOG IN\n" +
                                 "#------------------------------------------------------------------------------\n");
                         loginAndPassword();
-                        if(commandManager.handle("check_user","", user).equals(StatusCodes.OK)){
+                        if(commandManager.handle("checkUser","", user).equals(StatusCodes.OK)){
                             client.setUser(user);
                             return;
                         }
@@ -44,7 +44,7 @@ public class Authorization implements ClientPostProcessor{
                                 "#------------------------------------------------------------------------------\n");
                         loginAndPassword();
                         if (checkPassword()) {
-                            if(commandManager.handle("add_user","", user).equals(StatusCodes.OK)){
+                            if(commandManager.handle("addUser","", user).equals(StatusCodes.OK)){
                                 client.setUser(user);
                                 return;
                             }

@@ -12,5 +12,5 @@ public interface CommandManager {
     public void execute(String userCommand, String argument, Serializable argObj);
     public void setClientIO(Client_IO clientIO);
     public void setClient(Client client);
-
+    public Client getClient();
 }

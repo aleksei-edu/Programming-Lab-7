@@ -13,12 +13,13 @@ import com.lapin.network.StatusCodes;
 
 import java.io.Serializable;
 @ClassMeta(
-        name = "add_user",
+        name = "addUser",
         description = "добавить пользователя в bd"
 )
 public class AddUser extends AbstractCommand {
     DBHandler dbHandler = Controllers.getDbHandler();
     {
+        super.hide = true;
         super.accessType = AccessType.ALL;
     }
     @Override

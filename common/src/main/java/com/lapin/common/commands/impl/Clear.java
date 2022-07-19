@@ -1,6 +1,7 @@
 package com.lapin.common.commands.impl;
 
 
+import com.lapin.common.controllers.Controllers;
 import com.lapin.common.exception.CommandNotAcceptArgumentsException;
 import com.lapin.common.controllers.CollectionManager;
 import com.lapin.common.controllers.CommandManagerImpl;
@@ -21,8 +22,7 @@ import java.io.Serializable;
         name = "clear",
         description = "очистить коллекцию")
 public class Clear extends AbstractCommand {
-    @Inject
-    private CollectionManager collectionManager;
+    private CollectionManager collectionManager  = Controllers.getCollectionManager();
     {
         super.accessType = AccessType.ALL;
     }

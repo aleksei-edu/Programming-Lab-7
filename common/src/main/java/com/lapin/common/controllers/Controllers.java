@@ -7,4 +7,7 @@ public class Controllers {
     @Getter
     @Setter
     private static DBHandler dbHandler;
+    @Getter
+    @Setter
+    private static CollectionManager collectionManager;
 }

@@ -1,6 +1,7 @@
 package com.lapin.common.commands.impl;
 
 
+import com.lapin.common.controllers.Controllers;
 import com.lapin.di.annotation.Inject;
 import com.lapin.network.AccessType;
 import com.lapin.common.controllers.CollectionManager;
@@ -23,8 +24,7 @@ import java.util.stream.Collectors;
         name = "show",
         description = "вывести в стандартный поток вывода все элементы коллекции в строковом представлении")
 public class Show extends AbstractCommand {
-    @Inject
-    private CollectionManager collectionManager;
+    private CollectionManager collectionManager = Controllers.getCollectionManager();
     {
         super.accessType = AccessType.ALL;
     }

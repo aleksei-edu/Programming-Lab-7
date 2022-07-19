@@ -9,7 +9,7 @@ import com.lapin.server.App;
 public class CheckUser implements BeforeRequestExecute{
     @Override
     public boolean process(RequestCommand rc) {
-        if(rc.getCmd().equals("add_user")){
+        if(rc.getCmd().equals("addUser")){
             return true;
         }
         User user = rc.getUser();

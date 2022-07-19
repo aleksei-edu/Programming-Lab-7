@@ -11,12 +11,13 @@ import com.lapin.network.StatusCodes;
 
 import java.io.Serializable;
 @ClassMeta(
-        name = "check_user",
+        name = "checkUser",
         description = "проверить пользователя в bd"
 )
 public class CheckUser extends AbstractCommand {
     DBHandler dbHandler = Controllers.getDbHandler();
     {
+        super.hide = true;
         super.accessType = AccessType.ALL;
     }
     @Override
