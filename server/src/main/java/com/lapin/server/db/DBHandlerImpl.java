@@ -8,6 +8,7 @@ import com.lapin.network.log.NetworkLogOutputConsole;
 import com.lapin.network.log.NetworkLogger;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,7 +53,7 @@ public class DBHandlerImpl implements DBHandler {
 
     public synchronized long checkLogin(User user){
         try (Connection connection = dbConnector.connect();
-             PreparedStatement checkLogin = connection.prepareStatement(DBQuery.SELECT_USER_BY_LOGIN.getQuery());
+             PreparedStatement checkLogin = connection.prepareStatement(DBQuery.SELECT_USER_BY_LOGIN.getQuery())
         ) {
             checkLogin.setString(1, user.getLogin());
             ResultSet resultSet = checkLogin.executeQuery();
@@ -64,6 +65,32 @@ public class DBHandlerImpl implements DBHandler {
             return 0;
         }
         catch (SQLException e) {
+            Logger.error(e.getMessage());
+            return -1;
+        }
+    }
+    public synchronized int addRoute(Route route, User user){
+        try (Connection connection = dbConnector.connect();
+             PreparedStatement addRouteToTable = connection.prepareStatement(DBQuery.INSERT_ROUTE.getQuery())) {
+            int paramCounter = 1;
+            addRouteToTable.setDouble(1,route.getCoordinates().getX());
+            addRouteToTable.setDouble(2,route.getCoordinates().getY());
+            addRouteToTable.setInt(3,route.getFrom().getX());
+            addRouteToTable.setDouble(4,route.getFrom().getY());
+            addRouteToTable.setDouble(5,route.getFrom().getZ());
+            addRouteToTable.setDouble(6, route.getTo().getX());
+            addRouteToTable.setLong(7, route.getTo().getY());
+            addRouteToTable.setString(8, route.getTo().getName());
+            addRouteToTable.setString(9, route.getName());
+            addRouteToTable.setDate(10, Date.valueOf(route.getCreationDate()));
+            addRouteToTable.setLong(11, route.getDistance());
+            addRouteToTable.setLong(12, user.getId());
+            ResultSet resultSet = addRouteToTable.executeQuery();
+            resultSet.next();
+            int routeId = resultSet.getInt("id");
+            Logger.info("New route added to database with id - " + routeId);
+            return routeId;
+        } catch (SQLException e) {
             Logger.error(e.getMessage());
             return -1;
         }
@@ -117,6 +144,7 @@ public class DBHandlerImpl implements DBHandler {
                         ),
                         resultSet.getLong("distance")
                         );
+                route.setAuthorId(resultSet.getLong("author_id"));
                 routes.add(route);
             }
             return routes;
@@ -124,5 +152,30 @@ public class DBHandlerImpl implements DBHandler {
             Logger.error(e.getMessage());
         }
         return routes;
+    }
+    public synchronized long updateRoute(Integer id,Route route, User user){
+        try (Connection connection = dbConnector.connect();
+             PreparedStatement updateRoute = connection.prepareStatement(DBQuery.UPDATE_ROUTE.getQuery())) {
+            updateRoute.setDouble(1,route.getCoordinates().getX());
+            updateRoute.setDouble(2,route.getCoordinates().getY());
+            updateRoute.setInt(3,route.getFrom().getX());
+            updateRoute.setDouble(4,route.getFrom().getY());
+            updateRoute.setDouble(5,route.getFrom().getZ());
+            updateRoute.setDouble(6, route.getTo().getX());
+            updateRoute.setLong(7, route.getTo().getY());
+            updateRoute.setString(8, route.getTo().getName());
+            updateRoute.setString(9, route.getName());
+            updateRoute.setLong(10, route.getDistance());
+            updateRoute.setInt(11,id);
+            updateRoute.setLong(12, user.getId());
+            ResultSet resultSet = updateRoute.executeQuery();
+            resultSet.next();
+            int routeId = resultSet.getInt("id");
+            Logger.info("Route updated to database with id - " + routeId);
+            return routeId;
+        } catch (SQLException e) {
+            Logger.error(e.getMessage());
+            return -1;
+        }
     }
 }

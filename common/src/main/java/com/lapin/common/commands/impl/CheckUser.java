@@ -4,7 +4,9 @@ import com.lapin.common.commands.AbstractCommand;
 import com.lapin.common.controllers.Controllers;
 import com.lapin.common.controllers.DBHandler;
 import com.lapin.common.data.User;
-import com.lapin.common.utility.OutManager;
+import com.lapin.common.network.objimp.RequestCommand;
+import com.lapin.common.utility.OutResultStack;
+import com.lapin.common.utility.Pair;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.network.AccessType;
 import com.lapin.network.StatusCodes;
@@ -19,16 +21,20 @@ public class CheckUser extends AbstractCommand {
     {
         super.hide = true;
         super.accessType = AccessType.ALL;
+        super.NeedObj = true;
     }
     @Override
-    public void execute(String arg, Serializable argObj) {
-        long res = dbHandler.checkUser((User) argObj);
+    public void execute(RequestCommand rc) {
+        long res = dbHandler.checkUser((User) rc.argObj());
         if(res == -1){
-            OutManager.push(StatusCodes.ERROR,"Failed to login. Wait or contact the support service");
+            OutResultStack.push(StatusCodes.ERROR,"Failed to login. Wait or contact the support service");
         }
         else if(res == 0){
-            OutManager.push(StatusCodes.ERROR,"Invalid login or password. Try again.");
+            OutResultStack.push(StatusCodes.ERROR,"Invalid login or password. Try again.");
         }
-        else OutManager.push(StatusCodes.OK, "Successful login.");
+        else{
+
+            OutResultStack.push(StatusCodes.OK, new Pair("Successful login.", res));
+        }
     }
 }

@@ -2,12 +2,11 @@ package com.lapin.common.commands.impl;
 
 import com.lapin.common.controllers.FileManager;
 import com.lapin.common.exception.MaxRecursionExceededException;
-import com.lapin.common.controllers.FileManagerImpl;
-import com.lapin.common.utility.OutManager;
+import com.lapin.common.network.objimp.RequestCommand;
+import com.lapin.common.utility.OutResultStack;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.commands.AbstractCommand;
 import com.lapin.di.annotation.Inject;
-import com.lapin.di.context.ApplicationContext;
 import com.lapin.network.AccessType;
 import com.lapin.network.StatusCodes;
 
@@ -31,18 +30,18 @@ public class ExecuteScript extends AbstractCommand {
     }
 
     @Override
-    public void execute(String argument, Serializable argObj) {
+    public void execute(RequestCommand rc) {
         try {
-            fileManager.readScript(argument);
-            OutManager.push(StatusCodes.OK,"The script is executed");
+            fileManager.readScript(rc.getArg());
+            OutResultStack.push(StatusCodes.OK,"The script is executed");
         } catch (FileNotFoundException e) {
-            OutManager.push(StatusCodes.ERROR, "File not found");
+            OutResultStack.push(StatusCodes.ERROR, "File not found");
         }
         catch (MaxRecursionExceededException e){
-            OutManager.push(StatusCodes.ERROR, "Maximum recursion is exceeded!");
+            OutResultStack.push(StatusCodes.ERROR, "Maximum recursion is exceeded!");
         }
         catch (RuntimeException | IOException e) {
-            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
+            OutResultStack.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 }

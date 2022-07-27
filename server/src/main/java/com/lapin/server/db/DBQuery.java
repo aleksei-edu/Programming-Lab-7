@@ -2,7 +2,7 @@ package com.lapin.server.db;
 
 public enum DBQuery {
     CREATE_ROUTE_TABLE("CREATE TABLE IF NOT EXISTS ROUTE(\n" +
-            "\tID BIGSERIAL PRIMARY KEY,\n" +
+            "\tID SERIAL PRIMARY KEY,\n" +
             "\tNAME VARCHAR(80) NOT NULL,\n" +
             "\tCOORD_ID BIGINT NOT NULL,\n" +
             "\tCREATION_DATE DATE NOT NULL,\n" +
@@ -17,7 +17,7 @@ public enum DBQuery {
             ")"),
     CREATE_COORDINATES_TABLE("CREATE TABLE IF NOT EXISTS COORDINATES(\n" +
             "\tID BIGSERIAL PRIMARY KEY,\n" +
-            "\tCOORD_X DOUBLE PRECISION CHECK(COORD_X < 670) NOT NULL,\n" +
+            "\tCOORD_X DOUBLE PRECISION CHECK(COORD_X <= 669) NOT NULL,\n" +
             "\tCOORD_Y DOUBLE PRECISION\n" +
             ") "),
     CREATE_LOCATION_FROM_TABLE("CREATE TABLE IF NOT EXISTS LOCATION_FROM(\n" +
@@ -27,11 +27,10 @@ public enum DBQuery {
             "\tLOC_FROM_Z DOUBLE PRECISION\n" +
             ")"),
     CREATE_LOCATION_TO_TABLE("CREATE TABLE IF NOT EXISTS LOCATION_TO(\n" +
-            "\tID BIGSERIAL PRIMARY KEY,\n" +
+            "ID BIGSERIAL PRIMARY KEY,\n" +
             "\tLOC_TO_X DOUBLE PRECISION NOT NULL,\n" +
-            "\tLOC_TO_Y DOUBLE PRECISION NOT NULL,\n" +
-            "\tLOC_TO_NAME VARCHAR(80) NOT NULL\n" +
-            ")"),
+            "\tLOC_TO_Y BIGINT NOT NULL,\n" +
+            "\tLOC_TO_NAME VARCHAR(80) NOT NULL)"),
     CREATE_USERS_TABLE("CREATE TABLE IF NOT EXISTS USERS(\n" +
             "\tID BIGSERIAL PRIMARY KEY,\n" +
             "\tLOGIN VARCHAR(80) UNIQUE NOT NULL CHECK(LENGTH(LOGIN) >= 1),\n" +
@@ -46,7 +45,42 @@ public enum DBQuery {
             "DISTANCE, AUTHOR_ID FROM ROUTE\n" +
             "JOIN COORDINATES ON ROUTE.COORD_ID = COORDINATES.ID \n" +
             "JOIN LOCATION_FROM ON ROUTE.LOC_FROM_ID = LOCATION_FROM.ID\n" +
-            "JOIN LOCATION_TO ON ROUTE.LOC_TO_ID = LOCATION_TO.ID");
+            "JOIN LOCATION_TO ON ROUTE.LOC_TO_ID = LOCATION_TO.ID"),
+    INSERT_ROUTE("with coords as \n" +
+            "(INSERT INTO COORDINATES (COORD_X, COORD_Y) \n" +
+            " VALUES (?, ?) ON CONFLICT DO NOTHING RETURNING ID),\n" +
+            " loc_from as\n" +
+            " (INSERT INTO LOCATION_FROM (LOC_FROM_X, LOC_FROM_Y, LOC_FROM_Z)\n" +
+            " VALUES (?, ?, ?) ON CONFLICT DO NOTHING RETURNING ID),\n" +
+            " loc_to as \n" +
+            " (INSERT INTO LOCATION_TO (LOC_TO_X, LOC_TO_Y, LOC_TO_NAME)\n" +
+            " VALUES (?, ?, ?) ON CONFLICT DO NOTHING RETURNING ID)\n" +
+            " INSERT INTO ROUTE (NAME, COORD_ID, CREATION_DATE, LOC_FROM_ID, \n" +
+            "\t\t\t\t\tLOC_TO_ID, DISTANCE, AUTHOR_ID)\n" +
+            "\t\t\t\t\tVALUES (?,\n" +
+            "\t\t\t\t\t\t\t(SELECT ID FROM coords),\n" +
+            "\t\t\t\t\t\t\t?,\n" +
+            "\t\t\t\t\t\t\t(SELECT ID FROM loc_from),\n" +
+            "\t\t\t\t\t\t\t(SELECT ID FROM loc_to),\n" +
+            "\t\t\t\t\t\t\t?, ?)\n" +
+            "\t\t\t\t\tRETURNING ID"),
+    UPDATE_ROUTE("with coords as \n" +
+            "(INSERT INTO COORDINATES (COORD_X, COORD_Y) \n" +
+            " VALUES (?, ?) ON CONFLICT DO NOTHING RETURNING ID),\n" +
+            " loc_from as\n" +
+            " (INSERT INTO LOCATION_FROM (LOC_FROM_X, LOC_FROM_Y, LOC_FROM_Z)\n" +
+            " VALUES (?, ?, ?) ON CONFLICT DO NOTHING RETURNING ID),\n" +
+            " loc_to as \n" +
+            " (INSERT INTO LOCATION_TO (LOC_TO_X, LOC_TO_Y, LOC_TO_NAME)\n" +
+            " VALUES (?, ?, ?) ON CONFLICT DO NOTHING RETURNING ID)\n" +
+            " UPDATE ROUTE SET \n" +
+            "\t\t\t\tNAME = ?,\n" +
+            "\t\t\t\tCOORD_ID = (SELECT ID FROM coords),\n" +
+            "\t\t\t\tLOC_FROM_ID = (SELECT ID FROM loc_from) ,\n" +
+            "\t\t\t\tLOC_TO_ID = (SELECT ID FROM loc_to),\n" +
+            "\t\t\t\tDISTANCE = ?\n" +
+            "\t\t\t\t\tWHERE ID = ? AND AUTHOR_ID = ?\n" +
+            "\t\t\t\t\tRETURNING ID");
     private final String query;
 
     DBQuery(String query) {

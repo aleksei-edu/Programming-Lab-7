@@ -1,10 +1,9 @@
 package com.lapin.server.utility;
 
 
-import com.lapin.common.controllers.CollectionManager;
-import com.lapin.common.controllers.FileManager;
-import com.lapin.common.controllers.FileManagerImpl;
+import com.lapin.common.controllers.*;
 import com.lapin.common.data.Route;
+import com.lapin.common.data.User;
 import com.lapin.common.exception.IdOverflowException;
 import com.lapin.di.annotation.Inject;
 
@@ -19,10 +18,6 @@ import java.util.Set;
  */
 public class JavaCollectionManager implements CollectionManager {
     /**
-     * Свободный номер для уникального id.
-     */
-    private static int freeNumberForId = 1;
-    /**
      * Дата последней инициализации коллекции.
      */
     private static LocalDate lastInitTime;
@@ -33,10 +28,10 @@ public class JavaCollectionManager implements CollectionManager {
     /**
      * Коллекция в которой хранятся {@link Route}
      */
-    private static final LinkedHashSet<Route> routeCollection = new LinkedHashSet<>();
+    private static LinkedHashSet<Route> routeCollection = new LinkedHashSet<>();
     private static final ArrayList<String[]> stringRouteCollection = new ArrayList<>();
     @Inject
-    private FileManager fileManager;
+    private DBHandler dbHandler = Controllers.getDbHandler();
 
     public ArrayList<String[]> getStringRouteCollection() {
         ArrayList<String[]> strRouteCol = new ArrayList<>();
@@ -62,34 +57,7 @@ public class JavaCollectionManager implements CollectionManager {
         return strRouteCol;
     }
 
-    /**
-     * Метод ищет новое уникальное id
-     *
-     * @return уникальное id
-     */
-    public int getFreeNumberForId() {
-        while (true) {
-            try {
-                boolean flag = true;
-                for (Route route : routeCollection) {
-                    if (route.getId() == freeNumberForId) {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (!flag) {
-                    freeNumberForId += 1;
-                    if (freeNumberForId < 0) {
-                        throw new IdOverflowException();
-                    }
-                } else {
-                    return freeNumberForId;
-                }
-            } catch (IdOverflowException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+
 
     /**
      * Возвращает коллекцию из <b>Route</b>.
@@ -108,17 +76,26 @@ public class JavaCollectionManager implements CollectionManager {
     }
 
     @Override
-    public void add(Route route) {
-        routeCollection.add(route);
+    public void add(Route route, User user) throws RuntimeException{
+
+        if (dbHandler.addRoute(route, user) == -1){
+            throw new RuntimeException();
+        }
+        loadCollection();
     }
 
     @Override
-    public boolean update(Route newRoute,Integer id) {
+    public boolean update(Integer id, Route newRoute, User user) throws RuntimeException {
         for (Route route : routeCollection) {
             if (route.getId() == id) {
-                this.getRouteCollection().remove(route);
-                this.add(newRoute);
-                return true;
+                if(route.getAuthorId() == user.getId()){
+                    if(dbHandler.updateRoute(id,newRoute,user) == -1){
+                        throw new RuntimeException("The command ended with an error. Try again.");
+                    }
+                    loadCollection();
+                    return true;
+                }
+                else throw new RuntimeException("No permission for update");
             }
         }
         return false;
@@ -147,7 +124,8 @@ public class JavaCollectionManager implements CollectionManager {
      */
     public void loadCollection() {
         lastInitTime = LocalDate.now();
-        fileManager.readCollection();
+        routeCollection.clear();
+        routeCollection.addAll(dbHandler.loadRoutes());
     }
 
     /**
@@ -156,9 +134,5 @@ public class JavaCollectionManager implements CollectionManager {
     public void clear() {
         routeCollection.clear();
         System.out.println("Коллекция успешно очищена.");
-    }
-
-    public void addStringRouteCollection(String[] stringRoute) {
-        stringRouteCollection.add(stringRoute);
     }
 }

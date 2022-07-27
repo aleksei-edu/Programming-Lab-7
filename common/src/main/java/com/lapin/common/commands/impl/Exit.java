@@ -1,7 +1,8 @@
 package com.lapin.common.commands.impl;
 
 
-import com.lapin.common.utility.OutManager;
+import com.lapin.common.network.objimp.RequestCommand;
+import com.lapin.common.utility.OutResultStack;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.commands.AbstractCommand;
 import com.lapin.network.AccessType;
@@ -23,13 +24,13 @@ public class Exit extends AbstractCommand {
 
 
     @Override
-    public void execute(String argument, Serializable argObj) {
+    public void execute(RequestCommand rc) {
         try {
-            OutManager.push(StatusCodes.EXIT_CLIENT, "Client exit...");
+            OutResultStack.push(StatusCodes.EXIT_CLIENT, "Client exit...");
             //System.exit(0);
 
         } catch (RuntimeException e) {
-            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
+            OutResultStack.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 

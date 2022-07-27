@@ -2,13 +2,12 @@ package com.lapin.common.commands.impl;
 
 
 import com.lapin.common.controllers.CollectionManager;
-import com.lapin.common.controllers.CommandManagerImpl;
 import com.lapin.common.controllers.Controllers;
-import com.lapin.common.utility.OutManager;
+import com.lapin.common.network.objimp.RequestCommand;
+import com.lapin.common.utility.OutResultStack;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.data.Route;
 import com.lapin.common.commands.AbstractCommand;
-import com.lapin.di.annotation.Inject;
 import com.lapin.network.AccessType;
 import com.lapin.network.StatusCodes;
 
@@ -26,7 +25,7 @@ public class MaxByCreationDate extends AbstractCommand {
     }
 
     @Override
-    public void execute(String argument, Serializable argObj) {
+    public void execute(RequestCommand rc) {
         try {
             String response = "";
             if (collectionManager.getRouteCollection().size() == 0) {
@@ -40,10 +39,10 @@ public class MaxByCreationDate extends AbstractCommand {
                     .toList()
                     .get(0)
                     .toString();
-            OutManager.push(StatusCodes.OK,response);
+            OutResultStack.push(StatusCodes.OK,response);
 
         } catch (RuntimeException e) {
-            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
+            OutResultStack.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 }

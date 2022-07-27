@@ -8,7 +8,7 @@ import java.io.IOException;
 public interface FileManager {
     public void setCollectionManager(CollectionManager collectionManager);
     public String saveCollection(CollectionManager collectionManager) throws IOException, NullEnvException;
-    public void readCollection();
+   // public void readCollection();
     public void readScript(String fileName) throws MaxRecursionExceededException, IOException;
     public void setEnv(String env);
     public String getEnv();

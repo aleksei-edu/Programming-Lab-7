@@ -1,6 +1,7 @@
 package com.lapin.common.commands;
 
 
+import com.lapin.common.network.objimp.RequestCommand;
 import com.lapin.common.utility.UserRights;
 import com.lapin.network.AccessType;
 import com.lapin.di.annotation.ClassMeta;
@@ -20,7 +21,7 @@ public abstract class AbstractCommand implements Command {
     protected boolean executingLocal = false;
     protected boolean hide = false;
     @Override
-    public void execute(String arg, Serializable argObj) {
+    public void execute(RequestCommand rc) {
 
     }
     @Override

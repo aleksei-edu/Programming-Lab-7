@@ -3,13 +3,12 @@ package com.lapin.server;
 import com.lapin.common.controllers.CommandManager;
 import com.lapin.common.network.objimp.RequestCommand;
 import com.lapin.common.network.objimp.ResponseCommand;
-import com.lapin.common.utility.OutManager;
+import com.lapin.common.utility.OutResultStack;
 import com.lapin.common.utility.Pair;
 import com.lapin.di.context.ApplicationContext;
 import com.lapin.network.StatusCodes;
 import com.lapin.network.obj.NetObj;
 import com.lapin.network.obj.RequestHandler;
-import com.lapin.common.controllers.CommandManagerImpl;
 import com.lapin.server.BeforeRequestExecute.BeforeRequestExecute;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,9 +21,9 @@ public class ServerRequestHandler implements RequestHandler {
         if(netObj != null){
             RequestCommand rc = (RequestCommand) netObj;
             execute(rc);
-            Pair response = OutManager.pop();
+            Pair response = OutResultStack.pop();
             statusCodes = (StatusCodes) response.getFirst();
-            return new ResponseCommand(statusCodes,(String) response.getSecond());
+            return new ResponseCommand(statusCodes, response.getSecond());
         }
         return null;
     }

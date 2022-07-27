@@ -1,5 +1,6 @@
 package com.lapin.common.commands;
 
+import com.lapin.common.network.objimp.RequestCommand;
 import com.lapin.network.AccessType;
 
 import java.io.Serializable;
@@ -11,10 +12,8 @@ import java.io.Serializable;
 public interface Command {
     /**
      * Запускает выполнение команды
-     *
-     * @param arg аргументы команды (если есть, иначе null)
      */
-    public void execute(String arg, Serializable argObj);
+    public void execute(RequestCommand rc);
 
     public String toString();
     public boolean getNeedObj();

@@ -1,11 +1,9 @@
 package com.lapin.common.commands.impl;
 
 
-import com.lapin.common.client.Client;
 import com.lapin.common.controllers.CommandManager;
-import com.lapin.common.controllers.CommandManagerImpl;
-import com.lapin.common.utility.HistoryQueue;
-import com.lapin.common.utility.OutManager;
+import com.lapin.common.network.objimp.RequestCommand;
+import com.lapin.common.utility.OutResultStack;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.commands.AbstractCommand;
 import com.lapin.common.commands.Command;
@@ -30,7 +28,7 @@ public class History extends AbstractCommand {
     }
 
     @Override
-    public void execute(String argument, Serializable argObj) {
+    public void execute(RequestCommand rc) {
         try {
             String response = "";
             response = commandManager
@@ -40,10 +38,10 @@ public class History extends AbstractCommand {
                     .stream()
                     .map(Command::getName)
                     .collect(Collectors.joining("\n"));
-            OutManager.push(StatusCodes.OK,response);
+            OutResultStack.push(StatusCodes.OK,response);
 
         } catch (RuntimeException e) {
-            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
+            OutResultStack.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 }

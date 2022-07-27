@@ -1,6 +1,7 @@
 package com.lapin.common.controllers;
 
 import com.lapin.common.data.Route;
+import com.lapin.common.data.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,17 +9,15 @@ import java.util.Set;
 
 public interface CollectionManager {
 
-    public int getFreeNumberForId();
-
     public Set<Route> getRouteCollection();
 
     public ArrayList<String[]> getStringRouteCollection();
 
     public void saveTimeCollection();
 
-    public void add(Route route);
+    public void add(Route route, User user);
 
-    public boolean update(Route newRoute,Integer id);
+    public boolean update(Integer id, Route newRoute, User user);
 
     public LocalDate getLastInitTime();
 
@@ -28,5 +27,4 @@ public interface CollectionManager {
 
     public void clear();
 
-    public void addStringRouteCollection(String[] stringRoute);
 }

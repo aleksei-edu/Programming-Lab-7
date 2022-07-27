@@ -2,10 +2,10 @@ package com.lapin.common.controllers;
 
 import com.lapin.common.client.Client;
 import com.lapin.common.commands.CheckAccess;
-import com.lapin.common.data.Route;
 import com.lapin.common.exception.CommandNotFoundException;
+import com.lapin.common.network.objimp.RequestCommand;
 import com.lapin.common.utility.*;
-import com.lapin.di.annotation.Inject;
+import com.lapin.common.utility.OutResultStack;
 import com.lapin.di.context.ApplicationContext;
 
 import com.lapin.common.commands.Command;
@@ -40,7 +40,7 @@ public class CommandManagerImpl implements CommandManager {
      * @param userCommand команда введенная пользователем
      * @param argument    аргумент команды введенной пользователем
      */
-    public StatusCodes handle(String userCommand, String argument, Serializable argObj) {
+    public Pair<StatusCodes,Object> handle(String userCommand, String argument, Serializable argObj) {
         try {
             Object obj = ApplicationContext.getInstance().getBean(userCommand);
             Command command = (Command) (obj instanceof Command ? obj : null);
@@ -51,31 +51,33 @@ public class CommandManagerImpl implements CommandManager {
                         argObj = CreateNewElementManager.createNewElement();
                     }
                     if(command.getExecutingLocal() || client.getClientType().equals(ClientType.LOCAL)){
-                        command.execute(argument,argObj);
+                        command.execute(new RequestCommand(userCommand, argument,argObj, client.getUser()));
                     }
                     else{
                         Pair response = clientIO.handle(userCommand, argument, argObj, client.getUser());
                         client.setStatusCode((StatusCodes) response.getFirst());
-                        OutManager.push( (StatusCodes) response.getFirst(), (String) response.getSecond());
+                        OutResultStack.push( (StatusCodes) response.getFirst(), response.getSecond());
                     }
                 }
                 else {
-                    OutManager.push(StatusCodes.ERROR,"Access denied!");
+                    OutResultStack.push(StatusCodes.ERROR,"Access denied!");
                 }
             }
             else {
-                OutManager.push(StatusCodes.ERROR,"Command not found!");
+                OutResultStack.push(StatusCodes.ERROR,"Command not found!");
             }
         } catch (CommandNotFoundException e) {
-            OutManager.push(StatusCodes.ERROR,"Command not found!");
+            OutResultStack.push(StatusCodes.ERROR,"Command not found!");
         } catch (Exception e) {
-            OutManager.push(StatusCodes.ERROR,"Failed to execute command!");
+            OutResultStack.push(StatusCodes.ERROR,"Failed to execute command!");
         }
         finally {
-            Pair response = OutManager.pop();
+            Pair response = OutResultStack.pop();
             client.setStatusCode((StatusCodes) response.getFirst());
-            System.out.println((String)response.getSecond());
-            return (StatusCodes) response.getFirst();
+            if(response.getSecond() instanceof String){
+                System.out.println((String)response.getSecond());
+            }
+            return response;
         }
     }
     public void execute(String userCommand, String argument, Serializable argObj) {
@@ -83,15 +85,15 @@ public class CommandManagerImpl implements CommandManager {
             Object obj = ApplicationContext.getInstance().getBean(userCommand);
             Command command = (Command) (obj instanceof Command ? obj : null);
             if (command != null) {
-                command.execute(argument, argObj);
+                command.execute(new RequestCommand(userCommand, argument,argObj, client.getUser()));
             }
             else {
-                OutManager.push(StatusCodes.ERROR,"Command not found!");
+                OutResultStack.push(StatusCodes.ERROR,"Command not found!");
             }
         } catch (CommandNotFoundException e) {
-            OutManager.push(StatusCodes.ERROR,"Command not found!");
+            OutResultStack.push(StatusCodes.ERROR,"Command not found!");
         } catch (Exception e) {
-            OutManager.push(StatusCodes.ERROR,"Failed to execute command!");
+            OutResultStack.push(StatusCodes.ERROR,"Failed to execute command!");
         }
     }
 

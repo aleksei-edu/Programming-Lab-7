@@ -3,12 +3,11 @@ package com.lapin.common.commands.impl;
 import com.lapin.common.controllers.Controllers;
 import com.lapin.common.data.Route;
 import com.lapin.common.controllers.CollectionManager;
-import com.lapin.common.controllers.CommandManagerImpl;
-import com.lapin.common.utility.OutManager;
+import com.lapin.common.network.objimp.RequestCommand;
+import com.lapin.common.utility.OutResultStack;
 import com.lapin.di.annotation.ClassMeta;
 import com.lapin.common.commands.AbstractCommand;
 import com.lapin.common.exception.CommandNeedArgumentException;
-import com.lapin.di.annotation.Inject;
 import com.lapin.network.AccessType;
 import com.lapin.network.StatusCodes;
 
@@ -26,12 +25,12 @@ public class RemoveById extends AbstractCommand {
 
 
     @Override
-    public void execute(String argument, Serializable argObj) {
+    public void execute(RequestCommand rc) {
         try {
-            if (argument.isEmpty()) throw new CommandNeedArgumentException();
+            if (rc.getArg().isEmpty()) throw new CommandNeedArgumentException();
             String response = "";
             try {
-                int id = Integer.parseInt(argument);
+                int id = Integer.parseInt(rc.getArg());
                 Route route1 = (Route)collectionManager
                         .getRouteCollection()
                         .stream()
@@ -43,13 +42,13 @@ public class RemoveById extends AbstractCommand {
                     collectionManager.getRouteCollection().remove(route1);
                     response += "Удалён элемент по id: " + id;
                 }
-                OutManager.push(StatusCodes.OK,response);
+                OutResultStack.push(StatusCodes.OK,response);
             } catch (NumberFormatException e) {
-                OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
+                OutResultStack.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
             }
 
         } catch (RuntimeException e) {
-            OutManager.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
+            OutResultStack.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
         }
     }
 }

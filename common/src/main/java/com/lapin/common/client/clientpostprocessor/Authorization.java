@@ -5,6 +5,7 @@ import com.lapin.common.controllers.CommandManager;
 import com.lapin.common.controllers.CommandManagerImpl;
 import com.lapin.common.controllers.ConsoleManager;
 import com.lapin.common.data.User;
+import com.lapin.common.utility.Pair;
 import com.lapin.di.annotation.Inject;
 import com.lapin.di.context.ApplicationContext;
 import com.lapin.network.StatusCodes;
@@ -33,9 +34,15 @@ public class Authorization implements ClientPostProcessor{
                                 "# LOG IN\n" +
                                 "#------------------------------------------------------------------------------\n");
                         loginAndPassword();
-                        if(commandManager.handle("checkUser","", user).equals(StatusCodes.OK)){
-                            client.setUser(user);
-                            return;
+                        Pair res = commandManager.handle("checkUser","", user);
+                        if(((StatusCodes) res.getFirst())
+                                .equals(StatusCodes.OK)){
+                            if(res.getSecond() instanceof Pair){
+                                user.setId((Long) ((Pair<?, ?>) res.getSecond()).getSecond());
+                                client.setUser(user);
+                                System.out.println(((Pair<?, ?>) res.getSecond()).getFirst());
+                                return;
+                            }
                         }
                     } else {
                         System.out.print(
@@ -44,9 +51,15 @@ public class Authorization implements ClientPostProcessor{
                                 "#------------------------------------------------------------------------------\n");
                         loginAndPassword();
                         if (checkPassword()) {
-                            if(commandManager.handle("addUser","", user).equals(StatusCodes.OK)){
-                                client.setUser(user);
-                                return;
+                            Pair res = commandManager.handle("addUser","", user);
+                            if(((StatusCodes) res.getFirst())
+                                    .equals(StatusCodes.OK)){
+                                if(res.getSecond() instanceof Pair){
+                                    user.setId((Long) ((Pair<?, ?>) res.getSecond()).getSecond());
+                                    System.out.println(((Pair<?, ?>) res.getSecond()).getFirst());
+                                    client.setUser(user);
+                                    return;
+                                }
                             }
                         } else continue;
                     }
