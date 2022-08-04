@@ -29,7 +29,7 @@ public class ServerRequestHandler implements RequestHandler {
     }
     private void execute(RequestCommand rc){
         if(callBeforeRequestExecute(rc)){
-            commandManager.execute(rc.getCmd(), rc.getArg(), rc.argObj());
+            commandManager.execute(rc);
         }
     }
     private boolean callBeforeRequestExecute(RequestCommand rc) {

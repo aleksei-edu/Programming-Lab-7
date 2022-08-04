@@ -11,4 +11,6 @@ public interface DBHandler {
     public Set<Route> loadRoutes();
     public int addRoute(Route route, User user);
     public long updateRoute(Integer id, Route route, User user);
+    public long deleteRouteByID(int routeID, long AuthorID);
+    public long deleteRoutesByAuthor(long authorID);
 }

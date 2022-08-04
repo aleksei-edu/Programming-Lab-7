@@ -27,28 +27,25 @@ public class RemoveById extends AbstractCommand {
     @Override
     public void execute(RequestCommand rc) {
         try {
-            if (rc.getArg().isEmpty()) throw new CommandNeedArgumentException();
             String response = "";
             try {
                 int id = Integer.parseInt(rc.getArg());
-                Route route1 = (Route)collectionManager
-                        .getRouteCollection()
-                        .stream()
-                        .filter(route -> (route.getId() == id)).findFirst().orElse(null);
-                if (route1 == null){
-                    response += "Элемент не найден.";
+                long res = collectionManager.deleteRouteByID(id, rc.getUser().getId());
+                if (res == 1){
+                    response += "Deleted route by id:" + id;
                 }
-                else {
-                    collectionManager.getRouteCollection().remove(route1);
-                    response += "Удалён элемент по id: " + id;
+                else if (res == 0){
+                    response += "No routes found.";
+                }
+                else if (res > 1){
+                    response += "Deleted " + res + " routes by id:" + id;
                 }
                 OutResultStack.push(StatusCodes.OK,response);
             } catch (NumberFormatException e) {
                 OutResultStack.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
             }
-
         } catch (RuntimeException e) {
-            OutResultStack.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
+            OutResultStack.push(StatusCodes.ERROR, e.getMessage());
         }
     }
 }

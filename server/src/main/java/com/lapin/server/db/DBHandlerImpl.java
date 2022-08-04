@@ -115,7 +115,7 @@ public class DBHandlerImpl implements DBHandler {
             return -1;
         }
     }
-
+    @Override
     public synchronized Set<Route> loadRoutes(){
         Set<Route> routes = Collections.synchronizedSet(new LinkedHashSet<>());
         try(
@@ -174,6 +174,30 @@ public class DBHandlerImpl implements DBHandler {
             Logger.info("Route updated to database with id - " + routeId);
             return routeId;
         } catch (SQLException e) {
+            Logger.error(e.getMessage());
+            return -1;
+        }
+    }
+    public synchronized long deleteRouteByID(int routeID, long authorID){
+        try (Connection connection = dbConnector.connect();
+             PreparedStatement deleteRouteByID = connection.prepareStatement(DBQuery.DELETE_ROUTE_BY_ID.getQuery())
+        ){
+            deleteRouteByID.setInt(1,routeID);
+            deleteRouteByID.setLong(2,authorID);
+            return deleteRouteByID.executeUpdate();
+        } catch (SQLException e) {
+            Logger.error(e.getMessage());
+            return -1;
+        }
+    }
+    public synchronized long deleteRoutesByAuthor(long authorID){
+        try (Connection connection = dbConnector.connect();
+        PreparedStatement deleteRouteByAuthor = connection.prepareStatement(DBQuery.DELETE_ROUTES_BY_AUTHOR.getQuery())
+        ){
+            deleteRouteByAuthor.setLong(1,authorID);
+            return deleteRouteByAuthor.executeUpdate();
+        }
+        catch (SQLException e) {
             Logger.error(e.getMessage());
             return -1;
         }

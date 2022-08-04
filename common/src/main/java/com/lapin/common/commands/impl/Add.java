@@ -27,8 +27,6 @@ import java.io.Serializable;
         description = "добавить новый элемент в коллекцию")
 public class Add extends AbstractCommand {
     private CollectionManager collectionManager = Controllers.getCollectionManager();
-    @Inject
-    private CommandManager commandManager;
     {
         super.accessType = AccessType.ALL;
         super.NeedObj = true;
@@ -36,10 +34,9 @@ public class Add extends AbstractCommand {
     @Override
     public void execute(RequestCommand rc) {
         try {
-            if (!rc.getArg().isEmpty()) throw new CommandNotAcceptArgumentsException();
             if(!(rc.argObj() instanceof Route)) throw new RuntimeException();
             else{
-                collectionManager.add((Route) rc.argObj(), commandManager.getClient().getUser());
+                collectionManager.add((Route) rc.argObj(), rc.getUser());
             }
             OutResultStack.push(StatusCodes.OK,"The element is added");
         }

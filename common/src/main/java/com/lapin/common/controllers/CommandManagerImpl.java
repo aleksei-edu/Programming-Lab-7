@@ -73,19 +73,23 @@ public class CommandManagerImpl implements CommandManager {
         }
         finally {
             Pair response = OutResultStack.pop();
-            client.setStatusCode((StatusCodes) response.getFirst());
+            StatusCodes status = (StatusCodes) response.getFirst();
+            client.setStatusCode(status);
             if(response.getSecond() instanceof String){
-                System.out.println((String)response.getSecond());
+                if (status.equals(StatusCodes.ERROR)) {
+                    System.err.println((String) response.getSecond());
+                }
+                else System.out.println((String) response.getSecond());
             }
             return response;
         }
     }
-    public void execute(String userCommand, String argument, Serializable argObj) {
+    public void execute(RequestCommand rc) {
         try {
-            Object obj = ApplicationContext.getInstance().getBean(userCommand);
+            Object obj = ApplicationContext.getInstance().getBean(rc.getCmd());
             Command command = (Command) (obj instanceof Command ? obj : null);
             if (command != null) {
-                command.execute(new RequestCommand(userCommand, argument,argObj, client.getUser()));
+                command.execute(rc);
             }
             else {
                 OutResultStack.push(StatusCodes.ERROR,"Command not found!");

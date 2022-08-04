@@ -25,45 +25,51 @@ public class Authorization implements ClientPostProcessor{
                     "#------------------------------------------------------------------------------\n" +
                     "1.\tLog in\n" +
                     "2.\tSign up\n");
-            Integer userPrint = Integer.parseInt(consoleManager.getUserPrint());
-            if (userPrint == 1 || userPrint == 2) {
-                while (true) {
-                    if (userPrint == 1) {
-                        System.out.print(
-                                "#------------------------------------------------------------------------------\n" +
-                                "# LOG IN\n" +
-                                "#------------------------------------------------------------------------------\n");
-                        loginAndPassword();
-                        Pair res = commandManager.handle("checkUser","", user);
-                        if(((StatusCodes) res.getFirst())
-                                .equals(StatusCodes.OK)){
-                            if(res.getSecond() instanceof Pair){
-                                user.setId((Long) ((Pair<?, ?>) res.getSecond()).getSecond());
-                                client.setUser(user);
-                                System.out.println(((Pair<?, ?>) res.getSecond()).getFirst());
-                                return;
-                            }
-                        }
-                    } else {
-                        System.out.print(
-                                "#------------------------------------------------------------------------------\n" +
-                                "# SING UP\n" +
-                                "#------------------------------------------------------------------------------\n");
-                        loginAndPassword();
-                        if (checkPassword()) {
-                            Pair res = commandManager.handle("addUser","", user);
-                            if(((StatusCodes) res.getFirst())
-                                    .equals(StatusCodes.OK)){
-                                if(res.getSecond() instanceof Pair){
+            try {
+                Integer userPrint = Integer.parseInt(consoleManager.getUserPrint());
+                if (userPrint == 1 || userPrint == 2) {
+                    while (true) {
+                        if (userPrint == 1) {
+                            System.out.print(
+                                    "#------------------------------------------------------------------------------\n" +
+                                            "# LOG IN\n" +
+                                            "#------------------------------------------------------------------------------\n");
+                            loginAndPassword();
+                            Pair res = commandManager.handle("checkUser", "", user);
+                            if (((StatusCodes) res.getFirst())
+                                    .equals(StatusCodes.OK)) {
+                                if (res.getSecond() instanceof Pair) {
                                     user.setId((Long) ((Pair<?, ?>) res.getSecond()).getSecond());
-                                    System.out.println(((Pair<?, ?>) res.getSecond()).getFirst());
                                     client.setUser(user);
+                                    System.out.println(((Pair<?, ?>) res.getSecond()).getFirst());
                                     return;
                                 }
                             }
-                        } else continue;
+                        } else {
+                            System.out.print(
+                                    "#------------------------------------------------------------------------------\n" +
+                                            "# SING UP\n" +
+                                            "#------------------------------------------------------------------------------\n");
+                            loginAndPassword();
+                            if (checkPassword()) {
+                                Pair res = commandManager.handle("addUser", "", user);
+                                if (((StatusCodes) res.getFirst())
+                                        .equals(StatusCodes.OK)) {
+                                    if (res.getSecond() instanceof Pair) {
+                                        user.setId((Long) ((Pair<?, ?>) res.getSecond()).getSecond());
+                                        System.out.println(((Pair<?, ?>) res.getSecond()).getFirst());
+                                        client.setUser(user);
+                                        return;
+                                    }
+                                }
+                            } else continue;
+                        }
                     }
                 }
+            }
+            catch (NumberFormatException e){
+                logger.error("Unknown input. Try again");
+                continue;
             }
             logger.error("Unknown input. Try again");
         }

@@ -25,6 +25,7 @@ public interface CollectionManager {
 
     public void loadCollection();
 
-    public void clear();
+    public long deleteRouteByID(int routeID, long authorID);
 
+    public long clear(long authorId);
 }

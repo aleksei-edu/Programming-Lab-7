@@ -28,15 +28,15 @@ public class RemoveLower extends AbstractCommand {
     @Override
     public void execute(RequestCommand rc) {
         try {
-            String response = "";
             if(!(rc.argObj() instanceof Route)) throw new RuntimeException();
             Route route = (Route) rc.argObj();
             collectionManager
                     .getRouteCollection()
-                    .removeIf(route1 -> (route1.compareTo(route)<1));
-            OutResultStack.push(StatusCodes.OK,"Элементы успешно удалены");
+                    .stream().filter(route1 -> (route1.compareTo(route)<1))
+                    .forEach(route1 -> collectionManager.deleteRouteByID(route.getId(), rc.getUser().getId()));
+            OutResultStack.push(StatusCodes.OK,"Routes have been successfully deleted");
         } catch (RuntimeException e) {
-            OutResultStack.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
+            OutResultStack.push(StatusCodes.ERROR, e.getMessage());
         }
     }
 }

@@ -80,7 +80,9 @@ public enum DBQuery {
             "\t\t\t\tLOC_TO_ID = (SELECT ID FROM loc_to),\n" +
             "\t\t\t\tDISTANCE = ?\n" +
             "\t\t\t\t\tWHERE ID = ? AND AUTHOR_ID = ?\n" +
-            "\t\t\t\t\tRETURNING ID");
+            "\t\t\t\t\tRETURNING ID"),
+    DELETE_ROUTE_BY_ID("DELETE FROM ROUTE WHERE ID = ? AND AUTHOR_ID = ?"),
+    DELETE_ROUTES_BY_AUTHOR("DELETE FROM ROUTE WHERE AUTHOR_ID = ?");
     private final String query;
 
     DBQuery(String query) {

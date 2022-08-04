@@ -29,10 +29,16 @@ public class Clear extends AbstractCommand {
     @Override
     public void execute(RequestCommand rc) {
         try {
-            collectionManager.clear();
-            OutResultStack.push(StatusCodes.OK,"Collection is cleared.");
-        }catch (CommandNotAcceptArgumentsException e) {
-            OutResultStack.push(StatusCodes.ERROR, "The command ended with an error. Try again.");
+            long res = collectionManager.clear(rc.getUser().getId());
+            if (res == 0){
+                OutResultStack.push(StatusCodes.OK, "No accessible routes found.");
+            }
+            else if (res == 1){
+                OutResultStack.push(StatusCodes.OK,res + " route removed");
+            }
+            else OutResultStack.push(StatusCodes.OK,res + " routes removed");
+        }catch (RuntimeException e) {
+            OutResultStack.push(StatusCodes.ERROR, e.getMessage());
         }
     }
 }

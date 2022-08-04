@@ -30,7 +30,6 @@ public class JavaCollectionManager implements CollectionManager {
      */
     private static LinkedHashSet<Route> routeCollection = new LinkedHashSet<>();
     private static final ArrayList<String[]> stringRouteCollection = new ArrayList<>();
-    @Inject
     private DBHandler dbHandler = Controllers.getDbHandler();
 
     public ArrayList<String[]> getStringRouteCollection() {
@@ -100,7 +99,15 @@ public class JavaCollectionManager implements CollectionManager {
         }
         return false;
     }
-
+    @Override
+    public long deleteRouteByID(int routeID, long authorID) throws RuntimeException{
+        long res = dbHandler.deleteRouteByID(routeID, authorID);
+        if (res == -1) {
+            throw new RuntimeException("The command ended with an error. Try again.");
+        }
+        loadCollection();
+        return res;
+    }
     /**
      * Возвращает последнюю дату сохранения коллекции.
      *
@@ -131,8 +138,12 @@ public class JavaCollectionManager implements CollectionManager {
     /**
      * Очищает коллекцию
      */
-    public void clear() {
-        routeCollection.clear();
-        System.out.println("Коллекция успешно очищена.");
+    public long clear(long authorId) throws RuntimeException{
+        long res = dbHandler.deleteRoutesByAuthor(authorId);
+        if (res == -1){
+            throw new RuntimeException("The command ended with an error. Try again.");
+        }
+        loadCollection();
+        return res;
     }
 }
