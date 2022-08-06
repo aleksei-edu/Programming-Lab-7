@@ -134,7 +134,7 @@ fabric.properties
 hs_err_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java
-#Latex
+# Latex
 main.aux
 main.fdb_latexmk
 main.fls
@@ -142,10 +142,10 @@ main.log
 main.out
 main.synctex.gz
 main.toc
-#Idea
+# Idea
 .idea
 out
-#vscode
+# vscode
 .vscode
 # OS generated files #
 ######################
@@ -163,5 +163,7 @@ bin
 app/bin
 # Ignore Gradle build output directory
 build
-#Javadocs
+# Javadocs
 Javadocs
+# Ignore Properties
+*.properties

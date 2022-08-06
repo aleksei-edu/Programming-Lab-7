@@ -16,6 +16,10 @@ import java.nio.channels.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static java.nio.channels.SelectionKey.OP_ACCEPT;
 
@@ -24,6 +28,8 @@ public class ServerListener implements Listenerable, Runnable{
     private StatusCodes serverStatus = StatusCodes.OK;
     protected NetworkLogger netLogger;
     protected RequestHandler requestHandler;
+    private final ExecutorService readThreadPool = Executors.newFixedThreadPool(100);
+    private final ExecutorService writeThreadPool = Executors.newCachedThreadPool();
     private static final int BUFFER_SIZE = 1024*10;
     protected final Map<SocketChannel, ByteBuffer> channelBuffer = new HashMap<>();
     protected Selector sel;
