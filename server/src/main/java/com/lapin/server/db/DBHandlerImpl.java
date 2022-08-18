@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DBHandlerImpl implements DBHandler {
     private final DBConnector dbConnector;
@@ -117,7 +118,7 @@ public class DBHandlerImpl implements DBHandler {
     }
     @Override
     public synchronized Set<Route> loadRoutes(){
-        Set<Route> routes = Collections.synchronizedSet(new LinkedHashSet<>());
+        Set<Route> routes = ConcurrentHashMap.newKeySet();
         try(
                 Connection connection = dbConnector.connect();
                 PreparedStatement selectAllRoutes = connection.prepareStatement(DBQuery.SELECT_ALL_ROUTES.getQuery());
