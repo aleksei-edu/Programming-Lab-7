@@ -30,7 +30,7 @@ public class JavaCollectionManager implements CollectionManager {
      */
     private static LinkedHashSet<Route> routeCollection = new LinkedHashSet<>();
     private static final ArrayList<String[]> stringRouteCollection = new ArrayList<>();
-    private DBHandler dbHandler = Controllers.getDbHandler();
+    private final DBHandler dbHandler = Controllers.getDbHandler();
 
     public ArrayList<String[]> getStringRouteCollection() {
         ArrayList<String[]> strRouteCol = new ArrayList<>();

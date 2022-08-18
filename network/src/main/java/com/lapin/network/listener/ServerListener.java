@@ -8,31 +8,34 @@ import com.lapin.network.obj.NetObj;
 import com.lapin.network.obj.RequestHandler;
 import com.lapin.network.obj.ResponseBodyKeys;
 import com.lapin.network.obj.Serializer;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.*;
+import java.util.concurrent.*;
 
 import static java.nio.channels.SelectionKey.OP_ACCEPT;
 
 public class ServerListener implements Listenerable, Runnable{
     protected ServerSocketChannel ssc;
-    private StatusCodes serverStatus = StatusCodes.OK;
+    private volatile static StatusCodes serverStatus = StatusCodes.OK;
     protected NetworkLogger netLogger;
     protected RequestHandler requestHandler;
-    private final ExecutorService readThreadPool = Executors.newFixedThreadPool(100);
+    @Getter
+    private static final ConcurrentLinkedQueue<SocketChannel> readQueue = new ConcurrentLinkedQueue<>();
+    @Getter
+    private static final ConcurrentLinkedQueue<Map.Entry<SocketChannel, ByteBuffer>> handleQueue = new ConcurrentLinkedQueue<>();
+    private final ExecutorService readThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
+    private final ForkJoinPool handleThreadPool = new ForkJoinPool();
     private final ExecutorService writeThreadPool = Executors.newCachedThreadPool();
+    private final Set<SelectionKey> SetInProcess = Collections.synchronizedSet(new LinkedHashSet<>());
     private static final int BUFFER_SIZE = 1024*10;
-    protected final Map<SocketChannel, ByteBuffer> channelBuffer = new HashMap<>();
-    protected Selector sel;
+    protected final Map<SocketChannel, ByteBuffer> channelBuffer = new ConcurrentHashMap<>();
+    @Getter
+    protected static Selector sel;
     protected SelectionKey key;
 
     public ServerListener(RequestHandler requestHandler, ServerSocketChannel ssc){
@@ -60,21 +63,20 @@ public class ServerListener implements Listenerable, Runnable{
     public void run() {
         while (!serverStatus.equals(StatusCodes.EXIT_SERVER)) {
             try {
-                int numOfKeys = sel.select();
-                if (numOfKeys == 0){
-                    continue;
-                }
+                sel.selectNow();
                 Set<SelectionKey> keys = sel.selectedKeys();
                 for (var it = keys.iterator(); it.hasNext(); ) {
                     SelectionKey key = it.next();
                     it.remove();
-                    if (key.isValid()) {
+                    if (key.isValid() && !SetInProcess.contains(key)) {
                         if (key.isAcceptable()) {
                             accept();
                         } else if (key.isReadable()) {
-                            read(key);
+                            SetInProcess.add(key);
+                            readThreadPool.submit(() -> read(key));
                         } else if (key.isWritable()) {
-                            write(key);
+                            SetInProcess.add(key);
+                            writeThreadPool.submit(() -> write(key));
                         }
                     }
                 }
@@ -101,6 +103,7 @@ public class ServerListener implements Listenerable, Runnable{
 
     protected void read(SelectionKey key){
         try {
+            netLogger.info("READ : "+Thread.currentThread().getName());
             SocketChannel channel = (SocketChannel) key.channel();
             ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
             int bytesRead = channel.read(buffer);
@@ -112,8 +115,8 @@ public class ServerListener implements Listenerable, Runnable{
             newBuffer.put(channelBuffer.get(channel).array());
             newBuffer.put(ByteBuffer.wrap(buffer.array(), 0, bytesRead));
             channelBuffer.put(channel, newBuffer);
-            NetObj request = (NetObj) Serializer.deserialize(channelBuffer.get(channel).array());
-            NetObj response = requestHandler.handle(request);
+            Handler handler = new Handler(channel);
+            NetObj response = handleThreadPool.invoke(handler);
             serverStatus = requestHandler.getStatusCode();
             this.setServerStatus((StatusCodes)response.getBody().get(ResponseBodyKeys.STATUS_CODE));
             channelBuffer.put(channel,ByteBuffer.wrap(Serializer.serialize(response)));
@@ -121,10 +124,14 @@ public class ServerListener implements Listenerable, Runnable{
             } catch (IOException e) {
                 netLogger.error("Failed to process request!");
             }
+        finally {
+            SetInProcess.remove(key);
+        }
     }
 
     protected void write(SelectionKey key){
         try {
+            netLogger.info("WRITE : " + Thread.currentThread().getName());
             SocketChannel channel = (SocketChannel) key.channel();
             ByteBuffer buffer = channelBuffer.get(channel);
             int responseLen = 0;
@@ -140,9 +147,29 @@ public class ServerListener implements Listenerable, Runnable{
         catch (IOException e){
             netLogger.error("Failed to send response!");
         }
+        finally {
+            SetInProcess.remove(key);
+        }
     }
 
-    public void setServerStatus(StatusCodes serverStatus) {
-        this.serverStatus = serverStatus;
+    public static void setServerStatus(StatusCodes serverStatus) {
+        ServerListener.serverStatus = serverStatus;
+    }
+    class Handler extends RecursiveTask<NetObj>{
+        private final SocketChannel channel;
+        public Handler(SocketChannel channel){
+            this.channel = channel;
+        }
+        @Override
+        protected NetObj compute() {
+            netLogger.info(Thread.currentThread().getName());
+            NetObj request = null;
+            try {
+                request = (NetObj) Serializer.deserialize(channelBuffer.get(channel).array());
+            } catch (IOException e) {
+                netLogger.error("Failed to process request!");
+            }
+            return requestHandler.handle(request);
+        }
     }
 }
