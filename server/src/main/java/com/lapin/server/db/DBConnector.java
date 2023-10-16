@@ -30,8 +30,9 @@ public class DBConnector {
         String DB_HOST = properties.getProperty("db_host");
         String DB_NAME = properties.getProperty("db_name");
         DB_USER = properties.getProperty("db_user");
+        String DB_PORT = properties.getProperty("port");
         DB_PASSWORD = properties.getProperty("db_password");
-        DB_URL = "jdbc:postgresql://" + DB_HOST + ":5432/" + DB_NAME;
+        DB_URL = "jdbc:postgresql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
 
     }
     public Connection connect() throws SQLException {
